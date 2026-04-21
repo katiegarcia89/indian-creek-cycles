@@ -6,9 +6,9 @@
 
 {% block content %}
 <!-- Hero Section with Background Image -->
-<section class="hero" style="background-image: url('{% static "images/hero/family-biking-hero.jpg" %}');">
+<section class="hero" style="background-color: black;">
     <video id="hero-video" class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="auto" aria-hidden="true">
-        <source src="{% static 'videos/hero-bike-riders.mp4' %}" type="video/mp4">
+        <source id="hero-video-source" src="" type="video/mp4">
     </video>
     <div class="hero-overlay"></div>
     <div class="hero-content">
@@ -542,5 +542,31 @@
         
         return false;
     }
+    // 🎥 VIDEO ROTATION
+const videos = [
+    "{% static 'videos/hero-bike-riders.mp4' %}",
+    "{% static 'videos/pine-forest-trail-reel.mp4' %}",
+    "{% static 'videos/ride-reel.mp4' %}",
+    "{% static 'videos/scenic-forest-ride.mp4' %}",
+    "{% static 'videos/summit-challenge-trail-reel.mp4' %}"
+];
+
+let index = parseInt(localStorage.getItem("videoIndex"));
+
+if (isNaN(index) || index >= videos.length) {
+    index = 0;
+}
+
+const video = document.getElementById("hero-video");
+const source = document.getElementById("hero-video-source");
+
+if (video && source) {
+    source.src = videos[index];
+    video.load();
+    video.play();
+
+    const nextIndex = (index + 1) % videos.length;
+    localStorage.setItem("videoIndex", nextIndex);
+}
 </script>
 {% endblock %}
