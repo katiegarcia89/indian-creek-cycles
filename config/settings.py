@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'payments',
     'reviews',
     'locations',
-    'anymail',  
+    # 'anymail',  
 ]
 
 MIDDLEWARE = [

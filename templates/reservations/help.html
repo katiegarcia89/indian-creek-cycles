@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link rel="stylesheet" href="{% static 'css/help.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="help-container">
+
+    <!-- HEADER -->
+    <div class="help-header">
+        <h1>Getting Started</h1>
+        <p>From account setup to the open trail—here is your roadmap.</p>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="help-section">
+        <div class="help-split">
+            
+            <div class="help-text">
+                <h2 class="step-blue">01. Create Your Profile</h2>
+                <p>Before you can hit the trails, we need to get you in the system. An account is required to manage your digital keys and secure your gear.</p>
+
+                <div class="info-box">
+                    <h6>What You'll Need:</h6>
+                    <ul style="list-style-type:none;">
+                        <li>✔ Valid Email Address</li>
+                        <li>✔ Mobile Phone</li>
+                        <li>✔ Secure Payment Method</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="help-card primary">
+                <h3>Ready to Ride?</h3>
+                <a href="{% url 'register' %}" class="btn-main">Register Now</a>
+                <p>Already a member? <a href="{% url 'login' %}">Log In</a></p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="help-section">
+        <div class="help-split-map">
+
+            <div class="help-image-large">
+                <img src="{% static 'images/help/lgmap.png' %}" alt="Trail Map" class="img-fluid rounded">
+            </div>
+
+            <div class="help-text">
+                <h2 class="step-green">02. Pick Your Station</h2>
+                <p>Locate your preferred starting point on the map. Each blue pin corresponds to a Smart-Dock station waiting for you at the trailhead.</p>
+                
+                <div class="info-box mb-4">
+                    <strong>⚡ Energy Tip:</strong> Choosing a closer dock saves bike battery and effort.
+                </div>
+
+                <div class="directory-list-clean">
+                    <h6 class="hub-title mb-3"><i class="fas fa-store me-2"></i>The Hub (Main Shop)</h6>
+                    
+                    <div class="directory-flex">
+                        <ul class="list-unstyled">
+                            <li class="loc-link-premium"><span class="loc-num">1</span> Riverview Park</li>
+                            <li class="loc-link-premium"><span class="loc-num">2</span> Tomahawk Creek</li>
+                            <li class="loc-link-premium"><span class="loc-num">3</span> Nall Park</li>
+                            <li class="loc-link-premium"><span class="loc-num">4</span> Oak Ridge Loop</li>
+                            <li class="loc-link-premium"><span class="loc-num">5</span> Indian Creek</li>
+                            <li class="loc-link-premium"><span class="loc-num">6</span> Coffee Creek</li>
+                        </ul>
+                        <ul class="list-unstyled">
+                            <li class="loc-link-premium"><span class="loc-num">7</span> Summit Challenge</li>
+                            <li class="loc-link-premium"><span class="loc-num">8</span> Meadow Brook</li>
+                            <li class="loc-link-premium"><span class="loc-num">9</span> Shawnee Mission Park</li>
+                            <li class="loc-link-premium"><span class="loc-num">10</span> Pine Forest</li>
+                            <li class="loc-link-premium"><span class="loc-num">11</span> Cedar Niles Park</li>
+                            <li class="loc-link-premium"><span class="loc-num">12</span> Black Hoof Park</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- STEP 3 -->
+    <div class="help-section">
+        <div class="help-split">
+
+            <div class="help-text">
+                <h2 class="step-brown">03. One-Touch Unlock & Return</h2>
+                
+                <ol class="help-step-list">
+                    <li>
+                        <strong>Locate & Scan:</strong> 
+                        Find your reserved bike and scan the QR code on the Smart-Dock for an instant release.
+                    </li>
+                    <li>
+                        <strong>Digital Dashboard:</strong> 
+                        Alternatively, use our app interface to remotely unlock gear, check real-time dock availability, or manage multiple reservations.
+                    </li>
+                    <li>
+                        <strong>Go & Return:</strong> 
+                        Once your ride is complete, you can return your bike to <strong>any available Smart-Dock</strong> on the trail or bring it back to the <strong>ICC Hub</strong>.
+                    </li>
+                </ol>
+
+                <div class="info-box mt-3">
+                    <strong><i class="fas fa-map-location-dot"></i> Flexible Returns:</strong> 
+                    Check the app to see which stations have open docks before you arrive to ensure a smooth drop-off.
+                </div>
+
+                <p class="note">Hardware Tip: Look for flashing green lights on the dock!</p>
+            </div>
+
+            <div class="help-image">
+                <img src="{% static 'images/help/smdk.png' %}" alt="Dock Instructions">
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SAFETY -->
+    <div class="help-safety">
+        <h2>Trail Safety & Etiquette</h2>
+
+        <div class="help-safety-grid">
+            <ul>
+                <li><i class="fas fa-gauge-high"></i> Control your speed – stay alert for obstacles.</li>
+                <li><i class="fas fa-person-walking"></i> Yield to others – hikers have the right of way.</li>
+                <li><i class="fas fa-bag-shopping"></i> Carry essentials – water, snacks, repair kit.</li>
+                {% comment %} <li><i class="fas fa-user-group"></i> Don't ride alone – share your route.</li> {% endcomment %}
+            </ul>
+
+            <ul>
+                <li><i class="fas fa-bicycle"></i> Ride single file – stay predictable.</li>
+                <li><i class="fas fa-circle-xmark"></i> Respect closures – avoid restricted trails.</li>
+                <li><i class="fas fa-leaf"></i> Be aware of wildlife – stay alert.</li>
+                <li><i class="fas fa-triangle-exclamation"></i> Know your limits – walk if needed.</li>
+            </ul>
+
+            <ul>
+                <li><i class="fas fa-helmet-safety"></i> Wear a helmet – safety first.</li>
+                <li><i class="fas fa-eye"></i> Stay visible – wear bright gear.</li>
+                <li><i class="fas fa-map"></i> Know the trail – plan ahead.</li>
+                <li><i class="fas fa-cloud-sun"></i> Check conditions – weather matters.</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

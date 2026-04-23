@@ -1,0 +1,259 @@
+/* ============================================
+   Help Page
+============================================ */
+
+.help-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 120px 20px 40px;
+}
+
+.help-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.help-header h1 {
+    font-size: 42px;
+    color: #0b3704;
+}
+
+.help-header p {
+    color: #555;
+    margin-top: 10px;
+}
+
+.help-section {
+    margin-bottom: 60px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.help-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.help-split {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: center;
+}
+
+.help-section:nth-of-type(1) .help-split {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+}
+
+.help-split-map {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.help-text {
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.help-text h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.help-image img {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    margin: auto;
+    border-radius: 12px;
+}
+
+.help-image-large img {
+    width: 100%;
+    height: auto; 
+    max-height: 470px; 
+    display: block;
+    object-fit: contain; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.help-card {
+    padding: 45px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.help-card.primary {
+    background: #114704;
+    color: white;
+    min-width: 450px;
+    font-size: 20px;
+}
+
+.help-card.primary h3 { color: #ffffff; }
+
+.btn-main {
+    display: inline-block;
+    padding: 12px 24px;
+    background: white;
+    color: black;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.help-card.primary p a {
+    color: #d4af37;
+    text-decoration: underline;
+}
+
+.hub-title {
+    font-weight: bold;
+    color: #333;
+    font-size: 0.95rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.directory-flex {
+    display: flex;
+    gap: 15px;
+}
+
+.loc-link-premium {
+    text-decoration: none;
+    color: #0b3704;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.loc-num {
+    background-color: #0b3704;
+    color: #ffffff;
+    font-weight: bold;
+    width: 26px;
+    height: 26px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+.loc-link-premium:hover {
+    color: #d4af37;
+    transform: translateX(5px);
+}
+
+.loc-link-premium:hover .loc-num {
+    background-color: #d4af37;
+}
+
+.info-box {
+    background: #f5f5f5;
+    padding: 10px 15px;
+    border-left: 4px solid #114704;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.help-text ol {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 20px;
+}
+
+.help-text ol li {
+    background: #f5f5f5;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 4px solid #114704;
+}
+
+.note {
+    color: gray;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* SAFETY GRID */
+.help-safety {
+    background: linear-gradient(135deg, #012b12, #023f1c);
+    color: #f5f5f5;
+    padding: 35px 30px;
+    border-radius: 14px;
+    margin-top: 60px;
+}
+
+.help-safety h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #d4af37;
+}
+
+.help-safety-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.help-safety li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.help-safety li i {
+    color: #d4af37;
+    margin-top: 3px;
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+
+@media (max-width: 900px) {
+    .help-section:nth-of-type(1) .help-split,
+    .help-split-map,
+    .help-safety-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .help-image-large img {
+        height: auto; 
+        max-height: none; 
+    }
+
+    .help-split-map .help-image-large,
+    .help-split-map .help-text {
+        grid-column: 1;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .directory-flex {
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+        gap: 15px 20px;
+        padding: 10px 0;
+    }
+}

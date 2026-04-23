@@ -1,0 +1,163 @@
+/* ============================================
+   DISPATCH BASE
+============================================ */
+.app-shell {
+    max-width: 900px; 
+    margin: 20px auto; 
+    background: #ffffff;
+    min-height: auto; 
+    border-radius: 12px; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: flex; 
+    flex-direction: column;
+}
+
+.app-header { 
+    background-color: #0b0d0c; 
+    padding: 25px; 
+    text-align: center; 
+}
+
+.logo-text { 
+    color: #d4af37; 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    font-size: 1rem; 
+    letter-spacing: 1px; 
+}
+
+.logo-light { 
+    color: #fff; 
+    font-weight: 300; 
+}
+
+/* ============================================
+   DISPATCH CARD (THE GREEN BOX)
+============================================ */
+.dispatch-card {
+    background: linear-gradient(135deg, #114823 0%, #032109 100%);
+    margin: 20px; 
+    padding: 30px; 
+    padding-top: 55px; /* Extra room for the floating error bar */
+    border-radius: 10px; 
+    color: white;
+    border-bottom: 4px solid #d4af37; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    gap: 20px;
+    position: relative; /* Required for the floating error bar */
+}
+
+/* FLOATING ERROR CAPSULE */
+.search-error-float {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999; /* Ensures it is always on top */
+    
+    background-color: #fff1f0;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+    padding: 6px 20px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { transform: translate(-50%, -10px); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* RIDER INFO */
+.rider-info-group { display: flex; align-items: center; gap: 15px; flex: 2; }
+.gold-bar { width: 4px; height: 50px; background-color: #d4af37; border-radius: 2px; }
+.label-tiny { color: #d4af37; text-transform: uppercase; font-size: 0.65rem; font-weight: 800; display: block; }
+.rider-name { margin: 2px 0; font-size: 1.8rem; color: white; }
+.res-meta { display: flex; gap: 10px; }
+.mono-badge { font-family: monospace; font-size: 0.85rem; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 3px; }
+
+/* SWITCH UI */
+.switch-container { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.switch-ui { display: flex; background: rgba(255,255,255,0.1); border-radius: 4px; padding: 4px; border: 1px solid rgba(255,255,255,0.2); width: 100%; max-width: 180px; }
+.switch-input { background: transparent; border: none; color: white; width: 100%; padding: 4px 8px; font-weight: bold; font-size: 0.8rem; text-align: center; }
+.btn-switch { background: #d4af37; border: none; padding: 4px 10px; border-radius: 3px; font-weight: bold; font-size: 0.7rem; cursor: pointer; }
+.switch-subtext { color: #d4af37; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; }
+
+/* ACTION BUTTONS & STATUS */
+.action-area { flex: 1.5; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.status-badge-container { display: flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 4px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); }
+.status-text { text-transform: uppercase; font-size: 0.7rem; font-weight: 900; letter-spacing: 1px; }
+.status-pulse { width: 8px; height: 8px; border-radius: 50%; }
+.is-active-status { color: #00f2ff; border-color: rgba(0, 242, 255, 0.4); }
+.pulse-blue { background: #00f2ff; box-shadow: 0 0 8px #00f2ff; animation: flash 2s infinite; }
+
+@keyframes flash { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+.action-btn {
+    width: 100%; 
+    max-width: 240px; 
+    padding: 14px; 
+    border-radius: 6px; 
+    font-weight: 800;
+    font-size: 1rem; 
+    text-transform: uppercase; 
+    border: none; 
+    cursor: pointer;
+    box-shadow: 0 4px 0px rgba(0,0,0,0.2); 
+    transition: all 0.1s;
+}
+
+.btn-booked, .btn-confirmed, .btn-paid { background-color: #d4af37; color: #2d2005; }
+.btn-active { background-color: #b31d1d; color: #fff; }
+.action-btn:disabled { background-color: #555; color: #aaa; cursor: not-allowed; box-shadow: none; }
+
+/* GRID STYLES */
+.grid-label-container { padding: 0 25px; }
+.grid-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin-bottom: 15px; }
+.station-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 0 20px 30px 20px; }
+.station-item { background-color: #f1f3f5; border: 1px solid #dee2e6; border-radius: 8px; padding: 18px; display: flex; justify-content: space-between; align-items: center; }
+.current-local { border: 2px solid #114823; background-color: #ffffff; }
+.station-num { font-weight: 800; font-size: 0.6rem; text-transform: uppercase; color: #114823; }
+.station-num.gray { color: #adb5bd; }
+.station-name { font-weight: 800; font-size: 1.1rem; color: #111; }
+.station-name.soft { color: #495057; font-weight: 700; font-size: 1rem; }
+.local-tag { font-size: 0.6rem; color: #114823; font-weight: 900; margin-top: 4px; }
+.slot-badge { text-align: center; background: #ffffff; border: 2px solid #ced4da; padding: 8px 12px; border-radius: 6px; min-width: 45px; }
+.current-local .slot-badge { background: #114823; border-color: #114823; color: white; }
+.slot-count { display: block; font-size: 1.3rem; font-weight: 900; line-height: 1; }
+.slot-label { font-size: 0.55rem; text-transform: uppercase; font-weight: bold; }
+
+/* ============================================
+   MOBILE RESPONSIVENESS (768px)
+============================================ */
+@media (max-width: 768px) {
+    .dispatch-card {
+        display: grid;
+        grid-template-columns: 1.8fr 1fr; 
+        grid-template-areas: 
+            "info switch"
+            "button button";
+        gap: 20px;
+        padding: 22px;
+        padding-top: 60px; /* Even more room for error bar on mobile */
+        align-items: center;
+    }
+
+    .rider-info-group { grid-area: info; gap: 15px; }
+    .gold-bar { height: 60px; }
+    .rider-name { font-size: 1.6rem; }
+    .station-grid { grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; }
+    .switch-container { grid-area: switch; background: rgba(0,0,0,0.25); padding: 12px; border-radius: 8px; }
+    .action-area { grid-area: button; margin-top: 15px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.15); }
+    .action-btn { width: 100%; padding: 16px; }
+}

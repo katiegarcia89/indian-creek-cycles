@@ -3,107 +3,103 @@
 {% block title %}Reservation Confirmed - Indian Creek Cycles{% endblock %}
 
 {% block content %}
-<div style="height: 80px; background: #f8f9fa;"></div>
+<div class="spacer"></div>
 
-<section style="padding: 60px 0; background: #f8f9fa; min-height: 90vh; font-family: 'Inter', sans-serif;">
-    <div class="container" style="max-width: 1100px; margin: 0 auto; padding: 0 20px;">
+<section class="confirmation-section">
+    <div class="container confirmation-container">
         
-        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: start;">
+        <div class="confirmation-grid">
             
+            <!-- LEFT SIDE -->
             <div>
-                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                    <div style="background: #27ae60; color: white; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; transform: rotate(-5deg);">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <div class="confirmation-header">
+                    <div class="check-icon">
+                        ✓
                     </div>
-                    <h1 style="margin: 0; font-size: 2.8rem; font-weight: 900; color: #053c0f; letter-spacing: -1.5px;">Booking Confirmed</h1>
+                    <h1 class="confirmation-title">Booking Confirmed</h1>
                 </div>
 
-                <p style="font-size: 1.25rem; color: #5a676d; line-height: 1.6; margin-bottom: 40px; max-width: 600px;">
-                    Excellent choice! Your gear is reserved and waiting for you at <strong>{{ reservation.pickup_location.name }}</strong>.
+                <p class="confirmation-subtext">
+                    Excellent choice! Your gear is reserved and waiting for you at 
+                    <strong>{{ reservation.pickup_location.name }}</strong>.
                 </p>
 
-                <h3 style="font-size: 0.9rem; font-weight: 800; color: #053c0f; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; opacity: 0.6;">Arrival Information</h3>
+                <h3 class="section-label">Arrival Information</h3>
                 
-                <div style="display: grid; gap: 15px;">
-                    <div style="display: flex; gap: 20px; background: #fff; padding: 25px; border-radius: 24px; border: 1px solid #edf2ef; box-shadow: 0 10px 30px rgba(5, 60, 15, 0.03);">
-                        <div style="color: #27ae60;">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                        </div>
+                <div class="info-list">
+
+                    <div class="info-card">
+                        <div class="info-icon">🔓</div>
                         <div>
-                            <h4 style="margin: 0 0 5px 0; font-weight: 800; color: #1b262c; font-size: 1.1rem;">Digital Key Access</h4>
-                            <p style="margin: 0; color: #7f8c8d; font-size: 0.95rem; line-height: 1.5;">Your Bluetooth unlock code is active in your dashboard. No physical keys or staff required for pickup.</p>
+                            <h4>Digital Key Access</h4>
+                            <p>Your Bluetooth unlock code is active in your dashboard.</p>
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 20px; background: #fff; padding: 25px; border-radius: 24px; border: 1px solid #edf2ef; box-shadow: 0 10px 30px rgba(5, 60, 15, 0.03);">
-                        <div style="color: #27ae60;">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        </div>
+                    <div class="info-card">
+                        <div class="info-icon">📍</div>
                         <div>
-                            <h4 style="margin: 0 0 5px 0; font-weight: 800; color: #1b262c; font-size: 1.1rem;">Self-Service Return</h4>
-                            <p style="margin: 0; color: #7f8c8d; font-size: 0.95rem; line-height: 1.5;">When finished, simply return to any Smart-Dock in the network to finalize your session.</p>
+                            <h4>Self-Service Return</h4>
+                            <p>Return to any Smart-Dock when finished.</p>
                         </div>
                     </div>
+
                 </div>
 
-                <div style="margin-top: 40px; display: flex; gap: 15px;">
-                    <a href="{% url 'reservation_detail' pk=reservation.id %}" style="background: #053c0f; color: white; padding: 18px 35px; border-radius: 16px; font-weight: 800; text-decoration: none; box-shadow: 0 10px 25px rgba(5, 60, 15, 0.15);">
+                <div class="confirmation-actions">
+                    <a href="{% url 'reservation_detail' pk=reservation.id %}" class="btn btn-primary">
                         Go to My Dashboard
                     </a>
-                    <a href="{% url 'bike_list' %}" style="background: white; color: #053c0f; padding: 18px 35px; border-radius: 16px; font-weight: 800; text-decoration: none; border: 2px solid #eef2ef;">
+                    <a href="{% url 'bike_list' %}" class="btn btn-outline">
                         Reserve Another
                     </a>
                 </div>
             </div>
 
-            <div style="position: sticky; top: 120px; background: #fff; border-radius: 32px; border: 1px solid #eef2ef; box-shadow: 0 40px 80px rgba(0,0,0,0.06); overflow: hidden;">
-                <div style="background: linear-gradient(135deg, #053c0f, #0a5216); padding: 35px; color: white;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7;">Booking Summary</span>
-                        <span style="background: rgba(255,255,255,0.15); padding: 5px 12px; border-radius: 8px; font-weight: 800; font-size: 1.2rem;">#{{ reservation.id }}</span>
+            <!-- RIGHT SIDE -->
+            <div class="summary-card-confirmation">
+
+                <div class="summary-header">
+                    <div class="summary-top">
+                        <span class="summary-label">Booking Summary</span>
+                        <span class="summary-id">#{{ reservation.id }}</span>
                     </div>
-                    <h2 style="margin: 0; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px;">{{ reservation.bike.name }}</h2>
+                    <h2>{{ reservation.bike.name }}</h2>
                 </div>
                 
-                <div style="padding: 35px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fbf9; padding: 20px; border-radius: 20px; margin-bottom: 25px; border: 1px solid #edf5ef;">
-                        <div style="text-align: center; flex: 1;">
-                            <label style="display: block; font-size: 0.65rem; font-weight: 800; color: #95a5a6; text-transform: uppercase; margin-bottom: 5px;">Pickup</label>
-                            <span style="font-weight: 800; color: #1b262c; font-size: 1rem;">{{ reservation.rental_date|date:"M d" }}</span>
-                        </div>
-                        <div style="color: #27ae60; opacity: 0.4;">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                        </div>
-                        <div style="text-align: center; flex: 1;">
-                            <label style="display: block; font-size: 0.65rem; font-weight: 800; color: #95a5a6; text-transform: uppercase; margin-bottom: 5px;">Return</label>
-                            <span style="font-weight: 800; color: #1b262c; font-size: 1rem;">{{ reservation.return_date|date:"M d" }}</span>
-                        </div>
-                    </div>
+                <div class="summary-body">
 
-                    <div style="margin-bottom: 25px;">
-                        <label style="display: block; font-size: 0.7rem; font-weight: 800; color: #95a5a6; text-transform: uppercase; margin-bottom: 10px;">Pickup Location</label>
-                        <div style="display: flex; align-items: flex-start; gap: 12px;">
-                            <div style="width: 40px; height: 40px; background: #f0f7f1; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#053c0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                            </div>
-                            <div>
-                                <span style="display: block; font-weight: 800; color: #1b262c; font-size: 1.1rem;">{{ reservation.pickup_location.name }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                   <div style="padding-top: 25px; border-top: 1px solid #f0f4f1; display: flex; justify-content: space-between; align-items: center;">
+                    <div class="date-box">
                         <div>
-                            <label style="display: block; font-size: 0.65rem; font-weight: 800; color: #95a5a6; text-transform: uppercase;">Duration</label>
-                            <span style="font-weight: 700; color: #1b262c;">
+                            <label>Pickup</label>
+                            <span>{{ reservation.rental_date|date:"M d" }}</span>
+                        </div>
+                        <div>→</div>
+                        <div>
+                            <label>Return</label>
+                            <span>{{ reservation.return_date|date:"M d" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="location-box">
+                        <span class="location-name">
+                            {{ reservation.pickup_location.name }}
+                        </span>
+                    </div>
+
+                    <div class="summary-footer">
+                        <div>
+                            <label>Duration</label>
+                            <span>
                                 {{ reservation.rental_duration }} Day{{ reservation.rental_duration|pluralize }}
                             </span>
                         </div>
-                        <div style="text-align: right;">
-                            <label style="display: block; font-size: 0.65rem; font-weight: 800; color: #95a5a6; text-transform: uppercase;">Total Paid</label>
-                            <span style="font-weight: 900; color: #053c0f; font-size: 1.5rem;">${{ reservation.total_price }}</span>
+                        <div>
+                            <label>Total Paid</label>
+                            <span class="price">${{ reservation.total_price }}</span>
                         </div>
                     </div>
+
                 </div>
             </div>
 

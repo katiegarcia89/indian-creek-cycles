@@ -3,99 +3,100 @@
 {% block title %}My Reservations - Indian Creek Cycles{% endblock %}
 
 {% block content %}
-<section class="page-header" style="padding: 8rem 0 3rem; background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%); color: var(--color-white);">
+<section class="reservation-header">
     <div class="container">
-        <h1 class="page-title" style="font-family: var(--font-heading); font-weight: 700; color: var(--color-white); margin-bottom: 1rem;">My Reservations</h1>
+        <h1 class="page-title">My Reservations</h1>
     </div>
 </section>
 
-<section class="section section-alt" style="padding: 5rem 0; background: var(--color-gray-100); min-height: 70vh;">
+<section class="reservation-list-section">
     <div class="container">
         {% if reservations %}
-        <div class="reservations-list">
+        <div class="reservations-container">
             {% for reservation in reservations %}
-            <div class="reservation-card" style="background: var(--color-white); border-radius: var(--radius-lg); margin-bottom: 2rem; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--color-gray-200);">
+            <div class="reservation-card">
                 
-                <div class="reservation-card-header" style="padding: 1.5rem; background: var(--color-gray-100); display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--color-gray-200);">
-                    <div>
-                        <div style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                            <span style="font-family: var(--font-heading); font-weight: 700; font-size: 1.25rem; color: var(--color-black);">#{{ reservation.id }}</span>
-                            <span class="bike-badge {% if reservation.status == 'confirmed' %}badge-secondary{% endif %}" style="border-radius: var(--radius-sm);">
+                <div class="res-card-header">
+                    <div class="res-id-group">
+                        <div class="res-id-row">
+                            <span class="res-number">#{{ reservation.id }}</span>
+                            <span class="status-badge {% if reservation.status == 'confirmed' %}status-confirmed{% elif reservation.status == 'active' %}status-active{% endif %}">
                                 {{ reservation.get_status_display }}
                             </span>
                         </div>
-                        <p style="margin: 0; color: var(--color-gray-600); font-size: 0.9375rem; display: flex; align-items: center;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px; color: var(--color-primary);">
+                        <p class="res-location">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-primary">
                                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
                             </svg>
                             {{ reservation.pickup_location.name|default:"Location TBD" }}
                         </p>
                     </div>
-                    <div style="text-align: right;">
-                        <span style="display: block; font-size: 0.75rem; color: var(--color-gray-500); text-transform: uppercase; font-weight: 600; letter-spacing: 0.05rem;">Booked On</span>
-                        <span style="font-size: 1rem; color: var(--color-gray-800); font-weight: 500;">{{ reservation.created_at|date:"M d, Y" }}</span>
+                    <div class="res-date-booked">
+                        <span class="label-tiny">Booked On</span>
+                        <span class="date-value">{{ reservation.created_at|date:"M d, Y" }}</span>
                     </div>
                 </div>
 
-                <div class="reservation-card-body" style="padding: 1.5rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
-                    <div class="reservation-bike-img" style="width: 140px; height: 100px; flex-shrink: 0; border-radius: var(--radius-md); overflow: hidden; background: var(--color-gray-100);">
+                <div class="res-card-body">
+                    <div class="res-bike-img">
                         {% if reservation.bike.image %}
-                        <img src="{{ reservation.bike.image.url }}" alt="{{ reservation.bike.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <img src="{{ reservation.bike.image.url }}" alt="{{ reservation.bike.name }}">
                         {% else %}
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--color-gray-400);">
+                        <div class="img-placeholder">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 100-2 1 1 0 000 2zm-3 11.5V14l-3-3 4-3 2 3h2"/></svg>
                         </div>
                         {% endif %}
                     </div>
 
-                    <div style="flex-grow: 1;">
-                        <h4 class="bike-name" style="margin: 0 0 0.5rem 0; font-family: var(--font-heading); font-size: 1.5rem; color: var(--color-black);">{{ reservation.bike.name }}</h4>
-                        <div style="display: inline-flex; align-items: center; color: var(--color-primary); font-weight: 600; font-size: 0.9375rem;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 8px;">
+                    <div class="res-bike-info">
+                        <h4 class="res-bike-name">{{ reservation.bike.name }}</h4>
+                        <div class="res-rental-dates">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="icon-inline">
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
                             </svg>
                             {{ reservation.rental_date|date:"M d" }} — {{ reservation.return_date|date:"M d, Y" }}
                         </div>
                     </div>
 
-                    <div style="text-align: right; min-width: 120px;">
-                        <span style="font-size: 0.75rem; color: var(--color-gray-500); text-transform: uppercase; display: block; font-weight: 600;">Total</span>
-                        <span style="font-size: 1.75rem; font-weight: 700; color: var(--color-primary);">${{ reservation.total_price }}</span>
+                    <div class="res-total-group">
+                        <span class="label-tiny">Total</span>
+                        <span class="res-price-total">${{ reservation.total_price }}</span>
                     </div>
                 </div>
 
-                <div class="reservation-card-footer" style="padding: 1.25rem 1.5rem; background: var(--color-white); border-top: 1px solid var(--color-gray-200); display: flex; justify-content: flex-end; gap: 1rem; align-items: center;">
-                    
-                    {% if reservation.is_eligible_for_unlock %}
-                        {% if reservation.status == 'confirmed' %}
-                            <a href="{% url 'unlock_bike' reservation.id %}" class="btn btn-primary">
-                                Go to Smart-Dock & Unlock
-                            </a>
-                        {% elif reservation.status == 'active' %}
-                            <a href="{% url 'unlock_bike' reservation.id %}" class="btn btn-primary" style="background: var(--color-success);">
-                                Manage Active Ride
+                <div class="res-card-footer">
+                    <div class="footer-actions">
+                        {% if reservation.is_eligible_for_unlock %}
+                            {% if reservation.status == 'confirmed' %}
+                                <a href="{% url 'unlock_bike' reservation.id %}" class="btn btn-primary">
+                                    Go to Smart-Dock & Unlock
+                                </a>
+                            {% elif reservation.status == 'active' %}
+                                <a href="{% url 'unlock_bike' reservation.id %}" class="btn btn-success">
+                                    Manage Active Ride
+                                </a>
+                            {% endif %}
+                        {% endif %}
+
+                        <a href="{% url 'reservation_detail' pk=reservation.id %}" class="btn btn-outline">
+                            View Receipt
+                        </a>
+                        
+                        {% if reservation.is_active %}
+                            <a href="{% url 'cancel_reservation' pk=reservation.id %}" onclick="return confirm('Are you sure?')" class="btn-cancel">
+                                Cancel
                             </a>
                         {% endif %}
-                    {% endif %}
-
-                    <a href="{% url 'reservation_detail' pk=reservation.id %}" class="btn btn-outline">
-                        View Receipt
-                    </a>
-                    
-                    {% if reservation.is_active %}
-                        <a href="{% url 'cancel_reservation' pk=reservation.id %}" onclick="return confirm('Are you sure?')" class="btn-text" style="color: var(--color-danger); margin-left: 1rem;">
-                            Cancel
-                        </a>
-                    {% endif %}
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
         {% else %}
-        <div class="text-center" style="padding: 5rem 2rem; background: var(--color-white); border-radius: var(--radius-lg); border: 2px dashed var(--color-gray-300);">
-            <div style="font-size: 4rem; margin-bottom: 1.5rem;">🚲</div>
+        <div class="empty-reservations">
+            <div class="empty-icon">🚲</div>
             <h2 class="section-title-sm">No Reservations Yet</h2>
-            <p class="section-subtitle" style="margin-bottom: 2rem;">You haven't booked a ride at Indian Creek yet. Ready to hit the trails?</p>
+            <p class="section-subtitle">You haven't booked a ride at Indian Creek yet. Ready to hit the trails?</p>
             <a href="{% url 'bike_list' %}" class="btn btn-primary btn-lg">
                 Find Your Bike
             </a>

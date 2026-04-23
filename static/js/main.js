@@ -376,3 +376,103 @@ window.IndianCreekCycles = {
     initCountdown,
     setMinDate
 };
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const disabledDates = window.bookedDates || [];
+    const warningBox = document.getElementById('time-warning');
+    const submitBtn = document.getElementById('submit-btn');
+
+    let rentalPicker, returnPicker, timePickerStart, timePickerEnd;
+
+    const validateTimes = () => {
+        const startDay = rentalPicker.selectedDates[0];
+        const endDay = returnPicker.selectedDates[0];
+        const startTime = timePickerStart.selectedDates[0];
+        const endTime = timePickerEnd.selectedDates[0];
+
+        if (startDay && endDay && startTime && endTime) {
+            const fullStart = new Date(startDay.getFullYear(), startDay.getMonth(), startDay.getDate(), startTime.getHours(), 0);
+            const fullEnd = new Date(endDay.getFullYear(), endDay.getMonth(), endDay.getDate(), endTime.getHours(), 0);
+
+            const diffInHours = (fullEnd - fullStart) / (1000 * 60 * 60);
+            const daysPaid = Math.ceil((endDay - startDay) / (1000 * 60 * 60 * 24)) || 1;
+            const maxAllowedHours = daysPaid * 24;
+
+            document.getElementById('day-display').innerText = `${daysPaid} Day(s)`;
+
+            if (diffInHours > 0 && diffInHours <= maxAllowedHours + 0.02) {
+                warningBox.innerHTML = "✓ Within rental window";
+                warningBox.style.color = "#27ae60";
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = "1";
+            } else if (diffInHours <= 0) {
+                warningBox.innerHTML = "⚠ Return must be after pickup";
+                warningBox.style.color = "#e74c3c";
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = "0.5";
+            } else {
+                warningBox.innerHTML = `⚠ Exceeds ${daysPaid} day limit`;
+                warningBox.style.color = "#e74c3c";
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = "0.5";
+            }
+        }
+    };
+
+    // TIME PICKERS
+    if (document.getElementById("pickup_time_picker")) {
+        timePickerStart = flatpickr("#pickup_time_picker", {
+            enableTime: true,
+            noCalendar: true,
+            altInput: true,
+            altFormat: "h:i K",
+            dateFormat: "H:i",
+            defaultDate: "09:00",
+            minTime: "08:00",
+            maxTime: "17:00",
+            minuteIncrement: 60,
+            static: true,
+            onChange: validateTimes
+        });
+    }
+
+    if (document.getElementById("return_time_picker")) {
+        timePickerEnd = flatpickr("#return_time_picker", {
+            enableTime: true,
+            noCalendar: true,
+            altInput: true,
+            altFormat: "h:i K",
+            dateFormat: "H:i",
+            defaultDate: "09:00",
+            minuteIncrement: 60,
+            static: true,
+            onChange: validateTimes
+        });
+    }
+
+
+    // DATE PICKERS
+    if (window.rentalDateId && document.getElementById(window.rentalDateId)) {
+        rentalPicker = flatpickr(`#${window.rentalDateId}`, {
+            minDate: "today",
+            disable: disabledDates,
+            dateFormat: "Y-m-d",
+            onChange: (selectedDates, dateStr) => {
+                if (returnPicker) {
+                    returnPicker.set('minDate', dateStr);
+                }
+                validateTimes();
+            }
+        });
+    }
+
+    if (window.returnDateId && document.getElementById(window.returnDateId)) {
+        returnPicker = flatpickr(`#${window.returnDateId}`, {
+            minDate: "today",
+            disable: disabledDates,
+            dateFormat: "Y-m-d",
+            onChange: validateTimes
+        });
+    }
+}); 
