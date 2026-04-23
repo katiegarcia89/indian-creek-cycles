@@ -16,4 +16,5 @@ urlpatterns = [
     path('reservation/<int:reservation_id>/process-return/', views.process_return, name='process_return'),
     path('reservation/<int:reservation_id>/confirm-location/', views.confirm_pickup_location, name='confirm_pickup_location'),
     path('find-next/', views.find_next_reservation, name='find_next_reservation'),
+    path('help/', views.help_page, name='help'),
 ]

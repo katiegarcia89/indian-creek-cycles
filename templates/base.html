@@ -14,7 +14,10 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    
+    <head>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/reservations.css">
+</head>
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚲</text></svg>">
     
@@ -57,6 +60,12 @@
                 <li class="nav-item">
                     <a href="{% url 'trails' %}" class="nav-link {% if '/trails/' in request.path %}active{% endif %}">Trails</a>
                 </li>
+                 <li class="nav-item">
+                     <a href="{% url 'accessories' %}" class="nav-link {% if '/bikes/accessories/' in request.path %}active{% endif %}">Accessories</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'help' %}" class="nav-link {% if '/help/' in request.path %}active{% endif %}">Rental Guide</a>
+                </li>
                 <li class="nav-item">
                     <a href="{% url 'reviews' %}" class="nav-link {% if '/reviews/' in request.path %}active{% endif %}">Reviews</a>
                 </li>
@@ -65,9 +74,6 @@
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'contact' %}" class="nav-link {% if '/contact/' in request.path %}active{% endif %}">Contact</a>
-                </li>
-                <li class="nav-item">
-                     <a href="{% url 'accessories' %}" class="nav-link {% if '/bikes/accessories/' in request.path %}active{% endif %}">Accessories</a>
                 </li>
                 
                 {% if user.is_authenticated %}
@@ -200,7 +206,8 @@
         </div>
     </footer>
     
-    <!-- JavaScript -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>

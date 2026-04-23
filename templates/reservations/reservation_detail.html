@@ -3,109 +3,123 @@
 {% block title %}Reservation #{{ reservation.id }} - Indian Creek Cycles{% endblock %}
 
 {% block content %}
-<section class="page-header" style="padding: 8rem 0 3rem; background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%); color: var(--color-white);">
+<section class="page-header reservation-detail-header">
     <div class="container">
-        <h1 class="page-title" style="font-family: var(--font-heading); font-weight: 700; color: var(--color-white); margin-bottom: 0.5rem; font-size: 2rem;">Reservation Details</h1>
+        <h1 class="page-title">Reservation Details</h1>
     </div>
 </section>
 
-<section class="section section-alt" style="padding: 4rem 0; background: var(--color-gray-100); min-height: 80vh;">
+<section class="section section-alt reservation-detail-section">
     <div class="container">
-        <div class="reservation-detail-grid" style="display: flex; gap: 30px; align-items: flex-start; max-width: 1100px; margin: 0 auto; flex-wrap: wrap;">
+        <div class="reservation-detail-grid">
             
-            <div class="reservation-main" style="flex: 1.6; display: flex; flex-direction: column; gap: 25px; min-width: 320px;">
-                <div class="detail-card" style="background: var(--color-white); padding: 30px; border-radius: var(--radius-lg); border: 1px solid var(--color-gray-200); box-shadow: var(--shadow-md);">
+            <!-- MAIN -->
+            <div class="reservation-main">
+
+                <div class="detail-card">
                     
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                        <h2 style="margin: 0; font-family: var(--font-heading); font-weight: 700; color: var(--color-black); font-size: 1.5rem;">Booking #{{ reservation.id }}</h2>
-                        <span class="bike-badge {% if reservation.status == 'confirmed' or reservation.status == 'active' or reservation.status == 'paid' %}badge-secondary{% endif %}" style="border-radius: var(--radius-sm);">
+                    <div class="detail-header">
+                        <h2>Booking #{{ reservation.id }}</h2>
+                        <span class="bike-badge {% if reservation.status == 'confirmed' or reservation.status == 'active' or reservation.status == 'paid' %}badge-secondary{% endif %}">
                             {{ reservation.get_status_display }}
                         </span>
                     </div>
                     
-                    <div class="detail-bike-hero" style="text-align: center; background: var(--color-gray-100); padding: 30px; border-radius: var(--radius-md); border: 1px solid var(--color-gray-200); margin-bottom: 25px;">
+                    <div class="detail-bike-hero">
                         {% if reservation.bike.image %}
-                        <img src="{{ reservation.bike.image.url }}" alt="{{ reservation.bike.name }}" style="width: 100%; max-width: 350px; height: auto; margin-bottom: 20px;">
+                        <img src="{{ reservation.bike.image.url }}" alt="{{ reservation.bike.name }}">
                         {% endif %}
-                        <h3 style="margin: 0; font-family: var(--font-heading); font-size: 1.4rem; color: var(--color-black);">{{ reservation.bike.name }}</h3>
-                        <p style="color: var(--color-gray-500); margin: 5px 0 15px 0;">{{ reservation.bike.category.name }}</p>
-                        <a href="{% url 'bike_detail' slug=reservation.bike.slug %}" class="btn btn-outline btn-sm">View Bike Specs</a>
+                        <h3>{{ reservation.bike.name }}</h3>
+                        <p class="bike-category">{{ reservation.bike.category.name }}</p>
+                        <a href="{% url 'bike_detail' slug=reservation.bike.slug %}" class="btn btn-outline btn-sm">
+                            View Bike Specs
+                        </a>
                     </div>
 
                     {% if accessories %}
-                    <div style="margin-bottom: 25px; padding: 20px; background: var(--color-gray-50); border-radius: var(--radius-md); border: 1px dashed var(--color-gray-300);">
-                        <h4 style="margin: 0 0 12px 0; font-size: 0.85rem; font-weight: 700; color: var(--color-gray-600); text-transform: uppercase; letter-spacing: 0.05rem;">Extras</h4>
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    <div class="accessory-box">
+                        <h4>Included Equipment</h4>
+                        <div class="accessory-list">
                             {% for acc in accessories %}
-                            <span style="background: var(--color-white); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--color-gray-200); font-size: 0.9rem;">
-                                <strong style="color: var(--color-primary);">{{ acc.quantity }}x</strong> {{ acc.accessory.name }} · {{ acc.get_fulfillment_type_display }}
+                            <span class="accessory-pill">
+                                <strong>{{ acc.quantity }}x</strong> {{ acc.accessory.name }} · {{ acc.get_fulfillment_type_display }}
                             </span>
                             {% endfor %}
                         </div>
                     </div>
                     {% endif %}
 
-                    <div class="detail-dates" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; padding-top: 20px; border-top: 1px solid var(--color-gray-200);">
+                    <div class="detail-dates">
                         <div>
-                            <span style="display: block; font-size: 0.75rem; color: var(--color-gray-500); text-transform: uppercase; font-weight: 600;">Pickup</span>
-                            <span style="font-weight: 700; color: var(--color-black);">{{ reservation.rental_date|date:"M d, Y" }}</span>
+                            <span class="label">Pickup</span>
+                            <span class="value">{{ reservation.rental_date|date:"M d, Y" }}</span>
                         </div>
                         <div>
-                            <span style="display: block; font-size: 0.75rem; color: var(--color-gray-500); text-transform: uppercase; font-weight: 600;">Return</span>
-                            <span style="font-weight: 700; color: var(--color-black);">{{ reservation.return_date|date:"M d, Y" }}</span>
+                            <span class="label">Return</span>
+                            <span class="value">{{ reservation.return_date|date:"M d, Y" }}</span>
                         </div>
                         <div>
-                            <span style="display: block; font-size: 0.75rem; color: var(--color-gray-500); text-transform: uppercase; font-weight: 600;">Duration</span>
-                            <span style="font-weight: 700;">{{ reservation.duration_display }}</span>
+                            <span class="label">Duration</span>
+                            <span class="value">{{ reservation.duration_display }}</span>
                         </div>
                     </div>
+
                 </div>
             </div>
             
-            <div class="reservation-sidebar" style="flex: 1; display: flex; flex-direction: column; gap: 20px; min-width: 300px;">
+            <!-- SIDEBAR -->
+            <div class="reservation-sidebar">
                 
-                <div class="detail-card" style="background: var(--color-white); padding: 25px; border-radius: var(--radius-lg); border: 1px solid var(--color-gray-200); box-shadow: var(--shadow-md);">
-                    <h3 style="margin: 0 0 10px 0; font-size: 0.9rem; font-weight: 700; color: var(--color-gray-700); text-transform: uppercase;">Pickup Location</h3>
-                    <p style="margin: 0; font-weight: 700; color: var(--color-black);">{{ reservation.pickup_location.name }}</p>
-                    <p style="margin: 6px 0 12px 0; font-size: 0.9rem; color: var(--color-gray-600); line-height: 1.5;">{{ reservation.pickup_location.address }}</p>
-                    <a href="http://maps.google.com/?q={{ reservation.pickup_location.name|urlencode }}+{{ reservation.pickup_location.address|urlencode }}" target="_blank" class="btn-text" style="font-size: 0.85rem; font-weight: 600;">Get Directions →</a>
+                <div class="detail-card">
+                    <h3 class="sidebar-title">Pickup Location</h3>
+                    <p class="location-name">{{ reservation.pickup_location.name }}</p>
+                    <p class="location-address">{{ reservation.pickup_location.address }}</p>
 
-                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--color-gray-100); display: flex; flex-direction: column; align-items: center; gap: 12px;">
-                        <span style="font-size: 0.7rem; color: var(--color-gray-500); text-transform: uppercase; font-weight: 800; letter-spacing: 0.1rem;">Scan at Smart-Dock</span>
-                        <div style="background: white; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--color-gray-200);">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=ICC-RES-{{ reservation.id }}" alt="QR Code" style="display: block; width: 80px; height: 80px;">
+                    <a href="http://maps.google.com/?q={{ reservation.pickup_location.name|urlencode }}+{{ reservation.pickup_location.address|urlencode }}" 
+                       target="_blank" 
+                       class="btn-text">
+                        Get Directions →
+                    </a>
+
+                    <div class="qr-section">
+                        <span class="qr-label">Scan at Smart-Dock</span>
+
+                        <div class="qr-box">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=ICC-RES-{{ reservation.id }}">
                         </div>
-                        <div style="background: #ffffff; width: fit-content; min-width: 140px; padding: 6px 12px; border-radius: 8px; border: 2px solid var(--color-gray-900); font-family: monospace; font-weight: 900; font-size: 1.2rem; color: #000000; letter-spacing: 4px; text-align: center;">
+
+                        <div class="unlock-code">
                             {{ reservation.unlock_code|default:"509641" }}
                         </div>
                     </div>
                 </div>
 
-                <div class="detail-card" style="background: var(--color-white); padding: 25px; border-radius: var(--radius-lg); border: 1px solid var(--color-gray-200); box-shadow: var(--shadow-md);">
-                    <div style="font-size: 0.95rem; margin-bottom: 20px;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px; color: var(--color-gray-600);">
+                <div class="detail-card">
+
+                    <div class="pricing-box">
+                        <div class="price-row">
                             <span>Subtotal</span>
                             <span>${{ reservation.subtotal }}</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--color-gray-600);">
+
+                        <div class="price-row">
                             <span>Tax (7%)</span>
                             <span>${{ reservation.tax_amount }}</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between; padding-top: 15px; border-top: 2px solid var(--color-gray-100); font-weight: 700; font-size: 1.4rem;">
+
+                        <div class="price-total">
                             <span>Total Paid</span>
-                            <span style="color: var(--color-primary);">${{ reservation.total_price }}</span>
+                            <span>${{ reservation.total_price }}</span>
                         </div>
                     </div>
 
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div class="action-buttons">
                         {% if reservation.status == 'active' %}
-                            <a href="{% url 'unlock_bike' pk=reservation.id %}" 
-                               style="background: #124f31; color: white; padding: 16px; border-radius: var(--radius-lg); text-align: center; font-weight: 700; text-decoration: none; display: block;">
+                            <a href="{% url 'unlock_bike' pk=reservation.id %}" class="btn-return">
                                 Return Bike
                             </a>
                         {% elif reservation.status == 'confirmed' or reservation.status == 'paid' or reservation.status == 'pending' %}
-                            <a href="{% url 'unlock_bike' reservation.id %}" 
-                               style="background: var(--color-primary); color: white; padding: 16px; border-radius: var(--radius-lg); text-align: center; font-weight: 700; text-decoration: none; display: block;">
+                            <a href="{% url 'unlock_bike' reservation.id %}" class="btn-unlock">
                                 🔓 Unlock My Bike
                             </a>
                         {% endif %}
@@ -113,14 +127,16 @@
                         {% if reservation.status != 'cancelled' and reservation.status != 'completed' %}
                             <a href="{% url 'cancel_reservation' pk=reservation.id %}" 
                                onclick="return confirm('Cancel this rental?')" 
-                               style="background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: var(--radius-lg); text-align: center; font-weight: 600; font-size: 0.9rem; text-decoration: none; display: block; border: 1px solid #fecaca;">
+                               class="btn-cancel">
                                 ✕ Cancel Rental
                             </a>
                         {% endif %}
                     </div>
+
                 </div>
             </div>
-            </div>
+
+        </div>
     </div>
 </section>
 {% endblock %}

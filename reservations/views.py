@@ -187,13 +187,28 @@ def create_reservation(request, bike_slug):
                     reservation.save()
                     
                     # --- SMART-DOCK LOGIC ---
-                    bike.location = location
-                    bike.save()
+                    from django.utils import timezone
+                    today = timezone.now().date()
 
-                    location.current_bikes = location.bikes.count()
-                    location.save()
-                    
-                    messages.success(request, f'Reservation created for {bike.name}. It is waiting at {location.name}.')
+                    if rental_date == today:
+                        # Move the bike to the dock only if the rental starts TODAY
+                        bike.location = location
+                        bike.save()
+                        
+                        # Update the location count immediately
+                        location.current_bikes = location.bikes.count()
+                        location.save()
+                        
+                        msg = f'Reservation created for {bike.name}. It is waiting at {location.name}.'
+                    else:
+                        # Do NOT move the bike. Keep it in its current state (or set to None)
+                        # so it doesn't take up a slot in the trailhead grid.
+                        bike.location = None 
+                        bike.save()
+                        
+                        msg = f'Reservation created for {bike.name} on {rental_date.strftime("%b %d")}.'
+
+                    messages.success(request, msg)
                     return redirect('waiver', reservation_id=reservation.id)
                 
             except Exception as e:
@@ -342,11 +357,88 @@ def reservation_confirmation(request, pk):
     }
     return render(request, 'reservations/reservation_confirmation.html', context)
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.utils import timezone
+from datetime import datetime, time
+from .models import Reservation, Location
+
+def unlock_bike(request, pk):
+    # 1. FETCH THE 'ANCHOR' RESERVATION (The one in the URL)
+    try:
+        # We use this to keep the page loaded even if search fails
+        current_res = Reservation.objects.get(id=pk)
+    except (Reservation.DoesNotExist, ValueError):
+        # ONLY redirect if the URL itself is invalid
+        messages.error(request, "Invalid page access.")
+        return redirect('my_reservations')
+    
+    display_res = current_res
+    error_msg = None
+
+    # 2. HANDLE THE SEARCH (The ?search_id= part)
+    search_id = request.GET.get('search_id')
+    if search_id:
+        try:
+            searched_res = Reservation.objects.get(id=search_id)
+            
+            # Validation - If these fail, we do NOT redirect. 
+            # We stay on the current page and set the error_msg.
+            if searched_res.status == 'cancelled':
+                error_msg = "Reservation cancelled."
+            elif searched_res.status == 'completed':
+                error_msg = f"Reservation #{search_id} is already completed."
+            elif searched_res.user != request.user:
+                error_msg = "Reservation does not exist." # Security: Don't tell them it belongs to someone else
+            else:
+                # SUCCESS: Only redirect if it's a valid, viewable reservation
+                return redirect('unlock_bike', pk=searched_res.id)
+        
+        except (Reservation.DoesNotExist, ValueError):
+            # FAIL: Stay right here on the current page (current_res)
+            error_msg = "Reservation does not exist."
+
+    # 3. Security Check for the Anchor
+    if display_res.user != request.user:
+        return redirect('my_reservations')
+
+    # 4. Restored Logic for Timing & Stations
+    now = timezone.localtime(timezone.now())
+    opening_time = time(8, 0) 
+    delivery_time = timezone.make_aware(
+        datetime.combine(display_res.rental_date, opening_time)
+    )
+    is_early = now < delivery_time
+
+    location = display_res.pickup_location or Location.objects.all().first()
+    all_stations = list(Location.objects.filter(is_active=True).exclude(name__icontains="Hub").order_by('station_number'))
+    
+    try:
+        current_idx = all_stations.index(location)
+    except (ValueError, AttributeError):
+        current_idx = 0
+    sorted_locations = all_stations[current_idx:] + all_stations[:current_idx]
+
+    context = {
+        'reservation': display_res,
+        'location': sorted_locations[0] if sorted_locations else None,
+        'all_locations': sorted_locations[1:] if len(sorted_locations) > 1 else [],
+        'now': now, 
+        'is_early': is_early,
+        'search_error': error_msg, 
+    }
+    
+    return render(request, 'reservations/unlock_interface.html', context)
 
 def process_unlock(request, reservation_id):
+    """
+    Handles the actual database update when a user clicks 'Unlock'.
+    Restores your original status checks and bike availability logic.
+    """
     reservation = get_object_or_404(Reservation, id=reservation_id)
     today = timezone.now().date()
     
+    # Check Status Compatibility
     if reservation.status not in ['booked', 'confirmed', 'paid']:
         if reservation.status == 'active':
             messages.info(request, "This rental is already active.")
@@ -354,62 +446,30 @@ def process_unlock(request, reservation_id):
             messages.warning(request, f"Current status ({reservation.status}) prevents unlock.")
         return redirect('unlock_bike', pk=reservation.id)
 
+    # Check Date
     if reservation.rental_date > today:
         messages.warning(request, "It's too early for this reservation!")
         return redirect('unlock_bike', pk=reservation.id)
 
+    # Update Bike Model
     bike = reservation.bike
     bike.status = 'in_use'
     bike.location = None 
     bike.is_available = False
-    bike.save() # This triggers the dock count to go down (free_slots increases)
-    
+    bike.save() 
+
+    # Update Reservation Model
     reservation.status = 'active'
     reservation.save()
 
-    messages.success(request, f"Bike {bike.name} unlocked!")
+    messages.success(request, f"Bike {bike.name} unlocked! Enjoy your ride.")
     return redirect('unlock_bike', pk=reservation.id)
 
 
-
-def unlock_bike(request, pk):
-    reservation = get_object_or_404(Reservation, id=pk)
-    now = timezone.localtime(timezone.now())
-    today = now.date()
-
-    if reservation.user != request.user:
-        messages.error(request, "Access Denied.")
-        return redirect('my_reservations')
-
-    opening_time = time(8, 0) 
-    delivery_time = timezone.make_aware(
-        datetime.combine(reservation.rental_date, opening_time)
-    )
-    
-    is_early = now < delivery_time
-
-    location = reservation.pickup_location or Location.objects.all().first()
-    all_stations = list(Location.objects.filter(is_active=True).exclude(name__icontains="Hub").order_by('station_number'))
-
-    try:
-        current_idx = all_stations.index(location)
-    except (ValueError, AttributeError):
-        current_idx = 0
-    
-    sorted_locations = all_stations[current_idx:] + all_stations[:current_idx]
-
-    context = {
-        'location': sorted_locations[0] if sorted_locations else None,
-        'all_locations': sorted_locations[1:] if len(sorted_locations) > 1 else [],
-        'reservation': reservation,
-        'now': now, 
-        'is_early': is_early, # Pass this to your HTML template
-    }
-    
-    return render(request, 'reservations/unlock_interface.html', context)
-
-
 def process_return(request, reservation_id):
+    """
+    Finalizes the reservation and docks the bike back at its location.
+    """
     reservation = get_object_or_404(Reservation, id=reservation_id)
     
     if reservation.status == 'completed':
@@ -417,7 +477,6 @@ def process_return(request, reservation_id):
         return redirect('unlock_bike', pk=reservation.id)
 
     bike = reservation.bike
-    
     return_location = reservation.pickup_location 
     
     # Dock the bike
@@ -431,9 +490,7 @@ def process_return(request, reservation_id):
     reservation.save()
     
     messages.success(request, f"Return Successful! {bike.name} is locked at {return_location.name}.")
-    
     return redirect('unlock_bike', pk=reservation.id)
-
 
 def find_next_reservation(request):
     res_id = request.GET.get('res_id')
@@ -538,3 +595,9 @@ def send_daily_reminders(request):
         messages.info(request, "No confirmed rentals found for tomorrow.")
 
     return redirect('admin_reservations')
+
+
+def help_page(request):
+
+    return render(request, 'reservations/help.html')
+
