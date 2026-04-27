@@ -1,6 +1,30 @@
 {% extends "admin_dashboard/base.html" %}
 {% block title %}Manage Reservations Indian Creek Cycles{% endblock %}
 {% block meta_description %}Manage Reservations for Indian Creek Cycles{% endblock %}
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .reservation-table .admin-actions-inline {
+        min-width: 250px;
+    }
+
+    .reservation-table .admin-btn {
+        min-width: 0;
+        padding: 0.4rem 0.65rem;
+        white-space: nowrap;
+    }
+
+    .reservation-table th,
+    .reservation-table td {
+        white-space: nowrap;
+    }
+
+    .reservation-table .reservation-bike-cell,
+    .reservation-table .reservation-date-cell {
+        white-space: normal;
+    }
+</style>
+{% endblock %}
 {% block content %}
 <section class="admin-page">
     <div class="admin-shell">
@@ -13,70 +37,80 @@
                     </h1>
                     <p>Review waivers, statuses, and reservation totals.</p>
                     <a href="{% url 'admin_dashboard' %}" class="admin-back-link">
-                            ← Back to Dashboard
-                        </a>
-        <div class="admin-header-actions">
-            <a href="{% url 'send_reminders' %}" class="admin-btn" style="background-color: #182557; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; display: inline-block;">
-                ✉️ Send Tomorrow's Reminders
-            </a>
+                        ← Back to Dashboard
+                    </a>
+                </div>
+                <div class="admin-header-actions">
+                    <a href="{% url 'send_reminders' %}" class="admin-btn" style="background-color: #182557; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; display: inline-block;">
+                        ✉️ Send Tomorrow's Reminders
+                    </a>
+                </div>
+            </div>
+
+            <div class="admin-card">
+                <div class="admin-table-wrap">
+                    <table class="admin-table reservation-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Bike</th>
+                                <th>Dates</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Waiver</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reservation in reservations %}
+                            <tr>
+                                <td>#{{ reservation.id }}</td>
+                                <td>{{ reservation.user.get_full_name|default:reservation.user.username }}</td>
+                                <td class="reservation-bike-cell">{{ reservation.bike.name|truncatechars:20 }}</td>
+                                <td class="reservation-date-cell">{{ reservation.rental_date|date:"n/j/y" }} - {{ reservation.return_date|date:"n/j/y" }}</td>
+                                <td>
+                                    {% if reservation.status == "pending" %}
+                                        <a class="admin-status-link" href="{% url 'user_profile_detail' reservation.user.id %}">
+                                            <span class="status-pill status-{{ reservation.status }}">
+                                                {{ reservation.status }}
+                                            </span>
+                                        </a>
+                                    {% else %}
+                                        <span class="status-pill status-{{ reservation.status }}">
+                                            {{ reservation.status }}
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td>${{ reservation.total_price }}</td>
+                                <td>
+                                    <span class="boolean-pill {% if reservation.waiver_signed %}boolean-yes{% else %}boolean-no{% endif %}">
+                                        {% if reservation.waiver_signed %}Signed{% else %}Not Signed{% endif %}
+                                    </span>
+                                </td>
+                                <td class="admin-action-cell">
+                                    <div class="admin-actions admin-actions-inline">
+                                        {% if reservation.status != "confirmed" %}
+                                            <a class="admin-btn" href="{% url 'update_reservation_status' reservation.id 'confirmed' %}">Confirm</a>
+                                        {% endif %}
+                                        {% if reservation.status != "paid" %}
+                                            <a class="admin-btn admin-btn-success" href="{% url 'update_reservation_status' reservation.id 'paid' %}">Mark Paid</a>
+                                        {% endif %}
+                                        {% if reservation.status != "completed" %}
+                                            <a class="admin-btn" href="{% url 'update_reservation_status' reservation.id 'completed' %}">Complete</a>
+                                        {% endif %}
+                                        {% if reservation.status != "cancelled" %}
+                                            <a class="admin-btn admin-btn-danger" href="{% url 'update_reservation_status' reservation.id 'cancelled' %}">Cancel</a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-
-
-    <div class="admin-card">
-        <div class="admin-table-wrap">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>User</th>
-                        <th>Bike</th>
-                        <th>Dates</th>
-                        <th>Status</th>
-                        <th>Total</th>
-                        <th>Waiver</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for reservation in reservations %}
-                    <tr>
-                        <td>#{{ reservation.id }}</td>
-                        <td>{{ reservation.user.get_full_name|default:reservation.user.username }}</td>
-                        <td>{{ reservation.bike.name }}</td>
-                        <td>{{ reservation.rental_date }} → {{ reservation.return_date }}</td>
-                        <td>
-                            <span class="status-pill status-{{ reservation.status }}">
-                                {{ reservation.status }}
-                            </span>
-                        </td>
-                        <td>${{ reservation.total_price }}</td>
-                        <td>
-                            <span class="boolean-pill {% if reservation.waiver_signed %}boolean-yes{% else %}boolean-no{% endif %}">
-                                {% if reservation.waiver_signed %}Signed{% else %}Not Signed{% endif %}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="admin-actions">
-                                {% if reservation.status != "confirmed" %}
-                                    <a class="admin-btn" href="{% url 'update_reservation_status' reservation.id 'confirmed' %}">Confirm</a>
-                                {% endif %}
-                                {% if reservation.status != "paid" %}
-                                    <a class="admin-btn admin-btn-success" href="{% url 'update_reservation_status' reservation.id 'paid' %}">Mark Paid</a>
-                                {% endif %}
-                                {% if reservation.status != "completed" %}
-                                    <a class="admin-btn" href="{% url 'update_reservation_status' reservation.id 'completed' %}">Complete</a>
-                                {% endif %}
-                                {% if reservation.status != "cancelled" %}
-                                    <a class="admin-btn admin-btn-danger" href="{% url 'update_reservation_status' reservation.id 'cancelled' %}">Cancel</a>
-                                {% endif %}
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+</section>
 {% endblock %}

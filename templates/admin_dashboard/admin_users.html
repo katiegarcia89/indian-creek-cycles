@@ -46,7 +46,6 @@
                     <table class="admin-table">
                         <thead>
                             <tr>
-                                <th>Actions</th>
                                 <th>
                                     <a class="admin-sort-link" href="?sort=name&direction={% if sort == 'name' %}{{ next_direction }}{% else %}asc{% endif %}">
                                         Name{% if sort == 'name' %} {% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
@@ -122,22 +121,12 @@
                                         Joined{% if sort == 'joined' %} {% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
                                     </a>
                                 </th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for user in users %}
                             <tr>
-                                <td>
-                                    <div class="admin-actions">
-                                        <a class="admin-btn" href="{% url 'admin_edit_user' user.id %}">Edit</a>
-                                        {% if user != request.user %}
-                                        <form method="post" action="{% url 'delete_user' user.id %}" onsubmit="return confirm('Delete {{ user.get_full_name|default:user.username }}? Accounts with history or staff access will be deactivated instead.');">
-                                            {% csrf_token %}
-                                            <button class="admin-btn admin-btn-danger" type="submit">Delete</button>
-                                        </form>
-                                        {% endif %}
-                                    </div>
-                                </td>
                                 <td>{{ user.get_full_name|default:user.username }}</td>
                                 <td>{{ user.username }}</td>
                                 <td>
@@ -187,12 +176,24 @@
                                 </td>
                                 <td>
                                     {% if user.last_login %}
-                                    {{ user.last_login|date:"M j, Y g:i a" }}
+                                    {{ user.last_login|date:"n/j/y" }}
                                     {% else %}
                                     <span class="muted">Never</span>
                                     {% endif %}
                                 </td>
-                                <td>{{ user.date_joined|date:"M j, Y" }}</td>
+                                <td>{{ user.date_joined|date:"n/j/y" }}</td>
+                                <td class="admin-action-cell">
+                                    <div class="admin-actions admin-actions-inline admin-actions-compact">
+                                        <a class="admin-btn" href="{% url 'user_profile_detail' user.id %}">View</a>
+                                        <a class="admin-btn" href="{% url 'admin_edit_user' user.id %}">Edit</a>
+                                        {% if user != request.user %}
+                                        <form method="post" action="{% url 'delete_user' user.id %}" onsubmit="return confirm('Delete {{ user.get_full_name|default:user.username }}? Accounts with history or staff access will be deactivated instead.');">
+                                            {% csrf_token %}
+                                            <button class="admin-btn admin-btn-danger" type="submit">Delete</button>
+                                        </form>
+                                        {% endif %}
+                                    </div>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>

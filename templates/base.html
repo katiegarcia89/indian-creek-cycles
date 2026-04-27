@@ -64,7 +64,7 @@
                      <a href="{% url 'accessories' %}" class="nav-link {% if '/bikes/accessories/' in request.path %}active{% endif %}">Accessories</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'help' %}" class="nav-link {% if '/help/' in request.path %}active{% endif %}">Rental Guide</a>
+                    <a href="{% url 'help' %}" class="nav-link nav-link-nowrap {% if '/help/' in request.path %}active{% endif %}">Ride Guide</a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'reviews' %}" class="nav-link {% if '/reviews/' in request.path %}active{% endif %}">Reviews</a>
@@ -77,7 +77,7 @@
                 </li>
                 
                 {% if user.is_authenticated %}
-                <li class="nav-item has-dropdown">
+                <li class="nav-item has-dropdown nav-item-account-desktop">
                     <a href="{% url 'profile' %}" class="nav-link {% if '/accounts/' in request.path %}active{% endif %}">
                         <span class="user-avatar">{{ user.get_initials }}</span>
                         {{ user.first_name|default:user.username }}
@@ -96,15 +96,42 @@
                         <li><a href="{% url 'logout' %}" class="dropdown-link">Sign Out</a></li>
                     </ul>
                 </li>
-                {% else %}
-                <li class="nav-item">
-                    <a href="{% url 'login' %}" class="nav-link btn btn-outline">Sign In</a>
+                <li class="nav-item nav-item-mobile-auth nav-item-mobile-account">
+                    <div class="mobile-auth-actions">
+                        <a href="{% url 'profile' %}" class="nav-link btn btn-outline">My Profile</a>
+                        <a href="{% url 'my_reservations' %}" class="nav-link btn btn-outline">Reservations</a>
+                        <a href="{% url 'payment_history' %}" class="nav-link btn btn-outline">Payments</a>
+                        {% if user.is_staff %}
+                        <a href="{% url 'admin_dashboard' %}" class="nav-link btn btn-outline">Admin Dashboard</a>
+                        {% endif %}
+                        <a href="{% url 'logout' %}" class="nav-link btn btn-primary">Sign Out</a>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a href="{% url 'register' %}" class="nav-link btn btn-primary">Register</a>
+                {% else %}
+                <li class="nav-item nav-item-mobile-auth">
+                    <div class="mobile-auth-actions">
+                        <a href="{% url 'login' %}" class="nav-link btn btn-outline">Login</a>
+                        <a href="{% url 'register' %}" class="nav-link btn btn-primary">Register</a>
+                    </div>
                 </li>
                 {% endif %}
             </ul>
+
+            {% if user.is_authenticated %}
+            <div class="navbar-auth navbar-account">
+                <a href="{% url 'profile' %}" class="nav-link nav-account-btn {% if '/accounts/' in request.path %}active{% endif %}">
+                    <span class="user-avatar">{{ user.get_initials }}</span>
+                    <span class="nav-account-name">{{ user.first_name|default:user.username }}</span>
+                </a>
+            </div>
+            {% else %}
+            {% if not user.is_authenticated %}
+            <div class="navbar-auth">
+                <a href="{% url 'login' %}" class="nav-link btn btn-outline nav-auth-btn">Login</a>
+                <a href="{% url 'register' %}" class="nav-link btn btn-primary nav-auth-btn">Register</a>
+            </div>
+            {% endif %}
+            {% endif %}
         </div>
     </nav>
     

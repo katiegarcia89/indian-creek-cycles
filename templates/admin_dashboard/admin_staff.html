@@ -2,6 +2,15 @@
 
 {% block title %}Staff Accounts | Indian Creek Cycles{% endblock %}
 {% block meta_description %}Review staff accounts for Indian Creek Cycles{% endblock %}
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .staff-text-fix {
+        font-variant-ligatures: none;
+        font-feature-settings: "liga" 0, "clig" 0;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <section class="admin-page">
@@ -10,7 +19,7 @@
             <div class="admin-page-header">
                 <div>
                     <h1 class="admin-title-row">
-                        <span>Staff Accounts</span>
+                        <span class="staff-text-fix">Staff Accounts</span>
                     </h1>
                     <p>Review who can access the admin tools and when they last signed in.</p>
                     <a href="{% url 'admin_dashboard' %}" class="admin-back-link">
@@ -21,7 +30,7 @@
 
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-label">Staff Accounts</div>
+                    <div class="stat-label staff-text-fix">Staff Accounts</div>
                     <div class="stat-value">{{ staff_count }}</div>
                     <div class="stat-meta">Users with staff access</div>
                 </div>
@@ -39,7 +48,7 @@
                 </div>
             </div>
 
-            <h2 style="margin: 0 0 1rem; color: #16324f;">Staff Directory</h2>
+            <h2 class="staff-text-fix" style="margin: 0 0 1rem; color: #16324f;">Staff Directory</h2>
             <div class="admin-card">
                 {% if staff_members %}
                 <div class="admin-table-wrap">
@@ -76,7 +85,7 @@
                                 </td>
                                 <td>
                                     {% if staff.last_login %}
-                                    {{ staff.last_login|date:"M j, Y g:i a" }}
+                                    {{ staff.last_login|date:"n/j/y" }}
                                     {% else %}
                                     <span class="muted">Never</span>
                                     {% endif %}

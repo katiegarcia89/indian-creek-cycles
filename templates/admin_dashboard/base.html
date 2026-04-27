@@ -245,10 +245,62 @@
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
+        align-items: center;
+    }
+
+    .admin-actions form {
+        display: inline-flex;
+        margin: 0;
+    }
+
+    .admin-actions-linear {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 0.4rem;
+        white-space: nowrap;
+    }
+
+    .admin-actions-compact {
+        gap: 0.35rem;
+    }
+
+    .admin-actions-compact .admin-btn {
+        min-width: 0;
+        padding: 0.35rem 0.65rem;
+        font-size: 0.84rem;
+        border-radius: 9px;
+    }
+
+    .admin-actions-inline {
+        flex-wrap: nowrap;
+        gap: 0.35rem;
+    }
+
+    .admin-actions-inline .admin-btn {
+        min-width: 0;
+        padding: 0.4rem 0.65rem;
+        white-space: nowrap;
+    }
+
+    .admin-action-cell {
+        width: 1%;
+        white-space: nowrap;
+    }
+
+    .admin-status-link {
+        text-decoration: none;
+    }
+
+    .admin-status-link:hover .status-pill,
+    .admin-status-link:focus-visible .status-pill {
+        filter: brightness(0.97);
+        box-shadow: 0 0 0 2px rgba(22, 50, 79, 0.12);
     }
 
     .admin-btn {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         text-decoration: none;
         padding: 0.45rem 0.75rem;
         border-radius: 10px;
@@ -337,11 +389,12 @@
     }
 
     .admin-small-input {
-        width: 5.5rem;
-        padding: 0.45rem 0.55rem;
+        width: 6.5rem;
+        padding: 0.6rem 0.7rem;
         border: 1px solid #cbd5e1;
         border-radius: 8px;
         color: #1f2937;
+        font-size: 0.95rem;
     }
 
     .admin-form {

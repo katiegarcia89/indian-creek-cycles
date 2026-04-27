@@ -1,26 +1,35 @@
 {% extends 'base.html' %}
 
-{% block title %}My Profile - Indian Creek Cycles{% endblock %}
+{% block title %}
+    {% if admin_view %}Customer Profile - Indian Creek Cycles{% else %}My Profile - Indian Creek Cycles{% endif %}
+{% endblock %}
 
 {% block content %}
-<!-- Page Header -->
 <section class="page-header">
     <div class="container">
-        <h1 class="page-title">My Profile</h1>
+        <h1 class="page-title">
+            {% if admin_view %}Customer Profile{% else %}My Profile{% endif %}
+        </h1>
+        <p class="section-subtitle profile-header-subtitle">
+            {% if admin_view %}
+                Review contact details, reservations, and account history without editing anything.
+            {% else %}
+                Review the details on your account so you always know what we have on file.
+            {% endif %}
+        </p>
     </div>
 </section>
 
 <section class="section">
     <div class="container">
         <div class="profile-grid">
-            <!-- Profile Sidebar -->
-            <div class="profile-sidebar">
+            <aside class="profile-sidebar">
                 <div class="profile-card">
-                    <div class="profile-avatar-large">{{ user.get_initials }}</div>
-                    <h3 class="profile-name">{{ user.get_full_name }}</h3>
-                    <p class="profile-email">{{ user.email }}</p>
-                    <p class="profile-since">Member since {{ user.date_joined|date:"F Y" }}</p>
-                    
+                    <div class="profile-avatar-large">{{ profile_user.get_initials }}</div>
+                    <h2 class="profile-name">{{ profile_user.get_full_name }}</h2>
+                    <p class="profile-email">{{ profile_user.email|default:"Email not provided" }}</p>
+                    <p class="profile-since">Member since {{ profile_user.date_joined|date:"F Y" }}</p>
+
                     <div class="profile-stats">
                         <div class="profile-stat">
                             <span class="stat-value">{{ reservation_count }}</span>
@@ -31,39 +40,162 @@
                             <span class="stat-label">Reviews</span>
                         </div>
                     </div>
-                    
-                    <a href="{% url 'edit_profile' %}" class="btn btn-outline btn-block">Edit Profile</a>
+
+                    <div class="profile-sidebar-actions">
+                        {% if is_own_profile %}
+                            <a href="{% url 'edit_profile' %}" class="btn btn-outline btn-block">Edit Profile</a>
+                            {% if user.is_staff %}
+                                <a href="{% url 'admin_dashboard' %}" class="btn btn-primary btn-block">Admin Dashboard</a>
+                            {% endif %}
+                        {% elif admin_view %}
+                            <a href="{% url 'admin_edit_user' profile_user.id %}" class="btn btn-outline btn-block">Edit in Admin</a>
+                            <a href="{% url 'admin_users' %}" class="btn btn-primary btn-block">Back to Users</a>
+                        {% endif %}
+                    </div>
                 </div>
-                
-                <div class="profile-nav">
-                    <a href="{% url 'profile' %}" class="profile-nav-link active">
-                        Profile Overview
-                    </a>
+            </aside>
 
-                    <a href="{% url 'my_reservations' %}" class="profile-nav-link">
-                        My Reservations
-                    </a>
+            <div class="profile-content">
+                <div class="profile-info-grid">
+                    <section class="info-card">
+                        <h4>Contact Information</h4>
+                        <div class="profile-detail-list">
+                            <div class="profile-detail-item">
+                                <span class="profile-detail-label">Phone</span>
+                                <span class="profile-detail-value">{{ profile_user.phone|default:"Not provided" }}</span>
+                            </div>
+                            <div class="profile-detail-item">
+                                <span class="profile-detail-label">Email</span>
+                                <span class="profile-detail-value">{{ profile_user.email|default:"Not provided" }}</span>
+                            </div>
+                            <div class="profile-detail-item">
+                                <span class="profile-detail-label">Address</span>
+                                <span class="profile-detail-value">
+                                    {% if profile_user.address or profile_user.city or profile_user.state or profile_user.zip_code %}
+                                        {{ profile_user.address|default:"" }}
+                                        {% if profile_user.address and profile_user.city %}<br>{% endif %}
+                                        {{ profile_user.city }}{% if profile_user.city and profile_user.state %}, {% endif %}{{ profile_user.state }} {{ profile_user.zip_code }}
+                                    {% else %}
+                                        Not provided
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </section>
 
-                    <a href="{% url 'payment_history' %}" class="profile-nav-link">
-                        Payment History
-                    </a>
+                    <section class="info-card">
+                        <h4>Personal Details</h4>
+                        <div class="profile-detail-list">
+                            <div class="profile-detail-item">
+                                <span class="profile-detail-label">Username</span>
+                                <span class="profile-detail-value">{{ profile_user.username }}</span>
+                            </div>
+                            <div class="profile-detail-item">
+                                <span class="profile-detail-label">Date of Birth</span>
+                                <span class="profile-detail-value">
+                                    {% if profile_user.date_of_birth %}{{ profile_user.date_of_birth|date:"F j, Y" }}{% else %}Not provided{% endif %}
+                                </span>
+                            </div>
+                            <div class="profile-detail-item">
+                                <span class="profile-detail-label">Newsletter</span>
+                                <span class="profile-detail-value">
+                                    {% if profile_user.is_newsletter_subscribed %}Subscribed{% else %}Not subscribed{% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </section>
 
-                    <a href="{% url 'reviews' %}" class="profile-nav-link">
-                        My Reviews
-                    </a>
+                    <section class="info-card">
+                        <h4>Emergency Contact</h4>
+                        <div class="profile-detail-list">
+                            <div class="profile-detail-item">
+                                <span class="profile-detail-label">Name</span>
+                                <span class="profile-detail-value">{{ profile_user.emergency_contact_name|default:"Not provided" }}</span>
+                            </div>
+                            <div class="profile-detail-item">
+                                <span class="profile-detail-label">Phone</span>
+                                <span class="profile-detail-value">{{ profile_user.emergency_contact_phone|default:"Not provided" }}</span>
+                            </div>
+                        </div>
+                    </section>
 
-                    <!-- ✅ ADMIN LINK -->
-                    {% if user.is_staff %}
-                    <a href="{% url 'admin_dashboard' %}" class="profile-nav-link">
-                        Admin Dashboard
-                    </a>
+                    {% if admin_view and profile_user.admin_notes %}
+                    <section class="info-card">
+                        <h4>Admin Notes</h4>
+                        <p class="profile-notes">{{ profile_user.admin_notes }}</p>
+                    </section>
                     {% endif %}
                 </div>
-            </div>
-            
-            <!-- Profile Content -->
-            <div class="profile-content">
-                <!-- keep everything else EXACTLY the same -->
+
+                <section class="profile-history">
+                    <div class="section-header-flex">
+                        <h3 class="section-title-sm">Recent Reservations</h3>
+                    </div>
+                    {% if reservations %}
+                        <div class="profile-activity-list">
+                            {% for reservation in reservations %}
+                                {% if is_own_profile %}
+                                    <a href="{% url 'reservation_detail' pk=reservation.id %}?from_profile=1" class="profile-activity-link">
+                                        <article class="profile-activity-card">
+                                            <div>
+                                                <h4>{{ reservation.bike.name }}</h4>
+                                                <p>{{ reservation.rental_date|date:"n/j/y" }} - {{ reservation.return_date|date:"n/j/y" }}</p>
+                                                <span class="profile-activity-hint">Open reservation details</span>
+                                            </div>
+                                            <div class="profile-activity-meta">
+                                                <span class="status-pill status-{{ reservation.status }}">{{ reservation.status }}</span>
+                                                <span class="profile-activity-price">${{ reservation.total_price }}</span>
+                                            </div>
+                                        </article>
+                                    </a>
+                                {% else %}
+                                    <article class="profile-activity-card">
+                                        <div>
+                                            <h4>{{ reservation.bike.name }}</h4>
+                                            <p>{{ reservation.rental_date|date:"n/j/y" }} - {{ reservation.return_date|date:"n/j/y" }}</p>
+                                        </div>
+                                        <div class="profile-activity-meta">
+                                            <span class="status-pill status-{{ reservation.status }}">{{ reservation.status }}</span>
+                                            <span class="profile-activity-price">${{ reservation.total_price }}</span>
+                                        </div>
+                                    </article>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state-full compact-empty-state">
+                            <h3>No reservations yet</h3>
+                            <p>This account does not have any reservation history yet.</p>
+                        </div>
+                    {% endif %}
+                </section>
+
+                <section class="profile-history">
+                    <div class="section-header-flex">
+                        <h3 class="section-title-sm">Recent Reviews</h3>
+                    </div>
+                    {% if reviews %}
+                        <div class="profile-activity-list">
+                            {% for review in reviews %}
+                                <article class="profile-activity-card">
+                                    <div>
+                                        <h4>{{ review.title }}</h4>
+                                        <p>{{ review.content|truncatewords:18 }}</p>
+                                    </div>
+                                    <div class="profile-activity-meta">
+                                        <span class="profile-activity-rating">{{ review.rating }}/5</span>
+                                        <span class="muted">{{ review.created_at|date:"n/j/y" }}</span>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state-full compact-empty-state">
+                            <h3>No reviews yet</h3>
+                            <p>This account has not posted any reviews yet.</p>
+                        </div>
+                    {% endif %}
+                </section>
             </div>
         </div>
     </div>

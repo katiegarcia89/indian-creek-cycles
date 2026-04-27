@@ -1,12 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
 
 from reservations.models import Reservation
 from reviews.models import Review
 from .forms import UserRegistrationForm, UserLoginForm, UserProfileForm
+
+User = get_user_model()
 
 
 def register(request):
@@ -72,22 +74,48 @@ def user_logout(request):
 
 @login_required
 def profile(request):
-    """User profile view with reservations and reviews."""
-    # Get user's reservations
+    """User profile view with reservations, reviews, and full account details."""
     reservations = Reservation.objects.filter(
         user=request.user
     ).select_related('bike').order_by('-created_at')[:5]
-    
-    # Get user's reviews
+
     reviews = Review.objects.filter(
         user=request.user
     ).order_by('-created_at')[:5]
-    
+
     context = {
+        'profile_user': request.user,
+        'is_own_profile': True,
         'reservations': reservations,
         'reviews': reviews,
         'reservation_count': Reservation.objects.filter(user=request.user).count(),
         'review_count': Review.objects.filter(user=request.user).count(),
+    }
+    return render(request, 'accounts/profile.html', context)
+
+
+@login_required
+def user_profile_detail(request, user_id):
+    """Read-only profile view for staff reviewing a customer account."""
+    if not request.user.is_staff:
+        return redirect('profile')
+
+    profile_user = get_object_or_404(User, id=user_id)
+    reservations = Reservation.objects.filter(
+        user=profile_user
+    ).select_related('bike').order_by('-created_at')[:5]
+    reviews = Review.objects.filter(
+        user=profile_user
+    ).order_by('-created_at')[:5]
+
+    context = {
+        'profile_user': profile_user,
+        'is_own_profile': profile_user == request.user,
+        'admin_view': True,
+        'reservations': reservations,
+        'reviews': reviews,
+        'reservation_count': Reservation.objects.filter(user=profile_user).count(),
+        'review_count': Review.objects.filter(user=profile_user).count(),
     }
     return render(request, 'accounts/profile.html', context)
 
