@@ -1,302 +1,274 @@
-# Indian Creek Cycles - Django Bike Rental Platform
+# Indian Creek Cycles
 
-A complete, production-ready Django web application for a bike rental business. Features include bike inventory management, online reservations, waiver signing, simulated payments, customer reviews, and weather integration.
+Indian Creek Cycles is a Django bike rental platform with customer reservations, waiver signing, payments, reviews, trail browsing, bike/accessory inventory, and a custom staff dashboard.
 
 ## Team Members
 
-* Katie Garcia 
+- Katie Garcia
+- Katie Elder
+- Abdel Mahouel
+- Walid Mouhab
 
-* Katie Elder
+## Core Features
 
-* Abdel Mahouel
+### Customer Experience
+- Browse adult, kids, mountain, and tandem bikes
+- Filter bikes by type, size, and availability
+- View bike details and compatible accessories
+- Reserve bikes online
+- Sign waivers digitally
+- Complete demo payment flow
+- View reservation details and payment history
+- Browse trails and trail filters
+- Submit and read reviews
+- Manage account/profile information
 
-* Walid Mouhab 
-  
-## Features
-
-### Customer Features
-- **Browse Bikes** - View available bikes by category (Adult, Kids, Mountain)
-- **Bike Details** - See specifications, pricing, and compatible accessories
-- **Online Reservations** - Book bikes with date selection and accessory add-ons
-- **Waiver Signing** - Digital waiver acceptance before rental
-- **Simulated Payments** - Complete reservation with demo payment processing
-- **Weather Widget** - Check weather by ZIP code for ride planning
-- **Trail Information** - Browse local trails with difficulty ratings
-- **Customer Reviews** - Submit and read reviews
-- **User Accounts** - Registration, login, profile management
-
-### Admin Features
-- **Bike Management** - Add, edit, and manage bike inventory
-- **Reservation Management** - View and manage all reservations
-- **Waiver Records** - Track signed waivers
-- **Payment Records** - View simulated payment transactions
-- **Review Moderation** - Approve and feature customer reviews
-- **Contact Inquiries** - Manage customer inquiries
+### Staff Experience
+- Custom admin dashboard
+- Manage bikes, accessories, users, staff, reservations, payments, promos, reviews, and waivers
+- View customer profile snapshots
+- Manage trail records and contact inquiries
+- Ride Guide for onboarding and system how-to content
 
 ## Technology Stack
 
-- **Backend**: Django 4.2+
-- **Database**: SQLite (default, can be changed to PostgreSQL)
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript
-- **Styling**: Custom CSS with CSS Variables
-- **Fonts**: Playfair Display (headings), Inter (body)
-- **Icons**: SVG icons
+- Python 3.12 required
+- Django 4.2
+- SQLite
+- HTML, CSS, vanilla JavaScript
+- Pillow
+- Requests
+- qrcode
+- python-dotenv
 
 ## Project Structure
 
-```
-indian_creek_cycles/
-├── config/                 # Django project configuration
-│   ├── settings.py        # Project settings
-│   ├── urls.py            # Root URL configuration
-│   └── wsgi.py            # WSGI application
-├── core/                   # Core app (homepage, about, contact, trails, weather)
-│   ├── models.py          # ContactInquiry, Trail, SiteSetting models
-│   ├── views.py           # Home, about, trails, contact, weather API views
-│   ├── forms.py           # ContactForm, WeatherZipForm
-│   ├── urls.py            # URL patterns
-│   └── admin.py           # Admin configuration
-├── accounts/               # User accounts app
-│   ├── models.py          # Custom User model
-│   ├── views.py           # Registration, login, profile views
-│   ├── forms.py           # UserRegistrationForm, UserProfileForm
-│   ├── urls.py            # URL patterns
-│   └── admin.py           # Admin configuration
-├── bikes/                  # Bike inventory app
-│   ├── models.py          # BikeCategory, BikeSize, Bike, Accessory models
-│   ├── views.py           # Bike listing, detail, category views
-│   ├── urls.py            # URL patterns
-│   └── admin.py           # Admin configuration
-├── reservations/           # Reservations app
-│   ├── models.py          # Reservation, Waiver, PromoCode models
-│   ├── views.py           # Reservation creation, waiver, cancellation views
-│   ├── forms.py           # ReservationForm, WaiverForm
-│   ├── urls.py            # URL patterns
-│   └── admin.py           # Admin configuration
-├── payments/               # Payments app
-│   ├── models.py          # Payment, PaymentMethod models
-│   ├── views.py           # Payment processing views
-│   ├── forms.py           # PaymentForm
-│   ├── urls.py            # URL patterns
-│   └── admin.py           # Admin configuration
-├── reviews/                # Reviews app
-│   ├── models.py          # Review, ReviewImage, ReviewHelpfulVote models
-│   ├── views.py           # Review listing, submission views
-│   ├── forms.py           # ReviewForm
-│   ├── urls.py            # URL patterns
-│   └── admin.py           # Admin configuration
-├── templates/              # Django templates
-│   ├── base.html          # Base template
-│   ├── core/              # Core app templates
-│   ├── accounts/          # Accounts app templates
-│   ├── bikes/             # Bikes app templates
-│   ├── reservations/      # Reservations app templates
-│   ├── payments/          # Payments app templates
-│   └── reviews/           # Reviews app templates
-|   └── admin_dashboard/    # Custom admin dashboard templates
-│  
-├── static/                 # Static files
-│   ├── css/               # Stylesheets
-│   ├── js/                # JavaScript files
-│   ├── images/            # Images
-│   └── video/             # Video files
-├── media/                  # User-uploaded files
-├── manage.py               # Django management script
-├── requirements.txt        # Python dependencies
-└── .env.example           # Environment variables template
-```
-
-## Installation & Setup
-
-### Prerequisites
-- Python 3.8 or higher
-- pip (Python package manager)
-
-### Setup
-Make script executable (only needed once):
-chmod +x setup.sh
-
-Run setup:
-./setup.sh
-
-### Alternative Setup
-
-bash setup.sh
+```text
+indian-creek-cycles/
+├── accounts/
+│   ├── forms.py
+│   ├── models.py
+│   ├── urls.py
+│   └── views.py
+├── bikes/
+│   ├── models.py
+│   ├── urls.py
+│   └── views.py
+├── config/
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── core/
+│   ├── forms.py
+│   ├── management/commands/seed.py
+│   ├── models.py
+│   ├── urls.py
+│   └── views.py
+├── locations/
+│   ├── models.py
+│   ├── views.py
+│   └── admin.py
+├── media/
+│   ├── accessories/
+│   ├── bikes/
+│   ├── qr_codes/
+│   └── trails/
+├── payments/
+│   ├── forms.py
+│   ├── models.py
+│   ├── urls.py
+│   └── views.py
+├── reservations/
+│   ├── forms.py
+│   ├── models.py
+│   ├── signals.py
+│   ├── urls.py
+│   └── views.py
+├── reviews/
+│   ├── forms.py
+│   ├── models.py
+│   ├── urls.py
+│   └── views.py
+├── static/
+│   ├── css/
+│   ├── images/
+│   ├── js/
+│   └── videos/
+├── staticfiles/          # Generated by collectstatic
+├── templates/
+│   ├── accounts/
+│   ├── admin_dashboard/
+│   ├── bikes/
+│   ├── core/
+│   ├── emails/
+│   ├── payments/
+│   ├── reservations/
+│   ├── reviews/
+│   └── base.html
+├── .env.example
+├── manage.py
+├── requirements.txt
+└── setup.sh
 ```
 
-The application will be available at: **http://127.0.0.1:8000/**
+## Static vs Staticfiles
 
-### Step 7: Access Admin Panel (Optional)
+- `static/` is the source of truth for CSS, JS, images, and videos.
+- `staticfiles/` is generated output from `python manage.py collectstatic`.
+- Do not manually edit `staticfiles/`.
 
-Navigate to: **http://127.0.0.1:8000/admin/**
+## Environment Variables
 
-Login with:
-- Username: `admin`
-- Password: `admin123`
+Copy `.env.example` to `.env` if needed:
 
-## Default Users
-
-| Username | Password | Role |
-|----------|----------|------|
-| admin | admin123 | Superuser/Admin |
-| john_doe | demo123 | Regular user |
-| jane_smith | demo123 | Regular user |
-| mike_johnson | demo123 | Regular user |
-| sarah_williams | demo123 | Regular user |
-
-## URL Routes
-
-### Public Pages
-- `/` - Homepage
-- `/about/` - About page
-- `/trails/` - Trails listing
-- `/contact/` - Contact form
-- `/bikes/` - Bike listing
-- `/bikes/adults/` - Adult bikes
-- `/bikes/kids/` - Kids bikes
-- `/bikes/mountain/` - Mountain bikes
-- `/bikes/sizes/` - Bike size guide
-- `/bikes/<slug>/` - Bike detail page
-- `/reviews/` - Reviews listing
-
-### Account Pages
-- `/accounts/login/` - Login
-- `/accounts/register/` - Registration
-- `/accounts/logout/` - Logout
-- `/accounts/profile/` - User profile
-- `/accounts/profile/edit/` - Edit profile
-
-### Reservation Pages (Login Required)
-- `/reservations/create/<bike_slug>/` - Create reservation
-- `/reservations/waiver/<reservation_id>/` - Sign waiver
-- `/reservations/my-reservations/` - My reservations
-- `/reservations/detail/<pk>/` - Reservation detail
-- `/reservations/cancel/<pk>/` - Cancel reservation
-- `/reservations/confirmation/<pk>/` - Reservation confirmation
-
-### Payment Pages (Login Required)
-- `/payments/process/<reservation_id>/` - Process payment
-- `/payments/confirmation/<payment_id>/` - Payment confirmation
-- `/payments/history/` - Payment history
-
-### Admin Dashboard Pages (Staff/Superuser Only)
-- `/admin-dashboard/` - Admin dashboard overview
-- `/admin-dashboard/bikes/` - Manage bikes
-- `/admin-dashboard/reservations/` - Manage reservations
-- `/admin-dashboard/reviews/` - Moderate reviews
-- `/admin-dashboard/payments/` - View/manage payments
-- `/admin-dashboard/bikes/<bike_id>/toggle-availability/` - Toggle bike availability
-- `/admin-dashboard/bikes/<bike_id>/toggle-maintenance/` - Toggle bike maintenance
-- `/admin-dashboard/reservations/<reservation_id>/status/<new_status>/` - Update reservation status
-- `/admin-dashboard/reviews/<review_id>/approve/` - Approve review
-- `/admin-dashboard/reviews/<review_id>/unapprove/`- Unapprove review
-- `/admin-dashboard/payments/<payment_id>/refund/` - Refund payment
-- `/admin-dashboard/payments/<payment_id>/void/` - Void payment
-
-### API Endpoints
-- `/api/weather/?zip_code=<zip>` - Get weather data
-- `/reservations/check-availability/?bike_id=<id>&date=<date>` - Check bike availability
-
-## Weather API Configuration
-
-The weather feature works in two modes:
-
-### Demo Mode (Default)
-Without an API key, the weather endpoint returns mock data for demonstration purposes.
-
-### Live Mode (With OpenWeather API)
-1. Sign up for a free API key at [OpenWeatherMap](https://openweathermap.org/api)
-2. Add the key to your `.env` file:
-   ```
-   OPENWEATHER_API_KEY=your-api-key-here
-   ```
-3. Restart the server
-
-## Customization
-
-### Adding a Homepage Video
-
-1. Place your video file in `static/video/`
-2. Name it `family-biking.mp4` (or update the reference in `templates/core/home.html`)
-3. The video should be:
-   - MP4 format
-   - Optimized for web (compressed)
-   - Family-friendly cycling content
-
-### Changing Colors
-
-Edit CSS variables in `static/css/main.css`:
-
-```css
-:root {
-    --color-primary: #1a472a;      /* Dark green */
-    --color-primary-dark: #0d2916; /* Darker green */
-    --color-accent: #c9a227;       /* Gold */
-    /* ... other variables */
-}
+```env
+DEBUG=True
+SECRET_KEY=your-secret-key-here-change-in-production
+ALLOWED_HOSTS=localhost,127.0.0.1
+OPENWEATHER_API_KEY=your-openweather-api-key-here
 ```
 
-### Adding New Bike Categories
+For production, update `DEBUG`, `SECRET_KEY`, and `ALLOWED_HOSTS`.
 
-1. Log in to the admin panel
-2. Go to "Bike Categories"
-3. Click "Add Bike Category"
-4. Fill in name, slug, and description
+## Local Setup
 
-## Deployment
+### Prerequisite
 
-For production deployment:
+- Python 3.12 must be installed and available as `python3.12`
 
-1. Set `DEBUG=False` in `.env`
-2. Generate a new `SECRET_KEY`
-3. Configure allowed hosts
-4. Set up a production database (PostgreSQL recommended)
-5. Collect static files:
-   ```bash
-   python manage.py collectstatic
-   ```
-6. Use a production WSGI server (Gunicorn, uWSGI)
-7. Configure a reverse proxy (Nginx, Apache)
-
-## Testing
-
-Run Django tests:
+Make the script executable once:
 
 ```bash
-python manage.py test
+chmod +x setup.sh
 ```
 
-## License
+Run setup:
 
-This project is created for educational purposes.
+```bash
+./setup.sh
+```
 
-## Support
+The script will:
+- create or repair `.venv`
+- install dependencies
+- create `.env` if needed
+- run migrations
+- collect static files
+- run the seed command if available
 
-For issues or questions, please refer to the Django documentation or contact the project maintainer.
+After setup:
 
----
+```bash
+source .venv/bin/activate
+python manage.py runserver
+```
 
-# Indian Creek Cycles: Smart-Dock Implementation
+Default local URL:
 
-# New Features
-Functional Smart-Dock System: Integrated the logic required to connect the web application to the physical docking hardware.
+- [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 
-Active Unlock/Return Flow: Users can now successfully "Unlock" a bike to begin a session and "Return" it to end the billing cycle.
+If port `8000` is busy:
 
-Access Credentials: Automated generation of dynamic QR Codes and 6-digit manual entry codes for every reservation.
+```bash
+python manage.py runserver 8001
+```
 
-Responsive Interface: A redesigned Reservation Detail page that prioritizes the "Smart-Dock Access" card for easy trailhead use.
+## Useful Commands
 
-# Setup & Installation
-Install Required Packages:
+Activate virtual environment:
 
-pip install qrcode pillow
+```bash
+source .venv/bin/activate
+```
 
-Apply Database Migrations:
+Run migrations:
 
+```bash
 python manage.py migrate
+```
 
----
+Seed demo data:
 
+```bash
+python manage.py seed
+```
 
-**Made with ❤️ for bike lovers**
+Collect static assets:
+
+```bash
+python manage.py collectstatic --noinput
+```
+
+If collected assets look stale:
+
+```bash
+python manage.py collectstatic --clear --noinput
+```
+
+Django checks:
+
+```bash
+python manage.py check
+```
+
+## Main Routes
+
+### Public
+- `/`
+- `/about/`
+- `/contact/`
+- `/trails/`
+- `/bikes/`
+- `/bikes/accessories/`
+- `/bikes/sizes/`
+- `/reviews/`
+- `/help/` - Ride Guide
+
+### Accounts
+- `/accounts/login/`
+- `/accounts/register/`
+- `/accounts/logout/`
+- `/accounts/profile/`
+- `/accounts/profile/edit/`
+
+### Reservations and Payments
+- `/reservations/create/<bike_slug>/`
+- `/reservations/my-reservations/`
+- `/reservations/detail/<pk>/`
+- `/payments/process/<reservation_id>/`
+- `/payments/history/`
+
+### Staff Dashboard
+- `/admin-dashboard/`
+- `/admin-dashboard/bikes/`
+- `/admin-dashboard/accessories/`
+- `/admin-dashboard/users/`
+- `/admin-dashboard/staff/`
+- `/admin-dashboard/reservations/`
+- `/admin-dashboard/payments/`
+- `/admin-dashboard/promos/`
+- `/admin-dashboard/reviews/`
+- `/admin-dashboard/signed-waivers/`
+
+## Notes About Demo Data
+
+The seed command creates:
+- demo users
+- bike categories and bikes
+- accessories
+- trails
+- promo codes
+- reviews
+
+Re-running `seed` may update existing seeded content depending on the command logic.
+
+## Hosting Notes
+
+If the deployed site looks older than your repository:
+
+1. make sure the correct branch is deployed
+2. run `python manage.py collectstatic --clear --noinput`
+3. reload/restart the web app
+4. hard refresh the browser
+
+That usually means the deployed static files are stale, not that `static/` is wrong.

@@ -188,7 +188,6 @@
                 </div>
                 <h3 class="category-name">Adult Bikes</h3>
                 <p class="category-description">Premium bikes for adult riders of all skill levels</p>
-                <span class="category-count">{{ adult_count|default:"10+" }} bikes</span>
             </a>
             
             <a href="{% url 'kids_bikes' %}" class="category-card">
@@ -201,7 +200,6 @@
                 </div>
                 <h3 class="category-name">Kids Bikes</h3>
                 <p class="category-description">Safe and fun bikes for young riders</p>
-                <span class="category-count">{{ kids_count|default:"8+" }} bikes</span>
             </a>
             
             <a href="{% url 'mountain_bikes' %}" class="category-card">
@@ -216,7 +214,6 @@
                 </div>
                 <h3 class="category-name">Mountain Bikes</h3>
                 <p class="category-description">Rugged bikes built for off-road adventures</p>
-                <span class="category-count">{{ mountain_count|default:"7+" }} bikes</span>
             </a>
             
             <a href="{% url 'bike_category' slug='tandem-bikes' %}" class="category-card">
@@ -230,7 +227,6 @@
                 </div>
                 <h3 class="category-name">Tandem Bikes</h3>
                 <p class="category-description">Two-seat bikes for couples and families</p>
-                <span class="category-count">{{ tandem_count|default:"5+" }} bikes</span>
             </a>
         </div>
     </div>
