@@ -99,8 +99,8 @@
                                         {% if accessory.is_available %}Yes{% else %}No{% endif %}
                                     </span>
                                 </td>
-                                <td>
-                                    <div class="admin-actions">
+                                <td class="admin-action-cell">
+                                    <div class="admin-actions admin-actions-inline admin-actions-compact">
                                         <a class="admin-btn" href="{% url 'admin_edit_accessory' accessory.id %}">
                                             Edit
                                         </a>

@@ -93,7 +93,6 @@
                     <table class="admin-table promo-table">
                         <thead>
                             <tr>
-                                <th>Actions</th>
                                 <th>
                                     <a class="admin-sort-link" href="?sort=code&direction={% if sort == 'code' %}{{ next_direction }}{% else %}asc{% endif %}">
                                         Code{% if sort == 'code' %} {% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
@@ -134,23 +133,12 @@
                                         Valid Dates{% if sort == 'valid_dates' %} {% if direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
                                     </a>
                                 </th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
             {% for promo in promo_codes %}
             <tr>
-                                <td>
-                                    <div class="admin-actions">
-                                        <a class="admin-btn" href="{% url 'admin_edit_promo' promo.id %}">Edit</a>
-                                        <a class="admin-btn" href="{% url 'toggle_promo_status' promo.id %}">
-                                            {% if promo.is_active %}Deactivate{% else %}Activate{% endif %}
-                                        </a>
-                                        <form method="post" action="{% url 'delete_promo' promo.id %}" onsubmit="return confirm('Delete {{ promo.code }}? Codes with usage history will be deactivated instead.');">
-                                            {% csrf_token %}
-                                            <button class="admin-btn admin-btn-danger" type="submit">Delete</button>
-                                        </form>
-                                    </div>
-                                </td>
                                 <td class="promo-code-cell"><strong>{{ promo.code }}</strong></td>
                                 <td class="promo-status-cell">
                                     <span class="boolean-pill {% if promo.is_valid %}boolean-yes{% else %}boolean-no{% endif %}">
@@ -170,8 +158,19 @@
                                 <td class="promo-purpose-cell">{{ promo.description }}</td>
                                 <td class="promo-rule-cell">{{ promo.rule_summary }}</td>
                                 <td class="promo-date-cell">
-                                    {{ promo.valid_from|date:"M j, Y g:i a" }}<br>
-                                    <span class="muted">to {{ promo.valid_until|date:"M j, Y g:i a" }}</span>
+                                    {{ promo.valid_from|date:"n/j/y" }} - {{ promo.valid_until|date:"n/j/y" }}
+                                </td>
+                                <td class="admin-action-cell">
+                                    <div class="admin-actions admin-actions-inline admin-actions-compact">
+                                        <a class="admin-btn" href="{% url 'admin_edit_promo' promo.id %}">Edit</a>
+                                        <a class="admin-btn" href="{% url 'toggle_promo_status' promo.id %}">
+                                            {% if promo.is_active %}Deactivate{% else %}Activate{% endif %}
+                                        </a>
+                                        <form method="post" action="{% url 'delete_promo' promo.id %}" onsubmit="return confirm('Delete {{ promo.code }}? Codes with usage history will be deactivated instead.');">
+                                            {% csrf_token %}
+                                            <button class="admin-btn admin-btn-danger" type="submit">Delete</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
             {% endfor %}

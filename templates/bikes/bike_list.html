@@ -53,9 +53,17 @@
     </div>
 </section>
 
-<!-- Bikes Grid -->
 <section class="section">
     <div class="container">
+        <div class="cta-card cta-card-inline bike-size-guide-callout">
+            <div class="cta-card-content">
+                <span class="eyebrow">Bike Sizing</span>
+                <h3>Find Your Best Fit Before You Browse</h3>
+                <p>Use the size guide to match bike sizes with rider height before choosing from the available bikes below.</p>
+            </div>
+            <a href="{% url 'bike_sizes' %}" class="btn btn-outline">View Size Guide</a>
+        </div>
+
         <div class="section-header-flex">
             <h2 class="section-title">Available Bikes</h2>
             <span class="results-count">{{ bikes|length }} bike{{ bikes|length|pluralize }}</span>
@@ -121,19 +129,6 @@
                 <a href="{% url 'bike_list' %}" class="btn btn-primary">View All Bikes</a>
             </div>
             {% endfor %}
-        </div>
-    </div>
-</section>
-
-<!-- Size Guide CTA -->
-<section class="section section-alt">
-    <div class="container">
-        <div class="cta-card">
-            <div class="cta-card-content">
-                <h3>Not Sure What Size You Need?</h3>
-                <p>Use our bike size guide to find the perfect fit for your height and riding style.</p>
-            </div>
-            <a href="{% url 'bike_sizes' %}" class="btn btn-outline">View Size Guide</a>
         </div>
     </div>
 </section>

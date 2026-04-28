@@ -2,6 +2,18 @@
 
 {% block title %}Payments| Indian Creek Cycles{% endblock %}
 {% block meta_description %}Manage Payments for Indian Creek Cycles{% endblock %}
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .payment-table .admin-actions-inline {
+        min-width: 120px;
+    }
+
+    .payment-table .payment-bike-cell {
+        white-space: normal;
+    }
+</style>
+{% endblock %}
 {% block content %}
 <section class="admin-page">
     <div class="admin-shell">
@@ -20,7 +32,7 @@
 
     <div class="admin-card">
         <div class="admin-table-wrap">
-            <table class="admin-table">
+            <table class="admin-table payment-table">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -40,7 +52,7 @@
                         <td>#{{ payment.id }}</td>
                         <td>#{{ payment.reservation.id }}</td>
                         <td>{{ payment.reservation.user.get_full_name|default:payment.reservation.user.username }}</td>
-                        <td>{{ payment.reservation.bike.name }}</td>
+                        <td class="payment-bike-cell">{{ payment.reservation.bike.name|truncatechars:22 }}</td>
                         <td>${{ payment.total_amount }}</td>
                         <td>{{ payment.payment_method|title }}</td>
                         <td>
@@ -48,9 +60,9 @@
                                 {{ payment.status }}
                             </span>
                         </td>
-                        <td>{{ payment.created_at|date:"M j, Y g:i a" }}</td>
-                        <td>
-                            <div class="admin-actions">
+                        <td>{{ payment.created_at|date:"n/j/y" }}</td>
+                        <td class="admin-action-cell">
+                            <div class="admin-actions admin-actions-inline admin-actions-compact">
                                 {% if payment.status == "completed" %}
                                     <a class="admin-btn admin-btn-danger" href="{% url 'refund_payment' payment.id %}">
                                         Refund

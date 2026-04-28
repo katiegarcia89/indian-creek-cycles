@@ -1,6 +1,19 @@
 {% extends "admin_dashboard/base.html" %}
 {% block title %}Manage Bikes | Indian Creek Cycles{% endblock %}
 {% block meta_description %}Manage Bikes for Indian Creek Cycles{% endblock %}
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .bike-table .admin-actions-inline {
+        min-width: 280px;
+    }
+
+    .bike-table .bike-name-cell,
+    .bike-table .bike-location-cell {
+        white-space: normal;
+    }
+</style>
+{% endblock %}
 {% block content %}
 <section class="admin-page">
     <div class="admin-shell">
@@ -43,7 +56,7 @@
 
     <div class="admin-card">
         <div class="admin-table-wrap">
-            <table class="admin-table">
+            <table class="admin-table bike-table">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -57,11 +70,11 @@
                 <tbody>
                     {% for bike in bikes %}
                     <tr>
-                        <td>{{ bike.name }}</td>
+                        <td class="bike-name-cell">{{ bike.name|truncatechars:24 }}</td>
                         <td><strong>{{ bike.serial_number|default:"--" }}</strong></td>
                         <td>{{ bike.category.name }}</td>
                         
-                        <td>
+                        <td class="bike-location-cell">
                             {% if bike.location.name == "The Hub (Main Shop)" %}
                                 <span style="color: #034412; font-weight: 600;">🏠 Hub</span>
                             {% else %}
@@ -81,8 +94,8 @@
                                 {% if bike.is_maintenance %}Yes{% else %}No{% endif %}
                             </span>
                         </td>
-                        <td>
-                            <div class="admin-actions">
+                        <td class="admin-action-cell">
+                            <div class="admin-actions admin-actions-inline admin-actions-compact">
                                 <a class="admin-btn" href="{% url 'toggle_bike_availability' bike.id %}">
                                     {% if bike.is_available %}Mark Unavailable{% else %}Mark Available{% endif %}
                                 </a>

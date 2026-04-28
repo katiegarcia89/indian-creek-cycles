@@ -52,12 +52,20 @@
                             <tr>
                                 <td>#{{ reservation.id }}</td>
                                 <td>{{ reservation.user.get_full_name|default:reservation.user.username }}</td>
-                                <td>{{ reservation.bike.name }}</td>
-                                <td>{{ reservation.rental_date|date:"M j, Y" }} → {{ reservation.return_date|date:"M j, Y" }}</td>
+                                <td>{{ reservation.bike.name|truncatechars:20 }}</td>
+                                <td>{{ reservation.rental_date|date:"n/j/y" }} - {{ reservation.return_date|date:"n/j/y" }}</td>
                                 <td>
-                                    <span class="status-pill status-{{ reservation.status }}">
-                                        {{ reservation.status }}
-                                    </span>
+                                    {% if reservation.status == "pending" %}
+                                        <a class="admin-status-link" href="{% url 'user_profile_detail' reservation.user.id %}">
+                                            <span class="status-pill status-{{ reservation.status }}">
+                                                {{ reservation.status }}
+                                            </span>
+                                        </a>
+                                    {% else %}
+                                        <span class="status-pill status-{{ reservation.status }}">
+                                            {{ reservation.status }}
+                                        </span>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
@@ -91,8 +99,8 @@
                                     {{ waiver.full_name }}<br>
                                     <span class="muted">{{ waiver.user.email|default:waiver.user.username }}</span>
                                 </td>
-                                <td>{{ waiver.reservation.bike.name }}</td>
-                                <td>{{ waiver.date_signed|date:"M j, Y g:i a" }}</td>
+                                <td>{{ waiver.reservation.bike.name|truncatechars:20 }}</td>
+                                <td>{{ waiver.date_signed|date:"n/j/y" }}</td>
                                 <td>
                                     {% if waiver.emergency_contact_name or waiver.emergency_contact_phone %}
                                         {{ waiver.emergency_contact_name|default:"No name" }}<br>

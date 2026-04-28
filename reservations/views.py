@@ -551,7 +551,7 @@ def send_daily_reminders(request):
     )
     
     count = 0
-    logo_path = r'C:\CIS264\IndianCreekCycle\indian-creek-cycles\indian-creek-cycles\static\images\logo\logo-email.png'
+    logo_path = settings.BASE_DIR / 'static' / 'images' / 'logo' / 'logo-email.png'
 
     for res in reservations:
         subject = f"Reminder: Your Ride Tomorrow at {res.pickup_location.name}"
@@ -569,7 +569,7 @@ def send_daily_reminders(request):
         email = EmailMultiAlternatives(
             subject=subject,
             body=text_content,
-            from_email='rentals@indiancreekcycles.com',
+            from_email=settings.DEFAULT_FROM_EMAIL,
             to=[res.user.email],
         )
         
@@ -600,4 +600,3 @@ def send_daily_reminders(request):
 def help_page(request):
 
     return render(request, 'reservations/help.html')
-

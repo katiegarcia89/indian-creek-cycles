@@ -4,8 +4,8 @@
 <style>
     /* 1. FILTER BAR STYLING */
     .filter-section {
-        background: #ffffff;
-        padding: 15px 0;
+        background: var(--color-gray-100);
+        padding: 20px 0;
         border-bottom: 1px solid var(--color-gray-200);
         position: relative;
         z-index: 100;
@@ -15,7 +15,14 @@
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 15px;
     }
-    .filter-group { min-width: 0; }
+    .filter-group {
+        min-width: 0;
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        box-shadow: var(--shadow-sm);
+    }
     .filter-label {
         display: block;
         font-weight: 600;
@@ -23,15 +30,15 @@
         margin-bottom: 8px;
     }
     .filter-buttons {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 8px;
     }
     .filter-btn {
-        display: inline-flex;
+        display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 40px;
+        min-height: 44px;
         padding: 8px 16px;
         border-radius: var(--radius-sm);
         background: var(--color-gray-100);
@@ -48,7 +55,7 @@
     }
     .filter-select {
         width: 100%;
-        min-height: 40px;
+        min-height: 44px;
         padding: 8px 12px;
         border: 1px solid var(--color-gray-300);
         border-radius: var(--radius-sm);
@@ -138,6 +145,10 @@
         .filter-bar {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+
+        .filter-buttons {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
     }
 
     @media (max-width: 850px) {
@@ -155,7 +166,6 @@
         }
 
         .filter-buttons {
-            display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             width: 100%;
         }
