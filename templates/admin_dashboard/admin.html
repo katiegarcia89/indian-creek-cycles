@@ -296,13 +296,21 @@
                                 <td>{{ reservation.user.get_full_name|default:reservation.user.username }}</td>
                                 <td>{{ reservation.bike.name }}</td>
                                 <td>
-                                    {{ reservation.rental_date }}<br>
-                                    <span class="muted">to {{ reservation.return_date }}</span>
+                                    {{ reservation.rental_date|date:"n/j/y" }}<br>
+                                    <span class="muted">to {{ reservation.return_date|date:"n/j/y" }}</span>
                                 </td>
                                 <td>
-                                    <span class="status-pill status-{{ reservation.status }}">
-                                        {{ reservation.status }}
-                                    </span>
+                                    {% if reservation.status == "pending" %}
+                                        <a class="admin-status-link" href="{% url 'user_profile_detail' reservation.user.id %}">
+                                            <span class="status-pill status-{{ reservation.status }}">
+                                                {{ reservation.status }}
+                                            </span>
+                                        </a>
+                                    {% else %}
+                                        <span class="status-pill status-{{ reservation.status }}">
+                                            {{ reservation.status }}
+                                        </span>
+                                    {% endif %}
                                 </td>
                                 <td>${{ reservation.total_price }}</td>
                             </tr>

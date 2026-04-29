@@ -2,13 +2,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
 
 from reservations.models import Reservation
 from reviews.models import Review
 from .forms import UserRegistrationForm, UserLoginForm, UserProfileForm
+
 from django.db.models import Sum
 from core.models import SavedTrail
+User = get_user_model()
+
 
 def register(request):
     """User registration view."""
@@ -78,19 +81,16 @@ def profile(request):
     if request.method == "POST":
         user_profile = request.user
 
-        # Upload images
         if request.FILES.get('avatar'):
             user_profile.avatar = request.FILES['avatar']
 
         if request.FILES.get('cover_photo'):
             user_profile.cover_photo = request.FILES['cover_photo']
-            
-            
+
         user_profile.profile_quote = request.POST.get("profile_quote")
 
         user_profile.save()
-
-        return redirect('profile')  # ✅ prevents resubmitting form
+        return redirect('profile')
 
     # Reservations
     reservations = Reservation.objects.filter(
@@ -98,13 +98,11 @@ def profile(request):
     ).select_related('bike').order_by('-created_at')[:5]
 
     # Reviews
-    recent_reviews = Review.objects.filter(
-        user=request.user
-    ).order_by('-created_at')[:5]
-
     reviews = Review.objects.filter(
         user=request.user
     ).order_by('-created_at')
+
+    recent_reviews = reviews[:5]
 
     # Totals
     total_spent = Reservation.objects.filter(
@@ -120,6 +118,8 @@ def profile(request):
     ).select_related('trail')
 
     context = {
+        'profile_user': request.user,
+        'is_own_profile': True,
         'reservations': reservations,
         'reviews': reviews,
         'recent_reviews': recent_reviews,
@@ -131,6 +131,32 @@ def profile(request):
     }
 
     return render(request, 'accounts/profile.html', context)
+
+@login_required
+def user_profile_detail(request, user_id):
+    """Read-only profile view for staff reviewing a customer account."""
+    if not request.user.is_staff:
+        return redirect('profile')
+
+    profile_user = get_object_or_404(User, id=user_id)
+    reservations = Reservation.objects.filter(
+        user=profile_user
+    ).select_related('bike').order_by('-created_at')[:5]
+    reviews = Review.objects.filter(
+        user=profile_user
+    ).order_by('-created_at')[:5]
+
+    context = {
+        'profile_user': profile_user,
+        'is_own_profile': profile_user == request.user,
+        'admin_view': True,
+        'reservations': reservations,
+        'reviews': reviews,
+        'reservation_count': Reservation.objects.filter(user=profile_user).count(),
+        'review_count': Review.objects.filter(user=profile_user).count(),
+    }
+    return render(request, 'accounts/profile.html', context)
+
 
 @login_required
 def edit_profile(request):

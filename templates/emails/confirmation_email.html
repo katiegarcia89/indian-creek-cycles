@@ -49,14 +49,14 @@
                                 <tr>
                                     <td align="center" style="padding: 15px;">
                                         <p style="margin: 0 0 10px 0; font-size: 9px; text-transform: uppercase; color: #888888; letter-spacing: 1px;">Scan at Smart-Dock</p>
-                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=ICC-RES-{{ reservation.id }}" width="100" height="100" style="display: block; margin-bottom: 10px;">
+                                        <img src="cid:reservation_qr" width="100" height="100" style="display: block; margin-bottom: 10px;" alt="Reservation QR code">
                                         <div style="font-family: monospace; font-size: 24px; font-weight: bold; color: #114823; letter-spacing: 4px;">{{ reservation.unlock_code }}</div>
                                     </td>
                                 </tr>
                             </table>
 
                             <div style="text-align: center; padding-top: 30px;">
-                                <a href="http://127.0.0.1:8000/reservations/detail/{{ reservation.id }}/" 
+                                <a href="{{ reservation_detail_url }}" 
                                    style="background-color: #ffc107; color: #000000; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block;">View Full Dashboard</a>
                             </div>
                         </td>

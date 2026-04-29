@@ -1,11 +1,9 @@
 import json
 import os
-from datetime import datetime, timedelta
 from email.mime.image import MIMEImage
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.utils import timezone
 from django.db import transaction
 from django.http import JsonResponse
@@ -14,17 +12,17 @@ from django.db.models import Q
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.conf import settings
 
 # Local app models and forms
-from .models import Reservation, ReservationAccessory, Waiver, PromoCode, Location
+from .models import Reservation, ReservationAccessory, Waiver, PromoCode
 from .forms import ReservationForm, WaiverForm, PromoCodeForm, ReservationCancelForm
 from bikes.models import Accessory, Bike
 from payments.models import Payment
 
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
-from datetime import datetime, time
+from datetime import datetime, timedelta, time
 from locations.models import Location
 
 
@@ -550,7 +548,7 @@ def send_daily_reminders(request):
     )
     
     count = 0
-    logo_path = r'C:\CIS264\IndianCreekCycle\indian-creek-cycles\indian-creek-cycles\static\images\logo\logo-email.png'
+    logo_path = settings.BASE_DIR / 'static' / 'images' / 'logo' / 'logo-email.png'
 
     for res in reservations:
         subject = f"Reminder: Your Ride Tomorrow at {res.pickup_location.name}"
@@ -568,7 +566,7 @@ def send_daily_reminders(request):
         email = EmailMultiAlternatives(
             subject=subject,
             body=text_content,
-            from_email='rentals@indiancreekcycles.com',
+            from_email=settings.DEFAULT_FROM_EMAIL,
             to=[res.user.email],
         )
         
@@ -601,4 +599,3 @@ def help_page(request):
     return render(request, 'reservations/help.html', {
         'locations': locations
     })
-

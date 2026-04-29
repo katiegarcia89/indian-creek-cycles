@@ -153,8 +153,7 @@ class Reservation(models.Model):
             
     def generate_qr_code(self):
         """Generates a QR code pointing to the specific unlock URL for this reservation."""
-        # qr_url = f"http://127.0.0.1:8000/reservations/reservation/{self.id}/unlock/" 
-        qr_url = f"http://192.168.1.154:8000/reservations/reservation/{self.id}/unlock/"
+        qr_url = f"{settings.SITE_URL}{reverse('unlock_bike', kwargs={'pk': self.id})}"
         
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
         qr.add_data(qr_url)

@@ -6,16 +6,12 @@ echo "### Starting project setup"
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$PROJECT_ROOT"
 
-# Pick a usable Python interpreter
+# Require the same Python version used by the hosting environment
 if command -v python3.12 >/dev/null 2>&1; then
     PYTHON_BIN="python3.12"
-elif command -v python3.11 >/dev/null 2>&1; then
-    PYTHON_BIN="python3.11"
-elif command -v python3 >/dev/null 2>&1; then
-    PYTHON_BIN="python3"
 else
-    echo "Error: Python 3 is not installed or not on PATH."
-    echo "Please install Python 3.11+ and run this script again."
+    echo "Error: python3.12 is required for this project and was not found on PATH."
+    echo "Please install Python 3.12 and run this script again."
     exit 1
 fi
 
@@ -78,4 +74,5 @@ fi
 echo "### Setup complete"
 echo "### To activate later, run: source .venv/bin/activate"
 echo "### Run Development Server"
-python manage.py runserver
+echo "### source .venv/bin/activate"
+echo "### python manage.py runserver"

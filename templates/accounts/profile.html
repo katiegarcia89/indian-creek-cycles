@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}My Profile - Indian Creek Cycles{% endblock %}
+{% block title %}
+    {% if admin_view %}Customer Profile - Indian Creek Cycles{% else %}My Profile - Indian Creek Cycles{% endif %}
+{% endblock %}
 
 {% block content %}
+
 <div class="profile-layout-wrapper">
     <!-- SIDEBAR -->
     <aside class="profile-sidebar-nav">
@@ -37,7 +40,7 @@
         <!-- HERO -->
         <section class="profile-hero-minimal">
             <div class="hero-cover-small">
-                <img src="{% if user.cover_photo and user.cover_photo.url %}{{ user.cover_photo.url }}{% else %}{% static 'images/profile/bgforest.jpg' %}{% endif %}" 
+                <img src="{% if profile_user.cover_photo %}{{ profile_user.cover_photo.url }}{% else %}{% static 'images/profile/bgforest.jpg' %}{% endif %}" 
                 class="cover-photo"
                 >            
             </div>
@@ -45,29 +48,41 @@
             <div class="profile-header-integrated">
                 <div class="avatar-overlap">
                     <div class="avatar-large-img">
-                        {% if user.avatar %}
-                            <img src="{{ user.avatar.url }}">
+                        {% if profile_user.avatar %}
+                            <img src="{{ profile_user.avatar.url }}">
                         {% else %}
                             <img src="{% static 'images/profile/gbikep.png' %}">
                         {% endif %}                    
                     </div>
                 </div>
-
+                {% if admin_view %}
+                    <a href="{% url 'admin_users' %}" class="btn-secondary" style="margin-left:10px;">
+                        ← Back to Users
+                    </a>
+                {% endif %}
                 <div class="header-text-block">
                     <h1 class="profile-name">
-                        {{ user.get_full_name }}
+                        {{ profile_user.get_full_name }}
                         <span class="badge"><i class="fas fa-leaf"></i> Trail Explorer</span>
                     </h1>
                     <div class="profile-meta-row">
                         {% comment %} <span><i class="fas fa-user"></i> kat_on_trails</span> {% endcomment %}
-                        <span><i class="fas fa-envelope"></i> {{ user.email }}</span>
-                        <span><i class="fas fa-map-marker-alt"></i> {{ user.city }}, {{ user.state }}</span>
-                        <span><i class="fas fa-calendar"></i> Member since {{ user.date_joined|date:"F Y" }}</span>
+                        <span><i class="fas fa-envelope"></i> {{ profile_user.email }}</span>
+                        <span><i class="fas fa-map-marker-alt"></i> {{ profile_user.city }}, {{ profile_user.state }}</span>
+                        <span><i class="fas fa-calendar"></i> Member since {{ profile_user.date_joined|date:"F Y" }}</span>
                     </div>
                     
                 </div>
 
-                <a href="{% url 'edit_profile' %}" class="btn-edit-profile">Edit Profile</a>
+                {% if admin_view %}
+                    <a href="{% url 'admin_edit_user' profile_user.id %}" class="btn-edit-profile">
+                        Edit in Admin
+                    </a>
+                {% else %}
+                    <a href="{% url 'edit_profile' %}" class="btn-edit-profile">
+                        Edit Profile
+                    </a>
+                {% endif %}
             </div>
         </section>
 
@@ -113,14 +128,14 @@
                     <div class="stat-card">
 
                         <div class="stat-info">
-                            <h3>{{ reservation_count }}</h3>
+                            <h3>{{ saved_trails|length }}</h3>
                             <p>Trails</p>
                         </div>
                     </div>
                 </div>
                <div class="profile-quote-card">
                     <p>
-                        {{ user.profile_quote|default:"🚴‍♂️ Life is better on two wheels. Exploring new trails and chasing views." }}
+                        {{ profile_user.profile_quote|default:"🚴‍♂️ Life is better on two wheels. Exploring new trails and chasing views." }}
                     </p>
                 </div>
             </div>
@@ -284,18 +299,12 @@
                                                 Write Review
                                             </a>
                                         {% endif %}
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                         {% endif %}
                         {% endfor %}
-
                     </div>
                 {% else %}
                     <p class="empty-state">No rides yet.</p>
@@ -374,11 +383,12 @@
                             {% if saved.trail.image %}
                                 <img src="{{ saved.trail.image.url }}" alt="{{ saved.trail.name }}">
                             {% endif %}
-
-                            <!-- trash icon overlay -->
-                            <button class="remove-saved-icon" data-id="{{ saved.trail.id }}">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
+                            <form method="POST" action="{% url 'remove_saved_trail' saved.trail.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="remove-saved-icon">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>               
                         </div>
 
                         <!-- CONTENT -->
@@ -424,8 +434,8 @@
                                 <h2>Profile Picture</h2>
 
                                 <div class="card-content">
-                                    {% if user.avatar %}
-                                        <img src="{{ user.avatar.url }}" class="settings-avatar">
+                                    {% if profile_user.avatar %}
+                                        <img src="{{ profile_user.avatar.url }}" class="settings-avatar">
                                     {% else %}
                                         <img src="{% static 'images/profile/gbikep.png' %}" class="settings-avatar">
                                     {% endif %}
@@ -441,8 +451,8 @@
                             <h4>Cover Photo</h4>
 
                             <div class="card-content">
-                                {% if user.cover_photo %}
-                                    <img src="{{ user.cover_photo.url }}" class="settings-cover">
+                               {% if profile_user.cover_photo %}
+                                    <img src="{{ profile_user.cover_photo.url }}" class="settings-cover">
                                 {% else %}
                                     <img src="{% static 'images/profile/bgforest.jpg' %}" class="settings-cover">
                                 {% endif %}
@@ -456,20 +466,20 @@
                             </div> 
                         </div>
                     </div>
-                </form>
-                <div class="settings-card">
+                    <div class="settings-card">
                         <h2>Profile Quote</h2>
+                        <div class="card-content">
+                            <textarea 
+                                name="profile_quote" 
+                                class="quote-input"
+                                placeholder="Write something about your riding style, favorite trails, or motto..."
+                            >{{ profile_user.profile_quote }}</textarea>
 
-                            <div class="card-content">
-                                <textarea 
-                                    name="profile_quote" 
-                                    class="quote-input"
-                                    placeholder="Write something about your riding style, favorite trails, or motto..."
-                                >{{ user.profile_quote }}</textarea>
-
-                                <p class="input-hint">This will show on your profile overview.</p>
-                            </div>
-                </div>
+                            <p class="input-hint">This will show on your profile overview.</p>
+                        </div>
+                    </div>
+                </form>
+               
             </div>
         </div>
         <!-- TAB SCRIPT -->
@@ -509,7 +519,9 @@
 
                     const img = this.closest('.settings-card').querySelector('img');
                     if (img) {
-                        img.src = URL.createObjectURL(file);
+                        const url = URL.createObjectURL(file);
+                        img.src = url;
+                        img.onload = () => URL.revokeObjectURL(url);
                     }
                 });
             });

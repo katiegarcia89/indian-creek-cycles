@@ -251,7 +251,7 @@ class Command(BaseCommand):
                 'price_per_day': 38.00,
                 'price_per_hour': 11.00,
                 'quantity_total': 5,
-                'image_path': None
+                'image_path': 'bikes/sport-hybrid-clean.png'
             },
             {
                 'name': 'Fitness Trainer',
@@ -264,7 +264,7 @@ class Command(BaseCommand):
                 'price_per_day': 40.00,
                 'price_per_hour': 11.00,
                 'quantity_total': 4,
-                'image_path': None
+                'image_path': 'bikes/fitness-trainer-clean.png'
             },
             
             # ========== KIDS BIKES (8 bikes) ==========
@@ -344,7 +344,7 @@ class Command(BaseCommand):
                 'price_per_day': 28.00,
                 'price_per_hour': 8.00,
                 'quantity_total': 4,
-                'image_path': None
+                'image_path': 'bikes/kids-mountain-bike-clean.png'
             },
             {
                 'name': 'Princess Bike',
@@ -357,7 +357,7 @@ class Command(BaseCommand):
                 'price_per_day': 16.00,
                 'price_per_hour': 5.00,
                 'quantity_total': 3,
-                'image_path': None
+                'image_path': 'bikes/princess-bike-clean.png'
             },
             {
                 'name': 'Superhero Bike',
@@ -370,7 +370,7 @@ class Command(BaseCommand):
                 'price_per_day': 16.00,
                 'price_per_hour': 5.00,
                 'quantity_total': 3,
-                'image_path': None
+                'image_path': 'bikes/superhero-bike-clean.png'
             },
             
             # ========== MOUNTAIN BIKES (7 bikes) ==========
@@ -411,7 +411,7 @@ class Command(BaseCommand):
                 'price_per_day': 45.00,
                 'price_per_hour': 12.00,
                 'quantity_total': 5,
-                'image_path': None
+                'image_path': 'bikes/all-terrain-explorer-clean.png'
             },
             {
                 'name': 'Fat Trekker',
@@ -437,7 +437,7 @@ class Command(BaseCommand):
                 'price_per_day': 85.00,
                 'price_per_hour': 25.00,
                 'quantity_total': 2,
-                'image_path': None
+                'image_path': 'bikes/downhill-dominator-clean.png'
             },
             {
                 'name': 'Cross Country Racer',
@@ -450,7 +450,7 @@ class Command(BaseCommand):
                 'price_per_day': 65.00,
                 'price_per_hour': 18.00,
                 'quantity_total': 3,
-                'image_path': None
+                'image_path': 'bikes/cross-country-racer-clean.png'
             },
             {
                 'name': 'Trail Beginner',
@@ -463,7 +463,7 @@ class Command(BaseCommand):
                 'price_per_day': 38.00,
                 'price_per_hour': 11.00,
                 'quantity_total': 5,
-                'image_path': None
+                'image_path': 'bikes/trail-beginner-clean.png'
             },
             
             # ========== TANDEM BIKES (5 bikes) ==========
@@ -504,7 +504,7 @@ class Command(BaseCommand):
                 'price_per_day': 70.00,
                 'price_per_hour': 20.00,
                 'quantity_total': 2,
-                'image_path': None
+                'image_path': 'bikes/performance-tandem-clean.png'
             },
             {
                 'name': 'Kid-Size Tandem',
@@ -517,7 +517,7 @@ class Command(BaseCommand):
                 'price_per_day': 30.00,
                 'price_per_hour': 9.00,
                 'quantity_total': 2,
-                'image_path': None
+                'image_path': 'bikes/kid-size-tandem-clean.png'
             },
             {
                 'name': 'Recumbent Tandem',
@@ -530,7 +530,7 @@ class Command(BaseCommand):
                 'price_per_day': 80.00,
                 'price_per_hour': 24.00,
                 'quantity_total': 1,
-                'image_path': None
+                'image_path': 'bikes/recumbent-tandem-clean.png'
             },
         ]
         
@@ -625,7 +625,7 @@ class Command(BaseCommand):
                 'terrain': 'Mixed gravel and dirt, rolling hills',
                 'highlights': 'Forest canopy, wildflowers in spring, bird watching',
                 'is_featured': True,
-                'image_path': 'trails/oak-ridge-loop.jpg'
+                'image_path': 'trails/oak-ridge-loop-summer.jpg'
             },
             {
                 'name': 'Summit Challenge Trail',
@@ -658,7 +658,7 @@ class Command(BaseCommand):
                 'terrain': 'Packed gravel and dirt, gentle curves',
                 'highlights': 'Maple canopy, fall color, shaded turns, quiet woodland views',
                 'is_featured': False,
-                'image_path': 'trails/nallPark.png'
+                'image_path': 'trails/oak-ridge-loop.jpg'
             },
             {
                 'name': 'Lakeside Loop',

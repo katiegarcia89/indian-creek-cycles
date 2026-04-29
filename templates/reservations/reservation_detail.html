@@ -5,6 +5,11 @@
 {% block content %}
 <section class="page-header reservation-detail-header">
     <div class="container">
+        {% if request.GET.from_profile %}
+            <a href="{% url 'profile' %}" class="reservation-back-link">← Back to Profile</a>
+        {% else %}
+            <a href="{% url 'my_reservations' %}" class="reservation-back-link">← Back to My Reservations</a>
+        {% endif %}
         <h1 class="page-title">Reservation Details</h1>
     </div>
 </section>
