@@ -107,9 +107,9 @@ class Reservation(models.Model):
     # Administrative & Legal
     waiver_signed = models.BooleanField(default=False)
     waiver_signed_at = models.DateTimeField(null=True, blank=True)
+    reminder_sent = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    special_requests = models.TextField(blank=True, null=True)
 
     class Meta:
         ordering = ['-created_at']

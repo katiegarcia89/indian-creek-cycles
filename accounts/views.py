@@ -139,22 +139,49 @@ def user_profile_detail(request, user_id):
         return redirect('profile')
 
     profile_user = get_object_or_404(User, id=user_id)
+
+    # Reservations
     reservations = Reservation.objects.filter(
         user=profile_user
     ).select_related('bike').order_by('-created_at')[:5]
+
+    # Reviews
     reviews = Review.objects.filter(
         user=profile_user
-    ).order_by('-created_at')[:5]
+    ).order_by('-created_at')
+
+    recent_reviews = reviews[:5]
+
+    # Totals
+    total_spent = Reservation.objects.filter(
+        user=profile_user
+    ).aggregate(Sum('total_price'))['total_price__sum'] or 0
+
+    reservation_count = Reservation.objects.filter(user=profile_user).count()
+    review_count = Review.objects.filter(user=profile_user).count()
+
+    # Saved trails
+    saved_trails = SavedTrail.objects.filter(
+        user=profile_user
+    ).select_related('trail')
 
     context = {
         'profile_user': profile_user,
         'is_own_profile': profile_user == request.user,
         'admin_view': True,
+
+        # ADD THESE ↓↓↓
         'reservations': reservations,
         'reviews': reviews,
-        'reservation_count': Reservation.objects.filter(user=profile_user).count(),
-        'review_count': Review.objects.filter(user=profile_user).count(),
+        'recent_reviews': recent_reviews,
+        'reservation_count': reservation_count,
+        'review_count': review_count,
+        'total_spent': total_spent,
+        'saved_trails': saved_trails,
+
+        'is_profile_page': True,
     }
+
     return render(request, 'accounts/profile.html', context)
 
 

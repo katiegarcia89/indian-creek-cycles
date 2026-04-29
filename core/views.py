@@ -865,3 +865,14 @@ def trail_detail(request, id):
     return render(request, 'trails/trail_detail.html', {
         'trail': trail
     })
+    
+
+@login_required
+def remove_saved_trail(request, trail_id):
+    if request.method == 'POST':
+        # Find the saved trail specifically for this user and trail ID
+        saved_trail = get_object_or_404(SavedTrail, user=request.user, trail_id=trail_id)
+        saved_trail.delete()
+    
+    # Redirect back to the profile page (or wherever they came from)
+    return redirect('profile')

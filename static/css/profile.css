@@ -105,6 +105,19 @@
     gap: 10px;
 }
 
+.title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.res-number {
+    font-size: 0.9rem;
+    color: #6c757d; 
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
 /* DATES */
 .receipt-dates {
     display: flex;
@@ -660,6 +673,10 @@
     border-radius: 8px;
     font-weight: 600;
     transition: background 0.3s;
+}
+
+.btn-admin-back {
+    margin-right: 15px;
 }
 
 .btn-edit:hover {
@@ -1416,4 +1433,121 @@
     .settings-grid {
         grid-template-columns: 1fr;
     }
+}
+
+
+
+.profile-header-integrated {
+    position: relative;
+}
+
+/* Header row (name + button side by side) */
+.header-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Keep name + badge clean */
+.profile-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Fix edit button position */
+.btn-edit-profile {
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.btn-edit-profile:hover {
+    background: #f5f5f5;
+}
+
+/* 🔴 ADMIN BANNER (make it ACTUALLY visible) */
+.admin-banner {
+    background: #ff3b3b;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 5;
+}
+
+/* 🔒 Admin badge */
+.admin-badge {
+    background: #111;
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.admin-hero .admin-actions {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.admin-table .admin-actions {
+    position: static;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Back button */
+.btn-admin-back {
+    padding: 6px 12px;
+    background: #333;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.btn-admin-back:hover {
+    background: black;
+}
+
+/* Optional: whole page tint */
+body.admin-mode {
+    background-color: #fff5f5;
+}
+
+/* ONLY affect admin version */
+.admin-hero .profile-header-integrated {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 30px 50px;
+}
+
+/* Keep normal profile untouched */
+.admin-hero .header-text-block {
+    flex-grow: 1;
+}
+
+.admin-hero .profile-name {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.admin-hero .profile-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: #555;
+    font-size: 14px;
 }

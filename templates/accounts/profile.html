@@ -36,56 +36,75 @@
 
     <!-- MAIN -->
     <main class="profile-main-content">
+        <section class="profile-hero-minimal {% if admin_view %}admin-hero{% endif %}">
 
-        <!-- HERO -->
-        <section class="profile-hero-minimal">
+            {% if admin_view %}
+            <div class="admin-banner">
+                🔒 ADMIN MODE — Viewing {{ profile_user.get_full_name }}'s Profile
+            </div>
+            {% endif %}
+
             <div class="hero-cover-small">
                 <img src="{% if profile_user.cover_photo %}{{ profile_user.cover_photo.url }}{% else %}{% static 'images/profile/bgforest.jpg' %}{% endif %}" 
-                class="cover-photo"
-                >            
+                class="cover-photo">
             </div>
 
             <div class="profile-header-integrated">
+
+                <!-- Avatar -->
                 <div class="avatar-overlap">
                     <div class="avatar-large-img">
                         {% if profile_user.avatar %}
                             <img src="{{ profile_user.avatar.url }}">
                         {% else %}
                             <img src="{% static 'images/profile/gbikep.png' %}">
-                        {% endif %}                    
+                        {% endif %}
                     </div>
                 </div>
-                {% if admin_view %}
-                    <a href="{% url 'admin_users' %}" class="btn-secondary" style="margin-left:10px;">
-                        ← Back to Users
-                    </a>
-                {% endif %}
+
+                <!-- TEXT -->
                 <div class="header-text-block">
                     <h1 class="profile-name">
                         {{ profile_user.get_full_name }}
-                        <span class="badge"><i class="fas fa-leaf"></i> Trail Explorer</span>
+
+                        {% if admin_view %}
+                            <span class="admin-badge">
+                                <i class="fas fa-shield-alt"></i> Admin
+                            </span>
+                        {% else %}
+                            <span class="badge"><i class="fas fa-leaf"></i> Trail Explorer</span>
+                        {% endif %}
                     </h1>
+
                     <div class="profile-meta-row">
-                        {% comment %} <span><i class="fas fa-user"></i> kat_on_trails</span> {% endcomment %}
+                        <span><i class="fas fa-phone"></i> {{ profile_user.phone }}</span>
                         <span><i class="fas fa-envelope"></i> {{ profile_user.email }}</span>
                         <span><i class="fas fa-map-marker-alt"></i> {{ profile_user.city }}, {{ profile_user.state }}</span>
                         <span><i class="fas fa-calendar"></i> Member since {{ profile_user.date_joined|date:"F Y" }}</span>
                     </div>
-                    
                 </div>
 
-                {% if admin_view %}
-                    <a href="{% url 'admin_edit_user' profile_user.id %}" class="btn-edit-profile">
-                        Edit in Admin
-                    </a>
-                {% else %}
-                    <a href="{% url 'edit_profile' %}" class="btn-edit-profile">
-                        Edit Profile
-                    </a>
-                {% endif %}
+                <!-- RIGHT SIDE BUTTONS -->
+                <div class="profile-actions">
+
+                    {% if admin_view %}
+                        <a href="{% url 'admin_users' %}" class="btn-admin-back">
+                            ← Back to Users
+                        </a>
+
+                        <a href="{% url 'admin_edit_user' profile_user.id %}" class="btn-edit-profile">
+                            Edit in Admin
+                        </a>
+                    {% else %}
+                        <a href="{% url 'edit_profile' %}" class="btn-edit-profile">
+                            Edit Profile
+                        </a>
+                    {% endif %}
+
+                </div>
+
             </div>
         </section>
-
         <!-- TABS -->
         <div class="profile-tabs">
             <span class="tab active" data-tab="overview">Overview</span>
@@ -129,7 +148,7 @@
 
                         <div class="stat-info">
                             <h3>{{ saved_trails|length }}</h3>
-                            <p>Trails</p>
+                            <p>Saved Trails</p>
                         </div>
                     </div>
                 </div>
@@ -187,7 +206,12 @@
                                             <div class="bike-info">
 
                                                 <!-- TITLE -->
-                                                <h3>{{ reservation.bike.name }}</h3>
+                                                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                                                    <h3>{{ reservation.bike.name }}</h3>
+                                                    <span style="font-family: monospace; color: #6c757d; font-weight: bold;">
+                                                        #{{ reservation.id }}
+                                                    </span>
+                                                </div>
                                                 <p class="meta">{{ reservation.bike.category }} • {{ reservation.bike.size }}</p>
 
                                                 <!-- DATES -->
@@ -384,6 +408,7 @@
                                 <img src="{{ saved.trail.image.url }}" alt="{{ saved.trail.name }}">
                             {% endif %}
                             <form method="POST" action="{% url 'remove_saved_trail' saved.trail.id %}">
+                            
                                 {% csrf_token %}
                                 <button type="submit" class="remove-saved-icon">
                                     <i class="fa-solid fa-trash"></i>
@@ -437,7 +462,7 @@
                                     {% if profile_user.avatar %}
                                         <img src="{{ profile_user.avatar.url }}" class="settings-avatar">
                                     {% else %}
-                                        <img src="{% static 'images/profile/gbikep.png' %}" class="settings-avatar">
+                                        <img src="{% static 'images/profile/plHAvatar.jpg' %}" class="settings-avatar">
                                     {% endif %}
 
                                     <label class="upload-btn">

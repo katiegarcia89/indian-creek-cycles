@@ -136,16 +136,16 @@ MESSAGE_TAGS = {
     messages.ERROR: 'error',
 }
 
-
-# --- MAILTRAP API CONFIGURATION (ANYMAIL) ---
-# ANYMAIL = {
-#     "MAILTRAP_API_TOKEN": "ecbe70581e6f77673abc4be068e54ea6",
-#     "MAILTRAP_SANDBOX_ID": 4535131, 
-# }
-
-# EMAIL_BACKEND = "anymail.backends.mailtrap.EmailBackend"
-
-# DEFAULT_FROM_EMAIL = "kate@demomailtrap.co"
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'rentals@indiancreekcycles.com')
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+# EMAIL_PORT = 2525
+
+# EMAIL_HOST_USER = 'b6c329bfa190db'
+# EMAIL_HOST_PASSWORD = '25d13ac2c8bdae'
+
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+
+# DEFAULT_FROM_EMAIL = 'rentals@indiancreekcycles.com'

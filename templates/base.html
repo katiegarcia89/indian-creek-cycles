@@ -14,7 +14,7 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% comment %} <link rel="stylesheet" href="{% static 'css/styles.css' %}"> {% endcomment %}
     <link rel="stylesheet" href="{% static 'css/reservations.css' %}">
     <link rel="stylesheet" href="{% static 'css/help.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
@@ -67,7 +67,7 @@
                      <a href="{% url 'accessories' %}" class="nav-link {% if '/bikes/accessories/' in request.path %}active{% endif %}">Accessories</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'help' %}" class="nav-link nav-link-nowrap {% if '/help/' in request.path %}active{% endif %}">Ride Guide</a>
+                    <a href="{% url 'help' %}" class="nav-link {% if '/help/' in request.path %}active{% endif %}">Ride Guide</a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'reviews' %}" class="nav-link {% if '/reviews/' in request.path %}active{% endif %}">Reviews</a>
