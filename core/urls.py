@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from reservations import views as reservation_views
 from . import views
 
@@ -8,6 +8,8 @@ urlpatterns = [
     path('trails/', views.trails, name='trails'),
     path('contact/', views.contact, name='contact'),
     path('api/weather/', views.weather_api, name='weather_api'),
+    path('toggle-trail/<int:trail_id>/', views.toggle_saved_trail, name='toggle_saved_trail'),
+    path('trails/<int:id>/', views.trail_detail, name='trail_detail'),
 
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path("admin-dashboard/staff/", views.admin_staff, name="admin_staff"),

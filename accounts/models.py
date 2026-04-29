@@ -16,6 +16,10 @@ class User(AbstractUser):
     admin_notes = models.TextField(blank=True, help_text="Internal notes visible to staff only.")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    cover_photo = models.ImageField(upload_to='covers/', blank=True, null=True)
+    profile_quote = models.TextField(blank=True, null=True)
     
     class Meta:
         ordering = ['-date_joined']

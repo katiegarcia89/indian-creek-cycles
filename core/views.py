@@ -3,8 +3,10 @@ from datetime import timedelta
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.http import JsonResponse
+from .models import SavedTrail
 from django.views.decorators.http import require_http_methods, require_POST
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
@@ -21,6 +23,7 @@ from reservations.models import PromoCode, Reservation, Waiver
 from payments.models import Payment
 from .models import Trail
 from .forms import AccessoryForm, AdminPromoCodeForm, AdminUserForm, ContactForm, WeatherZipForm
+
 
 def home(request):
     """Homepage view with featured content."""
@@ -99,6 +102,12 @@ def trails(request):
     if location:
         all_trails = all_trails.filter(location_name=location)
 
+    if request.user.is_authenticated:
+        saved_trails = SavedTrail.objects.filter(user=request.user)
+        saved_trail_ids = saved_trails.values_list('trail_id', flat=True)
+    else:
+        saved_trail_ids = []
+        
     locations = (
         Trail.objects.exclude(location_name='')
         .order_by('location_name')
@@ -114,6 +123,7 @@ def trails(request):
         'selected_time': time,
         'selected_location': location,
         'locations': locations,
+        'saved_trail_ids': saved_trail_ids, 
     }
     return render(request, 'core/trails.html', context)
 
@@ -831,3 +841,27 @@ def admin_waivers(request):
             "unsigned_active_waiver_count": unsigned_active_reservations.count(),
         },
     )
+
+@login_required
+def toggle_saved_trail(request, trail_id):
+    trail = get_object_or_404(Trail, id=trail_id)
+
+    saved, created = SavedTrail.objects.get_or_create(
+        user=request.user,
+        trail=trail
+    )
+
+    if not created:
+        saved.delete()
+        is_saved = False
+    else:
+        is_saved = True
+
+    return JsonResponse({'saved': is_saved})
+
+
+def trail_detail(request, id):
+    trail = get_object_or_404(Trail, id=id)
+    return render(request, 'trails/trail_detail.html', {
+        'trail': trail
+    })

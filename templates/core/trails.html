@@ -256,54 +256,83 @@
 <div class="container">
     <div class="trails-list-container">
         {% for trail in trails %}
-        <article class="trail-horizontal-card">
+        <article class="trail-horizontal-card" id="trail-{{ trail.id }}">       
+            <!-- IMAGE -->
             <div class="trail-img-side">
                 {% if trail.image %}
-                <img src="{{ trail.image.url }}" alt="{{ trail.name }}">
+                    <img src="{{ trail.image.url }}" alt="{{ trail.name }}">
                 {% else %}
-                <div style="background:var(--color-gray-100); height:100%; display:flex; align-items:center; justify-content:center; color:var(--color-gray-400);">No Photo</div>
+                    <div style="background:var(--color-gray-100); height:100%; display:flex; align-items:center; justify-content:center; color:var(--color-gray-400);">
+                        No Photo
+                    </div>
                 {% endif %}
             </div>
 
+            <!-- INFO -->
             <div class="trail-info-side">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                    <h2 style="margin:0; font-size: 1.75rem;">{{ trail.name }}</h2>
+
+                <!-- TITLE ROW -->
+                <div class="trail-header-row">
+
+                    <div class="trail-title-group">
+                        <h2 class="trail-title">{{ trail.name }}</h2>
+
+                        <!-- ❤️ HEART (NOW IN PERFECT SPOT) -->
+                        <button 
+                            class="save-btn {% if trail.id in saved_trail_ids %}saved{% endif %}" 
+                            data-id="{{ trail.id }}"
+                            type="button">
+                            ❤
+                        </button>
+                    </div>
+
                     <span class="trail-difficulty difficulty-{{ trail.difficulty|lower }}">
                         {{ trail.get_difficulty_display }}
                     </span>
+
                 </div>
 
-                <p style="font-style: italic; color: var(--color-gray-600); margin-bottom: 15px;">"{{ trail.description }}"</p>
+                <!-- DESCRIPTION -->
+                <p class="trail-description">"{{ trail.description }}"</p>
 
+                <!-- LOCATION -->
                 {% if trail.location_name or trail.address %}
                 <p class="trail-location">
                     {{ trail.location_name }}
                     {% if trail.address %}
-                    <span class="trail-address">- {{ trail.address }}</span>
+                        <span class="trail-address">- {{ trail.address }}</span>
                     {% endif %}
                 </p>
                 {% endif %}
 
-                <div style="margin-bottom: 20px;">
-                    <small style="display:block; color:var(--color-gray-400); font-weight:700; text-transform:uppercase; font-size:0.65rem; margin-bottom:5px;">Trail Highlights</small>
-                    <p style="font-size: 0.95rem; line-height: 1.5; color: var(--color-gray-700);">{{ trail.highlights }}</p>
+                <!-- HIGHLIGHTS -->
+                <div class="trail-highlights">
+                    <small>Trail Highlights</small>
+                    <p>{{ trail.highlights }}</p>
                 </div>
 
+                <!-- STATS -->
                 <div class="trail-stats-row">
                     <div class="stat-item">
                         <span>Distance</span>
                         <strong>{{ trail.length_miles }} mi</strong>
                     </div>
+
                     <div class="stat-item">
                         <span>Est. Time</span>
                         <strong>{{ trail.estimated_time }}</strong>
                     </div>
-                    <div style="margin-left: auto;">
-                        <a href="{% url 'bike_list' %}" class="btn btn-primary">Rent a Bike</a>
+
+                    <div class="stat-action">
+                        <a href="{% url 'bike_list' %}" class="btn btn-primary">
+                            Rent a Bike
+                        </a>
                     </div>
                 </div>
+
             </div>
         </article>
+
         {% empty %}
         <div class="text-center" style="padding: 60px;">
             <h3>No trails found.</h3>

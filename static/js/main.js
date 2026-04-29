@@ -2,12 +2,122 @@
  * Indian Creek Cycles - Main JavaScript
  */
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all components
-    initNavigation();
-    initMessages();
-    initSmoothScroll();
+/**
+ * Indian Creek Cycles - Main JavaScript
+ */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Safe init (won't break script if missing)
+    if (typeof initNavigation === "function") initNavigation();
+    if (typeof initMessages === "function") initMessages();
+    if (typeof initSmoothScroll === "function") initSmoothScroll();
+
+    // ============================================
+    // SAVE + REMOVE (USING EVENT DELEGATION)
+    // ============================================
+
+    document.addEventListener('click', async function (e) {
+
+        // =========================
+        // SAVE BUTTON
+        // =========================
+        const saveBtn = e.target.closest('.save-btn');
+        if (saveBtn) {
+            const trailId = saveBtn.dataset.id;
+
+            try {
+                const response = await fetch(`/toggle-trail/${trailId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCSRFToken(),
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.saved) {
+                    saveBtn.classList.add('saved');
+                } else {
+                    saveBtn.classList.remove('saved');
+                }
+
+                // little animation
+                saveBtn.classList.add('pop');
+                setTimeout(() => saveBtn.classList.remove('pop'), 200);
+
+            } catch (err) {
+                console.error('Save failed:', err);
+            }
+
+            return; // stop here if save clicked
+        }
+
+        // =========================
+        // REMOVE BUTTON (TRASH ICON)
+        // =========================
+        const removeBtn = e.target.closest('.remove-saved-icon');
+        if (removeBtn) {
+
+            const trailId = removeBtn.dataset.id;
+            const card = removeBtn.closest('.saved-trail-card');
+
+            try {
+                const response = await fetch(`/toggle-trail/${trailId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCSRFToken(),
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                // If UNSAVED → remove card
+                if (!data.saved && card) {
+                    card.style.transition = "all 0.2s ease";
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.9)';
+
+                    setTimeout(() => {
+                        card.remove();
+                    }, 200);
+                }
+
+            } catch (err) {
+                console.error('Remove failed:', err);
+            }
+        }
+
+    });
+
 });
+
+
+// ============================================
+// CSRF TOKEN HELPER (MAKE SURE THIS EXISTS)
+// ============================================
+
+function getCSRFToken() {
+    const name = 'csrftoken';
+    let cookieValue = null;
+
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+
+    return cookieValue;
+}
 
 /**
  * Mobile Navigation Toggle
@@ -476,3 +586,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 }); 
+
+// helper
+function getCSRFToken() {
+    return document.cookie.split('; ')
+        .find(row => row.startsWith('csrftoken='))
+        ?.split('=')[1];
+}

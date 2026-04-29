@@ -1,9 +1,11 @@
 from django import forms
+from django.forms import inlineformset_factory
 from .models import Review, ReviewImage
 
 
 class ReviewForm(forms.ModelForm):
     """Form for submitting a review."""
+
     RATING_CHOICES = [
         (5, '5 - Excellent'),
         (4, '4 - Very Good'),
@@ -11,13 +13,13 @@ class ReviewForm(forms.ModelForm):
         (2, '2 - Fair'),
         (1, '1 - Poor'),
     ]
-    
+
     rating = forms.ChoiceField(
         choices=RATING_CHOICES,
         widget=forms.RadioSelect(attrs={'class': 'rating-radio'}),
         initial=5
     )
-    
+
     class Meta:
         model = Review
         fields = ['rating', 'title', 'content']
@@ -32,37 +34,53 @@ class ReviewForm(forms.ModelForm):
                 'placeholder': 'Tell us about your experience...'
             }),
         }
-    
+
     def clean_rating(self):
         rating = self.cleaned_data.get('rating')
         return int(rating)
 
 
+# ✅ CLEAN IMAGE FORM (no forced validation)
 class ReviewImageForm(forms.ModelForm):
-    """Form for adding images to reviews."""
+    """Form for adding images to reviews (optional)."""
+
     class Meta:
         model = ReviewImage
         fields = ['image', 'caption']
         widgets = {
+            'image': forms.ClearableFileInput(attrs={
+                'class': 'form-control'
+            }),
             'caption': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Optional caption'
             }),
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        image = cleaned_data.get('image')
+        caption = cleaned_data.get('caption')
 
-ReviewImageFormSet = forms.inlineformset_factory(
+        # ✅ If BOTH are empty → ignore this form completely
+        if not image and not caption:
+            self.cleaned_data = {}
+        
+        return cleaned_data
+
+
+ReviewImageFormSet = inlineformset_factory(
     Review,
     ReviewImage,
     form=ReviewImageForm,
-    extra=3,
-    max_num=5,
-    can_delete=False
+    extra=1,              # show 3 upload slots
+    max_num=1,
+    can_delete=True       # allows skipping/removing
 )
-
 
 class ReviewModerationForm(forms.ModelForm):
     """Form for moderating reviews (admin use)."""
+
     class Meta:
         model = Review
         fields = ['is_approved', 'is_featured', 'admin_response']

@@ -11,9 +11,13 @@
 <div class="help-container">
 
     <!-- HEADER -->
-    <div class="help-header">
+   <div class="help-header">
         <h1>Getting Started</h1>
         <p>From account setup to the open trail—here is your roadmap.</p>
+
+        <p class="help-rule">
+            All rides must begin and end at an Indian Creek Cycles Dock Location (trail docks and the ICC Hub).
+        </p>
     </div>
 
     <!-- STEP 1 -->
@@ -45,45 +49,88 @@
 
     <!-- STEP 2 -->
     <div class="help-section">
-        <div class="help-split-map">
 
-            <div class="help-image-large">
-                <img src="{% static 'images/help/lgmap.png' %}" alt="Trail Map" class="img-fluid rounded">
-            </div>
+        <!-- TOP ROW: TEXT + LOCATIONS -->
+        <div class="help-top-row">
 
-            <div class="help-text">
+            <!-- LEFT: TEXT + LEGEND -->
+            <div class="help-text help-panel">
                 <h2 class="step-green">02. Pick Your Station</h2>
-                <p>Locate your preferred starting point on the map. Each blue pin corresponds to a Smart-Dock station waiting for you at the trailhead.</p>
                 
+                <p>
+                    Locate your preferred starting point on the map. Each blue pin represents an 
+                    <strong>ICC Dock Location</strong>—these are the only locations where bikes can be picked up and returned.
+                </p>                
+
                 <div class="info-box mb-4">
                     <strong>⚡ Energy Tip:</strong> Choosing a closer dock saves bike battery and effort.
                 </div>
 
-                <div class="directory-list-clean">
-                    <h6 class="hub-title mb-3"><i class="fas fa-store me-2"></i>The Hub (Main Shop)</h6>
-                    
-                    <div class="directory-flex">
-                        <ul class="list-unstyled">
-                            <li class="loc-link-premium"><span class="loc-num">1</span> Riverview Park</li>
-                            <li class="loc-link-premium"><span class="loc-num">2</span> Tomahawk Creek</li>
-                            <li class="loc-link-premium"><span class="loc-num">3</span> Nall Park</li>
-                            <li class="loc-link-premium"><span class="loc-num">4</span> Oak Ridge Loop</li>
-                            <li class="loc-link-premium"><span class="loc-num">5</span> Indian Creek</li>
-                            <li class="loc-link-premium"><span class="loc-num">6</span> Coffee Creek</li>
-                        </ul>
-                        <ul class="list-unstyled">
-                            <li class="loc-link-premium"><span class="loc-num">7</span> Summit Challenge</li>
-                            <li class="loc-link-premium"><span class="loc-num">8</span> Meadow Brook</li>
-                            <li class="loc-link-premium"><span class="loc-num">9</span> Shawnee Mission Park</li>
-                            <li class="loc-link-premium"><span class="loc-num">10</span> Pine Forest</li>
-                            <li class="loc-link-premium"><span class="loc-num">11</span> Cedar Niles Park</li>
-                            <li class="loc-link-premium"><span class="loc-num">12</span> Black Hoof Park</li>
-                        </ul>
-                    </div>
+            </div>
+
+            <!-- RIGHT: LOCATION LIST -->
+            <div class="directory-list-clean">
+
+                <div class="directory-flex">
+                    <ul class="list-unstyled">
+                    {% for location in locations %}
+
+                        {% if location.station_number == 0 %}
+                            <!-- MAIN SHOP -->
+                            <li class="loc-link-premium">
+                                <img src="{% static 'images/help/bike-shop.png' %}" class="legend-icon" style="margin-right:8px;">
+                                <strong>{{ location.name }}</strong>
+                            </li>
+
+                        {% else %}
+                            <!-- NORMAL LOCATIONS -->
+                            <li class="loc-link-premium">
+                                <span class="loc-num">{{ location.station_number }}</span>
+                                {{ location.name }}
+                            </li>
+                        {% endif %}
+
+                        {% if forloop.counter == 6 %}
+                            </ul><ul class="list-unstyled">
+                        {% endif %}
+
+                    {% endfor %}
+                    </ul>
                 </div>
+
             </div>
 
         </div>
+
+        <div class="help-map-row">
+            <div class="map-container">
+
+                <!-- MAP -->
+                <iframe src="https://www.google.com/maps/d/u/0/embed?mid=19EvCrXARE227MeP8XjE-1VH8x8FGejM&ehbc=2E312F"></iframe>
+
+                <!-- ✅ FLOATING LEGEND -->
+                <div class="map-legend-overlay">
+
+                    <div class="legend-pill">
+                        <img src="{% static 'images/help/bike-shop.png' %}" class="legend-icon">
+                        <span>ICC Hub</span>
+                    </div>
+
+                    <div class="legend-pill">
+                        <img src="{% static 'images/help/blankpin.png' %}" class="legend-icon">
+                        <span>Dock Station</span>
+                    </div>
+
+                    <div class="legend-pill">
+                        <img src="{% static 'images/help/trails.png' %}" class="legend-icon">
+                        <span>Trail Access</span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
     </div>
     <!-- STEP 3 -->
     <div class="help-section">
@@ -103,9 +150,9 @@
                     </li>
                     <li>
                         <strong>Go & Return:</strong> 
-                        Once your ride is complete, you can return your bike to <strong>any available Smart-Dock</strong> on the trail or bring it back to the <strong>ICC Hub</strong>.
-                    </li>
-                </ol>
+                        Once your ride is complete, return your bike to <strong>any ICC Smart Dock Hub</strong>. 
+                        Bikes cannot be left on the trail and must be returned to a designated hub.                    </li>
+                                        </ol>
 
                 <div class="info-box mt-3">
                     <strong><i class="fas fa-map-location-dot"></i> Flexible Returns:</strong> 
@@ -116,12 +163,34 @@
             </div>
 
             <div class="help-image">
-                <img src="{% static 'images/help/smdk.png' %}" alt="Dock Instructions">
+                <img src="{% static 'images/help/biker2.png' %}" alt="Dock Instructions">
             </div>
 
         </div>
     </div>
+    <div class="help-section faq-section">
+        <h2>Common Questions</h2>
 
+        <div class="faq-item">
+            <button class="faq-question">
+                Can I start a ride anywhere on the trail?
+                <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div class="faq-answer">
+                <p>No. Bikes can only be picked up and returned at ICC Smart Dock Hubs.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                What if my trail doesn’t have a dock?
+                <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div class="faq-answer">
+                <p>Choose the nearest hub on the map and start your ride there. You can still access nearby trails once unlocked.</p>
+            </div>
+        </div>
+    </div>
     <!-- SAFETY -->
     <div class="help-safety">
         <h2>Trail Safety & Etiquette</h2>
@@ -151,5 +220,21 @@
     </div>
 
 </div>
+<script>
+document.querySelectorAll(".faq-question").forEach(button => {
+    button.addEventListener("click", () => {
+        const faqItem = button.parentElement;
 
+        // Close others (optional)
+        document.querySelectorAll(".faq-item").forEach(item => {
+            if (item !== faqItem) {
+                item.classList.remove("active");
+            }
+        });
+
+        // Toggle current
+        faqItem.classList.toggle("active");
+    });
+});
+</script>
 {% endblock %}

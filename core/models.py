@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings
 
 class ContactInquiry(models.Model):
     """Model for contact/reservation inquiries."""
@@ -67,3 +67,14 @@ class SiteSetting(models.Model):
     
     def __str__(self):
         return self.key
+
+class SavedTrail(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    trail = models.ForeignKey('Trail', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'trail')
+
+    def __str__(self):
+        return f"{self.user} saved {self.trail}"

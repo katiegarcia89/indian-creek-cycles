@@ -16,12 +16,16 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 # Local app models and forms
-from .models import Reservation, ReservationAccessory, Waiver, PromoCode
+from .models import Reservation, ReservationAccessory, Waiver, PromoCode, Location
 from .forms import ReservationForm, WaiverForm, PromoCodeForm, ReservationCancelForm
 from bikes.models import Accessory, Bike
 from payments.models import Payment
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.utils import timezone
+from datetime import datetime, time
 from locations.models import Location
-from datetime import time
 
 
 def _collect_accessory_items(form, post_data):
@@ -295,7 +299,8 @@ def reservation_detail(request, pk):
 def my_reservations(request):
     """List all user reservations."""
     reservations = Reservation.objects.filter(
-        user=request.user
+        user=request.user,
+        status__in=['pending', 'confirmed', 'paid']
     ).select_related('bike').order_by('-created_at')
 
     context = {
@@ -356,12 +361,6 @@ def reservation_confirmation(request, pk):
         'accessories': reservation.reservation_accessories.select_related('accessory').all(),
     }
     return render(request, 'reservations/reservation_confirmation.html', context)
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from django.utils import timezone
-from datetime import datetime, time
-from .models import Reservation, Location
 
 def unlock_bike(request, pk):
     # 1. FETCH THE 'ANCHOR' RESERVATION (The one in the URL)
@@ -596,8 +595,10 @@ def send_daily_reminders(request):
 
     return redirect('admin_reservations')
 
-
 def help_page(request):
+    locations = Location.objects.filter(is_active=True).order_by('station_number')
 
-    return render(request, 'reservations/help.html')
+    return render(request, 'reservations/help.html', {
+        'locations': locations
+    })
 
