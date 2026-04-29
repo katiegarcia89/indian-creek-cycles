@@ -1,203 +1,559 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
     {% if admin_view %}Customer Profile - Indian Creek Cycles{% else %}My Profile - Indian Creek Cycles{% endif %}
 {% endblock %}
 
 {% block content %}
-<section class="page-header">
-    <div class="container">
-        <h1 class="page-title">
-            {% if admin_view %}Customer Profile{% else %}My Profile{% endif %}
-        </h1>
-        <p class="section-subtitle profile-header-subtitle">
-            {% if admin_view %}
-                Review contact details, reservations, and account history without editing anything.
-            {% else %}
-                Review the details on your account so you always know what we have on file.
+
+<div class="profile-layout-wrapper">
+    <!-- SIDEBAR -->
+    <aside class="profile-sidebar-nav">
+        <div class="sidebar-logo">
+            <img src="{% static 'images/logo/logo-email.png' %}" alt="Indian Creek">
+        </div>
+
+        <nav class="sidebar-links">
+            <a href="{% url 'home' %}" class="side-link"><i class="fas fa-home"></i> Home</a>
+            <a href="{% url 'bike_list' %}" class="side-link"><i class="fas fa-bicycle"></i> Bikes</a>
+            <a href="{% url 'trails' %}" class="side-link"><i class="fas fa-map-marked-alt"></i> Trails</a>
+            <a href="{% url 'accessories' %}" class="side-link"><i class="fas fa-shirt"></i> Accessories</a>
+            <a href="{% url 'help' %}" class="side-link"><i class="fas fa-info-circle"></i> Ride Guide</a>
+            <a href="{% url 'reviews' %}" class="side-link"><i class="fas fa-star"></i> Reviews</a>
+            <a href="{% url 'about' %}" class="side-link"><i class="fas fa-users"></i> About</a>
+            <a href="{% url 'contact' %}" class="side-link"><i class="fas fa-phone"></i> Contact Us</a>
+            <a href="{% url 'my_reservations' %}" class="side-link"><i class="fas fa-calendar-check"></i> My Reservations</a>
+            {% if user.is_staff %}
+            <a href="{% url 'admin_dashboard' %}" class="side-link">
+                <i class="fas fa-shield-alt"></i> Admin Dashboard
+            </a>
             {% endif %}
-        </p>
-    </div>
-</section>
 
-<section class="section">
-    <div class="container">
-        <div class="profile-grid">
-            <aside class="profile-sidebar">
-                <div class="profile-card">
-                    <div class="profile-avatar-large">{{ profile_user.get_initials }}</div>
-                    <h2 class="profile-name">{{ profile_user.get_full_name }}</h2>
-                    <p class="profile-email">{{ profile_user.email|default:"Email not provided" }}</p>
-                    <p class="profile-since">Member since {{ profile_user.date_joined|date:"F Y" }}</p>
+            <a href="{% url 'logout' %}" class="side-link logout"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+        </nav>
+    </aside>
 
-                    <div class="profile-stats">
-                        <div class="profile-stat">
-                            <span class="stat-value">{{ reservation_count }}</span>
-                            <span class="stat-label">Reservations</span>
-                        </div>
-                        <div class="profile-stat">
-                            <span class="stat-value">{{ review_count }}</span>
-                            <span class="stat-label">Reviews</span>
-                        </div>
-                    </div>
+    <!-- MAIN -->
+    <main class="profile-main-content">
+        <section class="profile-hero-minimal {% if admin_view %}admin-hero{% endif %}">
 
-                    <div class="profile-sidebar-actions">
-                        {% if is_own_profile %}
-                            <a href="{% url 'edit_profile' %}" class="btn btn-outline btn-block">Edit Profile</a>
-                            {% if user.is_staff %}
-                                <a href="{% url 'admin_dashboard' %}" class="btn btn-primary btn-block">Admin Dashboard</a>
-                            {% endif %}
-                        {% elif admin_view %}
-                            <a href="{% url 'admin_edit_user' profile_user.id %}" class="btn btn-outline btn-block">Edit in Admin</a>
-                            <a href="{% url 'admin_users' %}" class="btn btn-primary btn-block">Back to Users</a>
+            {% if admin_view %}
+            <div class="admin-banner">
+                🔒 ADMIN MODE — Viewing {{ profile_user.get_full_name }}'s Profile
+            </div>
+            {% endif %}
+
+            <div class="hero-cover-small">
+                <img src="{% if profile_user.cover_photo %}{{ profile_user.cover_photo.url }}{% else %}{% static 'images/profile/bgforest.jpg' %}{% endif %}" 
+                class="cover-photo">
+            </div>
+
+            <div class="profile-header-integrated">
+
+                <!-- Avatar -->
+                <div class="avatar-overlap">
+                    <div class="avatar-large-img">
+                        {% if profile_user.avatar %}
+                            <img src="{{ profile_user.avatar.url }}">
+                        {% else %}
+                            <img src="{% static 'images/profile/gbikep.png' %}">
                         {% endif %}
                     </div>
                 </div>
-            </aside>
 
-            <div class="profile-content">
-                <div class="profile-info-grid">
-                    <section class="info-card">
-                        <h4>Contact Information</h4>
-                        <div class="profile-detail-list">
-                            <div class="profile-detail-item">
-                                <span class="profile-detail-label">Phone</span>
-                                <span class="profile-detail-value">{{ profile_user.phone|default:"Not provided" }}</span>
-                            </div>
-                            <div class="profile-detail-item">
-                                <span class="profile-detail-label">Email</span>
-                                <span class="profile-detail-value">{{ profile_user.email|default:"Not provided" }}</span>
-                            </div>
-                            <div class="profile-detail-item">
-                                <span class="profile-detail-label">Address</span>
-                                <span class="profile-detail-value">
-                                    {% if profile_user.address or profile_user.city or profile_user.state or profile_user.zip_code %}
-                                        {{ profile_user.address|default:"" }}
-                                        {% if profile_user.address and profile_user.city %}<br>{% endif %}
-                                        {{ profile_user.city }}{% if profile_user.city and profile_user.state %}, {% endif %}{{ profile_user.state }} {{ profile_user.zip_code }}
-                                    {% else %}
-                                        Not provided
-                                    {% endif %}
-                                </span>
-                            </div>
-                        </div>
-                    </section>
+                <!-- TEXT -->
+                <div class="header-text-block">
+                    <h1 class="profile-name">
+                        {{ profile_user.get_full_name }}
 
-                    <section class="info-card">
-                        <h4>Personal Details</h4>
-                        <div class="profile-detail-list">
-                            <div class="profile-detail-item">
-                                <span class="profile-detail-label">Username</span>
-                                <span class="profile-detail-value">{{ profile_user.username }}</span>
-                            </div>
-                            <div class="profile-detail-item">
-                                <span class="profile-detail-label">Date of Birth</span>
-                                <span class="profile-detail-value">
-                                    {% if profile_user.date_of_birth %}{{ profile_user.date_of_birth|date:"F j, Y" }}{% else %}Not provided{% endif %}
-                                </span>
-                            </div>
-                            <div class="profile-detail-item">
-                                <span class="profile-detail-label">Newsletter</span>
-                                <span class="profile-detail-value">
-                                    {% if profile_user.is_newsletter_subscribed %}Subscribed{% else %}Not subscribed{% endif %}
-                                </span>
-                            </div>
-                        </div>
-                    </section>
+                        {% if admin_view %}
+                            <span class="admin-badge">
+                                <i class="fas fa-shield-alt"></i> Admin
+                            </span>
+                        {% else %}
+                            <span class="badge"><i class="fas fa-leaf"></i> Trail Explorer</span>
+                        {% endif %}
+                    </h1>
 
-                    <section class="info-card">
-                        <h4>Emergency Contact</h4>
-                        <div class="profile-detail-list">
-                            <div class="profile-detail-item">
-                                <span class="profile-detail-label">Name</span>
-                                <span class="profile-detail-value">{{ profile_user.emergency_contact_name|default:"Not provided" }}</span>
-                            </div>
-                            <div class="profile-detail-item">
-                                <span class="profile-detail-label">Phone</span>
-                                <span class="profile-detail-value">{{ profile_user.emergency_contact_phone|default:"Not provided" }}</span>
-                            </div>
-                        </div>
-                    </section>
-
-                    {% if admin_view and profile_user.admin_notes %}
-                    <section class="info-card">
-                        <h4>Admin Notes</h4>
-                        <p class="profile-notes">{{ profile_user.admin_notes }}</p>
-                    </section>
-                    {% endif %}
+                    <div class="profile-meta-row">
+                        <span><i class="fas fa-phone"></i> {{ profile_user.phone }}</span>
+                        <span><i class="fas fa-envelope"></i> {{ profile_user.email }}</span>
+                        <span><i class="fas fa-map-marker-alt"></i> {{ profile_user.city }}, {{ profile_user.state }}</span>
+                        <span><i class="fas fa-calendar"></i> Member since {{ profile_user.date_joined|date:"F Y" }}</span>
+                    </div>
                 </div>
 
-                <section class="profile-history">
-                    <div class="section-header-flex">
-                        <h3 class="section-title-sm">Recent Reservations</h3>
-                    </div>
-                    {% if reservations %}
-                        <div class="profile-activity-list">
-                            {% for reservation in reservations %}
-                                {% if is_own_profile %}
-                                    <a href="{% url 'reservation_detail' pk=reservation.id %}?from_profile=1" class="profile-activity-link">
-                                        <article class="profile-activity-card">
-                                            <div>
-                                                <h4>{{ reservation.bike.name }}</h4>
-                                                <p>{{ reservation.rental_date|date:"n/j/y" }} - {{ reservation.return_date|date:"n/j/y" }}</p>
-                                                <span class="profile-activity-hint">Open reservation details</span>
-                                            </div>
-                                            <div class="profile-activity-meta">
-                                                <span class="status-pill status-{{ reservation.status }}">{{ reservation.status }}</span>
-                                                <span class="profile-activity-price">${{ reservation.total_price }}</span>
-                                            </div>
-                                        </article>
-                                    </a>
-                                {% else %}
-                                    <article class="profile-activity-card">
-                                        <div>
-                                            <h4>{{ reservation.bike.name }}</h4>
-                                            <p>{{ reservation.rental_date|date:"n/j/y" }} - {{ reservation.return_date|date:"n/j/y" }}</p>
-                                        </div>
-                                        <div class="profile-activity-meta">
-                                            <span class="status-pill status-{{ reservation.status }}">{{ reservation.status }}</span>
-                                            <span class="profile-activity-price">${{ reservation.total_price }}</span>
-                                        </div>
-                                    </article>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <div class="empty-state-full compact-empty-state">
-                            <h3>No reservations yet</h3>
-                            <p>This account does not have any reservation history yet.</p>
-                        </div>
-                    {% endif %}
-                </section>
+                <!-- RIGHT SIDE BUTTONS -->
+                <div class="profile-actions">
 
-                <section class="profile-history">
-                    <div class="section-header-flex">
-                        <h3 class="section-title-sm">Recent Reviews</h3>
-                    </div>
-                    {% if reviews %}
-                        <div class="profile-activity-list">
-                            {% for review in reviews %}
-                                <article class="profile-activity-card">
-                                    <div>
-                                        <h4>{{ review.title }}</h4>
-                                        <p>{{ review.content|truncatewords:18 }}</p>
-                                    </div>
-                                    <div class="profile-activity-meta">
-                                        <span class="profile-activity-rating">{{ review.rating }}/5</span>
-                                        <span class="muted">{{ review.created_at|date:"n/j/y" }}</span>
-                                    </div>
-                                </article>
-                            {% endfor %}
-                        </div>
+                    {% if admin_view %}
+                        <a href="{% url 'admin_users' %}" class="btn-admin-back">
+                            ← Back to Users
+                        </a>
+
+                        <a href="{% url 'admin_edit_user' profile_user.id %}" class="btn-edit-profile">
+                            Edit in Admin
+                        </a>
                     {% else %}
-                        <div class="empty-state-full compact-empty-state">
-                            <h3>No reviews yet</h3>
-                            <p>This account has not posted any reviews yet.</p>
-                        </div>
+                        <a href="{% url 'edit_profile' %}" class="btn-edit-profile">
+                            Edit Profile
+                        </a>
                     {% endif %}
-                </section>
+
+                </div>
+
+            </div>
+        </section>
+        <!-- TABS -->
+        <div class="profile-tabs">
+            <span class="tab active" data-tab="overview">Overview</span>
+            <span class="tab" data-tab="reservations">Reservations History</span>
+            <span class="tab" data-tab="saved">Saved Trails</span>
+            <span class="tab" data-tab="reviews">Reviews</span> 
+            <span class="tab" data-tab="settings">Settings</span>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="profile-content-card">
+
+            <!-- OVERVIEW -->
+            <div class="tab-content active" id="overview">
+                <div class="stats-grid">
+                    <div class="stat-card">
+
+                        <div class="stat-info">
+                            <h3>{{ reservation_count }}</h3>
+                            <p>Reservations</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-info">
+                            <h3>${{ total_spent|floatformat:2 }}</h3>
+                            <p>Total Spent</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-info">
+                            <h3>{{ review_count }}</h3>
+                            <p>Reviews</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-info">
+                            <h3>{{ saved_trails|length }}</h3>
+                            <p>Saved Trails</p>
+                        </div>
+                    </div>
+                </div>
+               <div class="profile-quote-card">
+                    <p>
+                        {{ profile_user.profile_quote|default:"🚴‍♂️ Life is better on two wheels. Exploring new trails and chasing views." }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- RESERVATION HISTORY -->
+            <div class="tab-content" id="reservations">
+                {% if reservations %}
+                    <div class="history-timeline">
+
+                        {% for reservation in reservations %}
+                        {% if reservation.status == "completed" %}
+
+                        <div class="timeline-item">
+
+                            <div class="timeline-dot"></div>
+
+                            <div class="timeline-content">
+
+                                <div class="reservation-card">
+
+                                    <!-- LEFT SIDE (BIKE INFO) -->
+                                    <div class="reservation-left-block">
+
+                                        <div class="bike-card-layout">
+
+                                            <!-- LEFT: IMAGE + BUTTONS -->
+                                            <div class="bike-image-section">
+                                                <a href="{% url 'bike_detail' reservation.bike.slug %}">
+                                                    {% if reservation.bike.image %}
+                                                        <img src="{{ reservation.bike.image.url }}" class="bike-img">
+                                                    {% else %}
+                                                        <img src="{% static 'images/default-bike.png' %}" class="bike-img">
+                                                    {% endif %}
+                                                </a>
+
+                                                <!-- LEFT ACTIONS -->
+                                                <div class="left-actions">
+                                                    <a href="{% url 'bike_detail' reservation.bike.slug %}" class="btn-small view">
+                                                        View Bike
+                                                    </a>
+
+                                                    <a href="{% url 'bike_list' %}?category={{ reservation.bike.category.slug }}" class="btn-small ghost">
+                                                        Similar Bikes
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <!-- RIGHT: INFO + BUTTONS -->
+                                            <div class="bike-info">
+
+                                                <!-- TITLE -->
+                                                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                                                    <h3>{{ reservation.bike.name }}</h3>
+                                                    <span style="font-family: monospace; color: #6c757d; font-weight: bold;">
+                                                        #{{ reservation.id }}
+                                                    </span>
+                                                </div>
+                                                <p class="meta">{{ reservation.bike.category }} • {{ reservation.bike.size }}</p>
+
+                                                <!-- DATES -->
+                                                <div class="receipt-dates">
+                                                    <div>
+                                                        <span>Pickup</span>
+                                                        <strong>{{ reservation.rental_date }}</strong>
+                                                    </div>
+                                                    <div>
+                                                        <span>Return</span>
+                                                        <strong>{{ reservation.return_date }}</strong>
+                                                    </div>
+                                                    <div>
+                                                        <span>Duration</span>
+                                                        <strong>{{ reservation.duration_display }}</strong>
+                                                    </div>
+                                                </div>
+
+                                                <!-- EQUIPMENT -->
+                                                {% if reservation.accessories.exists %}
+                                                <div class="equipment-tags">
+                                                    {% for item in reservation.accessories.all %}
+                                                        <span>{{ item.name }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                                {% endif %}
+
+                                                <!-- PRICE -->
+                                                <div class="price-breakdown">
+                                                    <div class="price-total">
+                                                        <span>Total Paid</span>
+                                                        <strong>${{ reservation.total_price|floatformat:2 }}</strong>
+                                                    </div>
+                                                </div>
+
+                                                <!-- RIGHT ACTIONS -->
+                                                <div class="right-actions">
+                                                    <a href="{% url 'reservation_detail' pk=reservation.id %}" class="btn-small view">
+                                                        View Reservation
+                                                    </a>
+
+                                                    <a href="{% url 'create_reservation' reservation.bike.slug %}" class="btn-small primary">
+                                                        Ride Again
+                                                    </a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- DIVIDER -->
+                                    <div class="reservation-divider"></div>
+
+                                    <!-- RIGHT SIDE (REVIEW) -->
+                                    <div class="reservation-review-block">
+                                        {% if reservation.review %}
+                                        <h4 class="review-section-title">Your Review</h4>
+
+                                            <!-- REVIEW IMAGE -->
+                                            <div class="review-content-row">
+                                                {% if reservation.review.images.all %}
+                                                    <img src="{{ reservation.review.images.first.image.url }}" class="review-img">
+                                                {% endif %}
+
+                                                <div class="review-info">
+
+                                                    <!-- STARS -->
+                                                    {% if reservation.review.is_approved %}
+                                                        <div class="review-stars">
+                                                            {% for i in "12345"|make_list %}
+                                                                <span class="star {% if forloop.counter <= reservation.review.rating %}filled{% endif %}">★</span>
+                                                            {% endfor %}
+                                                        </div>
+                                                    {% endif %}
+
+                                                    <h4 class="review-title">{{ reservation.review.title }}</h4>
+
+                                                    <p class="review-text">
+                                                        {{ reservation.review.content|truncatechars:80 }}
+                                                    </p>
+
+                                                    {% if reservation.review.is_approved %}
+                                                        <span class="review-badge success">Reviewed ✓</span>
+                                                    {% else %}
+                                                        <span class="review-badge pending">Pending Approval</span>
+                                                    {% endif %}
+
+                                                    <!-- REVIEW ACTIONS -->
+                                                    <div class="review-actions">
+                                                    <a href="{% url 'edit_review' reservation.review.id %}" class="btn-small">
+                                                        Edit
+                                                    </a>
+
+                                                    <form method="POST" action="{% url 'delete_review' reservation.review.id %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="next" value="{% url 'profile' %}">
+
+                                                        <button type="submit" class="delete-icon-btn">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                </div>
+                                            </div>
+
+                                        {% else %}
+                                            <a href="{% url 'submit_review' %}?reservation={{ reservation.id }}" 
+                                            class="btn-small review">
+                                                Write Review
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="empty-state">No rides yet.</p>
+                {% endif %}
+            </div>
+            <div class="tab-content" id="reviews">
+                {% if reviews %}
+                    <div class="reviews-list">
+
+                        {% for review in reviews %}
+                        <div class="review-card">
+
+                            <!-- Optional image -->
+                            {% if review.images.all %}
+                                <img src="{{ review.images.first.image.url }}" class="review-img">
+                            {% endif %}
+
+                            <div class="review-info">
+
+                                <!-- Stars -->
+                                {% if review.is_approved %}
+                                    <div class="review-stars">
+                                        {% for i in "12345"|make_list %}
+                                            <span class="star {% if forloop.counter <= review.rating %}filled{% endif %}">★</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Title + content -->
+                                <h4>{{ review.title }}</h4>
+                                <p>{{ review.content }}</p>
+
+                                <!-- Status -->
+                                {% if review.is_approved %}
+                                    <span class="review-badge success">Reviewed ✓</span>
+                                {% else %}
+                                    <span class="review-badge pending">Pending Approval</span>
+                                {% endif %}
+
+                                <!-- Actions -->
+                                <div class="review-actions">
+                                    <a href="{% url 'edit_review' review.id %}" class="btn-small">
+                                        Edit
+                                    </a>
+
+                                    <form method="POST" action="{% url 'delete_review' review.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="next" value="{% url 'profile' %}">
+
+                                        <button type="submit" class="delete-icon-btn">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                            {% if not forloop.last %}
+                                <hr class="review-divider">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="empty-state">No reviews yet.</p>
+                {% endif %}
+            </div>
+            <div class="tab-content" id="saved">
+                {% if saved_trails %}
+                <div class="saved-trails-grid">
+
+                    {% for saved in saved_trails %}
+                    <div class="saved-trail-card">
+
+                        <!-- IMAGE -->
+                        <div class="saved-trail-image">
+                            {% if saved.trail.image %}
+                                <img src="{{ saved.trail.image.url }}" alt="{{ saved.trail.name }}">
+                            {% endif %}
+                            <form method="POST" action="{% url 'remove_saved_trail' saved.trail.id %}">
+                            
+                                {% csrf_token %}
+                                <button type="submit" class="remove-saved-icon">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>               
+                        </div>
+
+                        <!-- CONTENT -->
+                        <div class="saved-trail-info">
+                            <h3>{{ saved.trail.name }}</h3>
+                            <p class="location">{{ saved.trail.location_name }}</p>
+
+                            <div class="saved-meta">
+                                <span>{{ saved.trail.length_miles }} mi</span>
+                                <span>{{ saved.trail.get_difficulty_display }}</span>
+                            </div>
+
+                            <a href="{% url 'trails' %}#trail-{{ saved.trail.id }}" class="view-btn">
+                                View Trail
+                            </a>
+                        </div>
+
+                    </div>
+                    {% endfor %}
+
+                </div>
+                {% else %}
+                <p class="empty-state">No saved trails yet.</p>
+                {% endif %}
+
+            </div>
+
+            <div class="tab-content" id="settings">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                   
+                    <div class="settings-section">
+                        <div class="settings-actions">
+                            <h3>Customize Profile</h3>
+                            <button type="submit" class="btn btn-primary">
+                                Save
+                            </button>
+                        </div>
+                        <div class="settings-grid">
+
+
+                            <div class="settings-card">
+                                <h2>Profile Picture</h2>
+
+                                <div class="card-content">
+                                    {% if profile_user.avatar %}
+                                        <img src="{{ profile_user.avatar.url }}" class="settings-avatar">
+                                    {% else %}
+                                        <img src="{% static 'images/profile/plHAvatar.jpg' %}" class="settings-avatar">
+                                    {% endif %}
+
+                                    <label class="upload-btn">
+                                        Upload Image
+                                        <input type="file" name="avatar">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-card">
+                            <h4>Cover Photo</h4>
+
+                            <div class="card-content">
+                               {% if profile_user.cover_photo %}
+                                    <img src="{{ profile_user.cover_photo.url }}" class="settings-cover">
+                                {% else %}
+                                    <img src="{% static 'images/profile/bgforest.jpg' %}" class="settings-cover">
+                                {% endif %}
+
+                                <div class="upload-wrapper">
+                                    <label class="upload-btn">
+                                        Upload Image
+                                        <input type="file" name="cover_photo">
+                                    </label>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="settings-card">
+                        <h2>Profile Quote</h2>
+                        <div class="card-content">
+                            <textarea 
+                                name="profile_quote" 
+                                class="quote-input"
+                                placeholder="Write something about your riding style, favorite trails, or motto..."
+                            >{{ profile_user.profile_quote }}</textarea>
+
+                            <p class="input-hint">This will show on your profile overview.</p>
+                        </div>
+                    </div>
+                </form>
+               
             </div>
         </div>
-    </div>
-</section>
+        <!-- TAB SCRIPT -->
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+
+            // TABS
+            const tabs = document.querySelectorAll(".tab");
+            const contents = document.querySelectorAll(".tab-content");
+
+            if (tabs.length && contents.length) {
+                tabs.forEach(tab => {
+                    tab.addEventListener("click", () => {
+                        const target = tab.dataset.tab;
+
+                        tabs.forEach(t => t.classList.remove("active"));
+                        tab.classList.add("active");
+
+                        contents.forEach(c => c.classList.remove("active"));
+
+                        const activeContent = document.getElementById(target);
+                        if (activeContent) activeContent.classList.add("active");
+                    });
+                });
+            }
+
+            // IMAGE PREVIEW
+            const fileInputs = document.querySelectorAll('input[type="file"]');
+
+            fileInputs.forEach(input => {
+                input.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const img = this.closest('.settings-card').querySelector('img');
+                    if (img) {
+                        const url = URL.createObjectURL(file);
+                        img.src = url;
+                        img.onload = () => URL.revokeObjectURL(url);
+                    }
+                });
+            });
+          
+        });
+        </script>
+
+    </main>
+</div>
 {% endblock %}

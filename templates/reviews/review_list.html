@@ -4,6 +4,10 @@
 {% block meta_description %}Read what our customers say about Indian Creek Cycles. Real reviews from real riders about our bikes and service.{% endblock %}
 
 {% block content %}
+
+<form style="display:none;">
+    {% csrf_token %}
+</form>
 <!-- Page Header -->
 <section class="page-header">
     <div class="container">
@@ -103,7 +107,13 @@
                 
                 <h3 class="review-title">{{ review.title }}</h3>
                 <p class="review-content">{{ review.content }}</p>
-                
+                {% if review.images.all %}
+                    <div class="review-images">
+                        {% for img in review.images.all %}
+                            <img src="{{ img.image.url }}" alt="Review image" class="review-img">
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 {% if review.admin_response %}
                 <div class="admin-response">
                     <h5>Response from Indian Creek Cycles</h5>

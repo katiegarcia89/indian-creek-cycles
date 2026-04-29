@@ -41,4 +41,5 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('profile/<int:user_id>/', views.user_profile_detail, name='user_profile_detail'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('rate-reservation/<int:reservation_id>/', views.rate_reservation, name='rate_reservation'),
 ]

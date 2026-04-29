@@ -1,194 +1,458 @@
 [
 {
-    "model": "core.trail",
-    "pk": 1,
-    "fields": {
-        "name": "Indian Creek Trail",
-        "description": "A scenic paved trail following Indian Creek. Perfect for families and casual riders. Beautiful views of the creek and wildlife.",
-        "difficulty": "easy",
-        "length_miles": "4.50",
-        "estimated_time": "1-2 hours",
-        "terrain": "Paved path, mostly flat",
-        "highlights": "Creek views, wildlife spotting, picnic areas, rest stops",
-        "image": "trails/indian-creek-greenway_ivgsMIS.jpg",
-        "is_featured": true,
-        "created_at": "2026-04-07T20:06:58.587Z"
-    }
+  "model": "core.trail",
+  "pk": 1,
+  "fields": {
+    "name": "Indian Creek",
+    "description": "A shaded route through wooded sections near Indian Creek, with a quieter feel than the open greenway.",
+    "difficulty": "easy",
+    "length_miles": "3.80",
+    "estimated_time": "1-1.5 hours",
+    "estimated_minutes": 75,
+    "location_name": "Overland Park, KS",
+    "address": "Wooded Indian Creek access",
+    "terrain": "Packed dirt and gravel path with gentle turns and shaded sections",
+    "highlights": "Wooded creek corridor, quiet bends, shade trees, nature watching",
+    "image": "trails/indianCreek.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-07T20:06:58.587Z"
+  }
 },
 {
-    "model": "core.trail",
-    "pk": 2,
-    "fields": {
-        "name": "Oak Ridge Loop",
-        "description": "A moderate loop through oak forests with some gentle hills. Great for intermediate riders looking for a bit of challenge.",
-        "difficulty": "moderate",
-        "length_miles": "8.20",
-        "estimated_time": "2-3 hours",
-        "terrain": "Mixed gravel and dirt, rolling hills",
-        "highlights": "Forest canopy, wildflowers in spring, bird watching",
-        "image": "trails/oak-ridge-loop_wsRORkr.jpg",
-        "is_featured": true,
-        "created_at": "2026-04-07T20:06:58.620Z"
-    }
+  "model": "core.trail",
+  "pk": 2,
+  "fields": {
+    "name": "Oregon Trail Park",
+    "description": "A moderate loop through oak forests with some gentle hills. Great for intermediate riders looking for a bit of challenge.",
+    "difficulty": "moderate",
+    "length_miles": "8.20",
+    "estimated_time": "2-3 hours",
+    "estimated_minutes": 150,
+    "location_name": "Oak Ridge Area",
+    "address": "Oak Ridge trailhead",
+    "terrain": "Mixed gravel and dirt, rolling hills",
+    "highlights": "Forest canopy, wildflowers in spring, bird watching",
+    "image": "trails/oak-ridge-loop-summer.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-07T20:06:58.620Z"
+  }
 },
 {
-    "model": "core.trail",
-    "pk": 3,
-    "fields": {
-        "name": "Summit Challenge Trail",
-        "description": "A challenging mountain bike trail with steep climbs and technical descents. For experienced riders only.",
-        "difficulty": "expert",
-        "length_miles": "12.50",
-        "estimated_time": "3-5 hours",
-        "terrain": "Technical singletrack, rocky sections, steep grades",
-        "highlights": "Panoramic summit views, rock gardens, stream crossings",
-        "image": "trails/summit-challenge-trail_LJOdrh7.jpg",
-        "is_featured": true,
-        "created_at": "2026-04-07T20:06:58.644Z"
-    }
+  "model": "core.trail",
+  "pk": 3,
+  "fields": {
+    "name": "Meadowbrook Park",
+    "description": "A challenging mountain bike trail with steep climbs and technical descents. For experienced riders only.",
+    "difficulty": "expert",
+    "length_miles": "12.50",
+    "estimated_time": "3-5 hours",
+    "estimated_minutes": 240,
+    "location_name": "Summit Ridge Area",
+    "address": "Summit Ridge trailhead",
+    "terrain": "Technical singletrack, rocky sections, steep grades",
+    "highlights": "Panoramic summit views, rock gardens, stream crossings",
+    "image": "trails/summit-challenge-trail_LJOdrh7.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-07T20:06:58.644Z"
+  }
 },
 {
-    "model": "core.trail",
-    "pk": 4,
-    "fields": {
-        "name": "Riverside Park Path",
-        "description": "An easy, family-friendly path along the river. Great for kids and beginners.",
-        "difficulty": "easy",
-        "length_miles": "3.00",
-        "estimated_time": "45 min - 1 hour",
-        "terrain": "Paved, completely flat",
-        "highlights": "River views, playgrounds, fishing spots",
-        "image": "trails/riverside-park-path_gkWMbWN.jpg",
-        "is_featured": true,
-        "created_at": "2026-04-07T20:06:58.663Z"
-    }
+  "model": "core.trail",
+  "pk": 4,
+  "fields": {
+    "name": "Northwood Trails Access Park",
+    "description": "An easy, family-friendly path along the river. Great for kids and beginners.",
+    "difficulty": "easy",
+    "length_miles": "3.00",
+    "estimated_time": "45 min - 1 hour",
+    "estimated_minutes": 55,
+    "location_name": "Riverside Park Area",
+    "address": "Riverside Park trailhead",
+    "terrain": "Paved, completely flat",
+    "highlights": "River views, playgrounds, fishing spots",
+    "image": "trails/riverside-park-path_gkWMbWN.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-07T20:06:58.663Z"
+  }
 },
 {
-    "model": "core.trail",
-    "pk": 5,
-    "fields": {
-        "name": "Pine Forest",
-        "description": "A beautiful trail through pine forests with moderate elevation changes.",
-        "difficulty": "moderate",
-        "length_miles": "6.80",
-        "estimated_time": "2-3 hours",
-        "terrain": "Dirt path, some rocky sections",
-        "highlights": "Pine forest scenery, deer sightings, peaceful atmosphere",
-        "image": "trails/pine-forest-trail_HsBsK64.jpg",
-        "is_featured": true,
-        "created_at": "2026-04-07T20:06:58.685Z"
-    }
+  "model": "core.trail",
+  "pk": 5,
+  "fields": {
+    "name": "Frisco Lake Park",
+    "description": "A beautiful trail through pine forests with moderate elevation changes.",
+    "difficulty": "moderate",
+    "length_miles": "6.80",
+    "estimated_time": "2-3 hours",
+    "estimated_minutes": 150,
+    "location_name": "Pine Forest Area",
+    "address": "Pine Forest trailhead",
+    "terrain": "Dirt path, some rocky sections",
+    "highlights": "Pine forest scenery, deer sightings, peaceful atmosphere",
+    "image": "trails/pine-forest-trail_HsBsK64.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-07T20:06:58.685Z"
+  }
 },
 {
-    "model": "core.trail",
-    "pk": 6,
-    "fields": {
-        "name": "Shawnee Mission Park",
-        "description": "This extensive park features a variety of trails that cater to both hikers and cyclists. The trails here are well-marked and offer beautiful views of the surrounding landscapes, including lakes and fields.",
-        "difficulty": "easy",
-        "length_miles": "5.50",
-        "estimated_time": "1.5-2 hours",
-        "terrain": "Paved path, flat",
-        "highlights": "Lake views, picnic areas, wildlife, fishing piers",
-        "image": "trails/lakeside-loop_fKCEBYR.jpg",
-        "is_featured": true,
-        "created_at": "2026-04-07T20:06:58.706Z"
-    }
+  "model": "core.trail",
+  "pk": 6,
+  "fields": {
+    "name": "Shawnee Mission Park",
+    "description": "This extensive park features a variety of trails that cater to both hikers and cyclists. The trails here are well-marked and offer beautiful views of the surrounding landscapes, including lakes and fields.",
+    "difficulty": "easy",
+    "length_miles": "5.50",
+    "estimated_time": "1.5-2 hours",
+    "estimated_minutes": 105,
+    "location_name": "Shawnee, KS",
+    "address": "Shawnee Mission Park trailhead",
+    "terrain": "Paved path, flat",
+    "highlights": "Lake views, picnic areas, wildlife, fishing piers",
+    "image": "trails/shawneeMission.webp",
+    "is_featured": true,
+    "created_at": "2026-04-07T20:06:58.706Z"
+  }
 },
 {
-    "model": "core.trail",
-    "pk": 7,
-    "fields": {
-        "name": "Meadow Brook",
-        "description": "Peaceful trail through open meadows and along a gentle brook. Great for nature lovers.",
-        "difficulty": "easy",
-        "length_miles": "4.00",
-        "estimated_time": "1-1.5 hours",
-        "terrain": "Gravel and dirt, mostly flat",
-        "highlights": "Wildflower meadows, brook crossings, butterfly watching",
-        "image": "trails/MeadowBrook.jpg",
-        "is_featured": true,
-        "created_at": "2026-04-07T20:06:58.726Z"
-    }
+  "model": "core.trail",
+  "pk": 7,
+  "fields": {
+    "name": "Deer Creek",
+    "description": "Peaceful trail through open meadows and along a gentle brook. Great for nature lovers.",
+    "difficulty": "easy",
+    "length_miles": "4.00",
+    "estimated_time": "1-1.5 hours",
+    "estimated_minutes": 75,
+    "location_name": "Meadow Brook Area",
+    "address": "Meadow Brook trailhead",
+    "terrain": "Gravel and dirt, mostly flat",
+    "highlights": "Wildflower meadows, brook crossings, butterfly watching",
+    "image": "trails/MeadowBrook.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-07T20:06:58.726Z"
+  }
 },
 {
-    "model": "core.trail",
-    "pk": 8,
-    "fields": {
-        "name": "Coffee Creek",
-        "description": "Technical ridge-top trail with challenging climbs and fast descents.",
-        "difficulty": "difficult",
-        "length_miles": "9.30",
-        "estimated_time": "2.5-4 hours",
-        "terrain": "Rocky singletrack, steep sections",
-        "highlights": "Ridge views, technical sections, fast descents",
-        "image": "trails/coffeeCreek_LEjc249.png",
-        "is_featured": true,
-        "created_at": "2026-04-07T20:06:58.732Z"
-    }
+  "model": "core.trail",
+  "pk": 8,
+  "fields": {
+    "name": "Coffee Creek",
+    "description": "Technical ridge-top trail with challenging climbs and fast descents.",
+    "difficulty": "difficult",
+    "length_miles": "9.30",
+    "estimated_time": "2.5-4 hours",
+    "estimated_minutes": 195,
+    "location_name": "Overland Park, KS",
+    "address": "Coffee Creek trail corridor",
+    "terrain": "Rocky singletrack, steep sections",
+    "highlights": "Ridge views, technical sections, fast descents",
+    "image": "trails/coffeeCreek_LEjc249.png",
+    "is_featured": true,
+    "created_at": "2026-04-07T20:06:58.732Z"
+  }
 },
 {
-    "model": "core.trail",
-    "pk": 9,
-    "fields": {
-        "name": "Nall Park",
-        "description": "Located in a smaller park, this trailhead offers a short loop trail that meanders through wooded areas and open spaces. It’s great for quick outings and nature walks.",
-        "difficulty": "easy",
-        "length_miles": "6.00",
-        "estimated_time": "1.5-2 hours",
-        "terrain": "Paved and packed dirt, flat",
-        "highlights": "Creek access, shade trees, cool temperatures",
-        "image": "trails/nallPark_z7A5dtl.png",
-        "is_featured": true,
-        "created_at": "2026-04-07T20:06:58.738Z"
-    }
+  "model": "core.trail",
+  "pk": 9,
+  "fields": {
+    "name": "Nall Park",
+    "description": "Located in a smaller park, this trailhead offers a short loop trail that meanders through wooded areas and open spaces. It’s great for quick outings and nature walks.",
+    "difficulty": "easy",
+    "length_miles": "6.00",
+    "estimated_time": "1.5-2 hours",
+    "estimated_minutes": 105,
+    "location_name": "Overland Park, KS",
+    "address": "Nall Park trailhead",
+    "terrain": "Paved and packed dirt, flat",
+    "highlights": "Creek access, shade trees, cool temperatures",
+    "image": "trails/nallPark_z7A5dtl.png",
+    "is_featured": true,
+    "created_at": "2026-04-07T20:06:58.738Z"
+  }
 },
 {
-    "model": "core.trail",
-    "pk": 10,
-    "fields": {
-        "name": "Black Hoof Park",
-        "description": "Situated near a scenic lake, this trailhead offers a mix of paved and natural surface trails.",
-        "difficulty": "expert",
-        "length_miles": "3.50",
-        "estimated_time": "1-2 hours",
-        "terrain": "Technical downhill, jumps, berms",
-        "highlights": "The area is known for its wildlife and tranquil surroundings, making it perfect for leisurely strolls.",
-        "image": "trails/blackHoofPark_QFq4I4C.webp",
-        "is_featured": true,
-        "created_at": "2026-04-07T20:06:58.743Z"
-    }
+  "model": "core.trail",
+  "pk": 10,
+  "fields": {
+    "name": "Black Hoof Park",
+    "description": "Situated near a scenic lake, this trailhead offers a mix of paved and natural surface trails.",
+    "difficulty": "expert",
+    "length_miles": "3.50",
+    "estimated_time": "1-2 hours",
+    "estimated_minutes": 75,
+    "location_name": "Lenexa, KS",
+    "address": "Black Hoof Park trailhead",
+    "terrain": "Technical downhill, jumps, berms",
+    "highlights": "The area is known for its wildlife and tranquil surroundings, making it perfect for leisurely strolls.",
+    "image": "trails/blackHoofPark_QFq4I4C.webp",
+    "is_featured": true,
+    "created_at": "2026-04-07T20:06:58.743Z"
+  }
 },
 {
-    "model": "core.trail",
-    "pk": 11,
-    "fields": {
-        "name": "Cedar Niles Park",
-        "description": "Located in a larger natural area, this trailhead offers a network of trails that wind through diverse habitats.",
-        "difficulty": "easy",
-        "length_miles": "8.00",
-        "estimated_time": "3 hours",
-        "terrain": "Technical downhill, jumps, berms",
-        "highlights": "It’s popular among hikers and mountain bikers looking for a little more adventure.",
-        "image": "trails/CedarNilesPark.jpg",
-        "is_featured": true,
-        "created_at": "2026-04-08T23:16:17.764Z"
-    }
+  "model": "core.trail",
+  "pk": 11,
+  "fields": {
+    "name": "Cedar Niles Park",
+    "description": "Located in a larger natural area, this trailhead offers a network of trails that wind through diverse habitats.",
+    "difficulty": "easy",
+    "length_miles": "8.00",
+    "estimated_time": "3 hours",
+    "estimated_minutes": 180,
+    "location_name": "Olathe, KS",
+    "address": "Cedar Niles Park trailhead",
+    "terrain": "Technical downhill, jumps, berms",
+    "highlights": "It’s popular among hikers and mountain bikers looking for a little more adventure.",
+    "image": "trails/CedarNilesPark.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-08T23:16:17.764Z"
+  }
 },
 {
-    "model": "core.trail",
-    "pk": 12,
-    "fields": {
-        "name": "Tomahawk Creek",
-        "description": "This area showcases trails that run along the river, offering scenic views and opportunities for wildlife spotting. It’s a quieter spot, ideal for nature lovers.",
-        "difficulty": "easy",
-        "length_miles": "9.00",
-        "estimated_time": "5 hours",
-        "terrain": "Paved path, mostly flat",
-        "highlights": "It’s a great place for birdwatching and enjoying the natural beauty of the region.",
-        "image": "trails/tomahawkCreek_HfHbK3t.png",
-        "is_featured": true,
-        "created_at": "2026-04-08T23:36:27.127Z"
-    }
+  "model": "core.trail",
+  "pk": 12,
+  "fields": {
+    "name": "Tomahawk Creek",
+    "description": "This area showcases trails that run along the river, offering scenic views and opportunities for wildlife spotting. It’s a quieter spot, ideal for nature lovers.",
+    "difficulty": "easy",
+    "length_miles": "9.00",
+    "estimated_time": "5 hours",
+    "estimated_minutes": 180,
+    "location_name": "Leawood, KS",
+    "address": "Tomahawk Creek trailhead",
+    "terrain": "Paved path, mostly flat",
+    "highlights": "It’s a great place for birdwatching and enjoying the natural beauty of the region.",
+    "image": "trails/tomahawkCreek_HfHbK3t.png",
+    "is_featured": true,
+    "created_at": "2026-04-08T23:36:27.127Z"
+  }
+},
+{
+  "model": "core.trail",
+  "pk": 13,
+  "fields": {
+    "name": "Forest Park",
+    "description": "A scenic paved trail following Indian Creek. Perfect for families and casual riders. Beautiful views of the creek and wildlife.",
+    "difficulty": "easy",
+    "length_miles": "4.50",
+    "estimated_time": "1-2 hours",
+    "estimated_minutes": 90,
+    "location_name": "Overland Park, KS",
+    "address": "Indian Creek Greenway access",
+    "terrain": "Paved path, mostly flat",
+    "highlights": "Creek views, wildlife spotting, picnic areas, rest stops",
+    "image": "trails/indian-creek-greenway_s2qfWmy.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-13T17:33:13.571Z"
+  }
+},
+{
+  "model": "core.trail",
+  "pk": 15,
+  "fields": {
+    "name": "Eastbrooke Park",
+    "description": "Scenic loop around beautiful Lake Henderson. Flat and easy with stunning water views.",
+    "difficulty": "easy",
+    "length_miles": "5.50",
+    "estimated_time": "1.5-2 hours",
+    "estimated_minutes": 105,
+    "location_name": "Lake Henderson Area",
+    "address": "Lake Henderson trailhead",
+    "terrain": "Paved path, flat",
+    "highlights": "Lake views, picnic areas, wildlife, fishing piers",
+    "image": "trails/lakeside-loop_Ujxqcvv.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-13T17:33:13.581Z"
+  }
+},
+{
+  "model": "core.trail",
+  "pk": 17,
+  "fields": {
+    "name": "Lake Olathe Park",
+    "description": "Technical ridge-top trail with challenging climbs and fast descents.",
+    "difficulty": "difficult",
+    "length_miles": "9.30",
+    "estimated_time": "2.5-4 hours",
+    "estimated_minutes": 195,
+    "location_name": "Ridge Runner Area",
+    "address": "North ridge trailhead",
+    "terrain": "Rocky singletrack, steep sections",
+    "highlights": "Ridge views, technical sections, fast descents",
+    "image": "trails/ol.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-13T17:33:13.588Z"
+  }
+},
+{
+  "model": "core.trail",
+  "pk": 18,
+  "fields": {
+    "name": "Corporate Woods Park",
+    "description": "Gentle valley trail following Cedar Creek. Shaded and cool, perfect for summer rides.",
+    "difficulty": "easy",
+    "length_miles": "6.00",
+    "estimated_time": "1.5-2 hours",
+    "estimated_minutes": 105,
+    "location_name": "Olathe, KS",
+    "address": "Cedar Creek valley access",
+    "terrain": "Paved and packed dirt, flat",
+    "highlights": "Creek access, shade trees, cool temperatures",
+    "image": "trails/cedar-valley-path.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-13T17:33:13.589Z"
+  }
+},
+{
+  "model": "core.trail",
+  "pk": 19,
+  "fields": {
+    "name": "Mahaffie Creek",
+    "description": "Expert-only downhill trail with jumps, drops, and technical features.",
+    "difficulty": "expert",
+    "length_miles": "3.50",
+    "estimated_time": "1-2 hours",
+    "estimated_minutes": 75,
+    "location_name": "Olathe, KS",
+    "address": "Advanced downhill trail area",
+    "terrain": "Technical downhill, jumps, berms",
+    "highlights": "Jumps, drops, berms, technical features",
+    "image": "trails/black-diamond-run.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-13T17:33:13.591Z"
+  }
+},
+{
+  "model": "core.trail",
+  "pk": 20,
+  "fields": {
+    "name": "Cedar Creek Waterfall",
+    "description": "A shaded woodland path with a smooth packed surface and colorful seasonal tree cover.",
+    "difficulty": "moderate",
+    "length_miles": "4.70",
+    "estimated_time": "1-2 hours",
+    "estimated_minutes": 90,
+    "location_name": "Maple Grove Area",
+    "address": "Maple Grove trailhead",
+    "terrain": "Packed gravel and dirt, gentle curves",
+    "highlights": "Maple canopy, fall color, shaded turns, quiet woodland views",
+    "image": "trails/maple-grove-trail.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-19T22:01:23.527Z"
+  }
+},
+{
+  "model": "core.trail",
+  "pk": 21,
+  "fields": {
+    "name": "Quivira Park",
+    "description": "Open natural-surface loops through meadow edges, grasses, and shaded tree lines.",
+    "difficulty": "easy",
+    "length_miles": "5.20",
+    "estimated_time": "1.5-2 hours",
+    "estimated_minutes": 105,
+    "location_name": "Heritage Park Area",
+    "address": "Heritage Park loop trailhead",
+    "terrain": "Packed dirt and gravel, mostly flat",
+    "highlights": "Meadow edges, shade trees, open views, easy loop options",
+    "image": "trails/Heritage_Park_Loops.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-19T22:01:23.556Z"
+  }
+},
+{
+  "model": "core.trail",
+  "pk": 22,
+  "fields": {
+    "name": "Two Trails Park",
+    "description": "A 19-acre community park featuring a paved walking trail, playgrounds, and sports facilities.",
+    "difficulty": "easy",
+    "length_miles": "3.00",
+    "estimated_time": "1-2 hours",
+    "estimated_minutes": 90,
+    "location_name": "",
+    "address": "",
+    "terrain": "Paved path, mostly flat",
+    "highlights": "Known for its six lighted, outdoor concrete pickleball courts.",
+    "image": "trails/tt.webp",
+    "is_featured": true,
+    "created_at": "2026-04-29T15:46:18.894Z"
+  }
+},
+{
+  "model": "core.trail",
+  "pk": 23,
+  "fields": {
+    "name": "Blackbob Trails",
+    "description": "An 80-acre park offering a 1.5-mile walking trail loop surrounded by trees and recreational amenities.",
+    "difficulty": "moderate",
+    "length_miles": "1.50",
+    "estimated_time": "1-2 hours",
+    "estimated_minutes": 90,
+    "location_name": "",
+    "address": "",
+    "terrain": "Paved and packed dirt, flat",
+    "highlights": "Features a large outdoor swimming pool with water slides and batting cages.",
+    "image": "trails/pic.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-29T15:52:13.169Z"
+  }
+},
+{
+  "model": "core.trail",
+  "pk": 24,
+  "fields": {
+    "name": "Blue River Parkway",
+    "description": "Offers over 12 miles of natural-surface, scenic trails suitable for hiking and mountain biking along the river.",
+    "difficulty": "difficult",
+    "length_miles": "12.00",
+    "estimated_time": "4-5 hours",
+    "estimated_minutes": 90,
+    "location_name": "",
+    "address": "",
+    "terrain": "Technical downhill, jumps, berms",
+    "highlights": "Features challenging single-track biking trails with significant elevation changes.",
+    "image": "trails/blue.webp",
+    "is_featured": true,
+    "created_at": "2026-04-29T15:55:18.170Z"
+  }
+},
+{
+  "model": "core.trail",
+  "pk": 25,
+  "fields": {
+    "name": "Sar-Ko-Par Trails Park",
+    "description": "A 50-acre park featuring scenic paved trails that wind around Rose's Pond and connect to local amenities.",
+    "difficulty": "easy",
+    "length_miles": "5.00",
+    "estimated_time": "3-4",
+    "estimated_minutes": 90,
+    "location_name": "",
+    "address": "",
+    "terrain": "Paved path, flat",
+    "highlights": "Hosts the annual \"Sar-Ko-Aglow\" holiday lighting display and includes a skateboard park.",
+    "image": "trails/sar_n5DDTe3.jpg",
+    "is_featured": true,
+    "created_at": "2026-04-29T15:59:43.910Z"
+  }
+},
+{
+  "model": "core.trail",
+  "pk": 26,
+  "fields": {
+    "name": "Heritage Park",
+    "description": "A large 1,238-acre park featuring a 40-acre lake, paved trails, and an 18-hole golf course.",
+    "difficulty": "moderate",
+    "length_miles": "4.00",
+    "estimated_time": "2-3 hours",
+    "estimated_minutes": 90,
+    "location_name": "",
+    "address": "",
+    "terrain": "Paved path, mostly flat",
+    "highlights": "eatures a popular 30-acre off-leash dog park with its own pond.",
+    "image": "trails/hp.jpeg",
+    "is_featured": true,
+    "created_at": "2026-04-29T16:04:12.995Z"
+  }
 }
 ]

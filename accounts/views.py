@@ -8,6 +8,8 @@ from reservations.models import Reservation
 from reviews.models import Review
 from .forms import UserRegistrationForm, UserLoginForm, UserProfileForm
 
+from django.db.models import Sum
+from core.models import SavedTrail
 User = get_user_model()
 
 
@@ -71,28 +73,64 @@ def user_logout(request):
     messages.info(request, 'You have been logged out successfully.')
     return redirect('home')
 
-
 @login_required
 def profile(request):
-    """User profile view with reservations, reviews, and full account details."""
+    """User profile view with reservations, reviews, and saved trails."""
+
+    # Handle form submission FIRST
+    if request.method == "POST":
+        user_profile = request.user
+
+        if request.FILES.get('avatar'):
+            user_profile.avatar = request.FILES['avatar']
+
+        if request.FILES.get('cover_photo'):
+            user_profile.cover_photo = request.FILES['cover_photo']
+
+        user_profile.profile_quote = request.POST.get("profile_quote")
+
+        user_profile.save()
+        return redirect('profile')
+
+    # Reservations
     reservations = Reservation.objects.filter(
         user=request.user
     ).select_related('bike').order_by('-created_at')[:5]
 
+    # Reviews
     reviews = Review.objects.filter(
         user=request.user
-    ).order_by('-created_at')[:5]
+    ).order_by('-created_at')
+
+    recent_reviews = reviews[:5]
+
+    # Totals
+    total_spent = Reservation.objects.filter(
+        user=request.user
+    ).aggregate(Sum('total_price'))['total_price__sum'] or 0
+
+    reservation_count = Reservation.objects.filter(user=request.user).count()
+    review_count = Review.objects.filter(user=request.user).count()
+
+    # Saved trails
+    saved_trails = SavedTrail.objects.filter(
+        user=request.user
+    ).select_related('trail')
 
     context = {
         'profile_user': request.user,
         'is_own_profile': True,
         'reservations': reservations,
         'reviews': reviews,
-        'reservation_count': Reservation.objects.filter(user=request.user).count(),
-        'review_count': Review.objects.filter(user=request.user).count(),
+        'recent_reviews': recent_reviews,
+        'reservation_count': reservation_count,
+        'review_count': review_count,
+        'total_spent': total_spent,
+        'saved_trails': saved_trails,
+        'is_profile_page': True,
     }
-    return render(request, 'accounts/profile.html', context)
 
+    return render(request, 'accounts/profile.html', context)
 
 @login_required
 def user_profile_detail(request, user_id):
@@ -101,22 +139,49 @@ def user_profile_detail(request, user_id):
         return redirect('profile')
 
     profile_user = get_object_or_404(User, id=user_id)
+
+    # Reservations
     reservations = Reservation.objects.filter(
         user=profile_user
     ).select_related('bike').order_by('-created_at')[:5]
+
+    # Reviews
     reviews = Review.objects.filter(
         user=profile_user
-    ).order_by('-created_at')[:5]
+    ).order_by('-created_at')
+
+    recent_reviews = reviews[:5]
+
+    # Totals
+    total_spent = Reservation.objects.filter(
+        user=profile_user
+    ).aggregate(Sum('total_price'))['total_price__sum'] or 0
+
+    reservation_count = Reservation.objects.filter(user=profile_user).count()
+    review_count = Review.objects.filter(user=profile_user).count()
+
+    # Saved trails
+    saved_trails = SavedTrail.objects.filter(
+        user=profile_user
+    ).select_related('trail')
 
     context = {
         'profile_user': profile_user,
         'is_own_profile': profile_user == request.user,
         'admin_view': True,
+
+        # ADD THESE ↓↓↓
         'reservations': reservations,
         'reviews': reviews,
-        'reservation_count': Reservation.objects.filter(user=profile_user).count(),
-        'review_count': Review.objects.filter(user=profile_user).count(),
+        'recent_reviews': recent_reviews,
+        'reservation_count': reservation_count,
+        'review_count': review_count,
+        'total_spent': total_spent,
+        'saved_trails': saved_trails,
+
+        'is_profile_page': True,
     }
+
     return render(request, 'accounts/profile.html', context)
 
 
@@ -137,3 +202,16 @@ def edit_profile(request):
         'title': 'Edit Profile'
     }
     return render(request, 'accounts/edit_profile.html', context)
+
+@login_required
+def rate_reservation(request, reservation_id):
+    reservation = get_object_or_404(Reservation, id=reservation_id, user=request.user)
+
+    if request.method == "POST":
+        rating = request.POST.get("rating")
+
+        if rating:
+            reservation.rating = int(rating)
+            reservation.save()
+
+    return redirect('profile') 

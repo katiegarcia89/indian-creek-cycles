@@ -3,6 +3,17 @@
 {% block title %}Write a Review - Indian Creek Cycles{% endblock %}
 
 {% block content %}
+
+{% if reservation %}
+    <div class="form-notice">
+        Reviewing your ride: <strong>{{ reservation.bike.name }}</strong>
+    </div>
+{% elif bike %}
+    <div class="form-notice">
+        Reviewing: <strong>{{ bike.name }}</strong>
+    </div>
+{% endif %}
+
 <!-- Page Header -->
 <section class="page-header">
     <div class="container">
@@ -15,42 +26,68 @@
         <div class="review-form-card">
             <form method="post" class="review-form" enctype="multipart/form-data">
                 {% csrf_token %}
-                
+                    
+                    <div class="form-group">
+                        <label for="{{ form.title.id_for_label }}">Review Title *</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                        <span class="form-error">{{ form.title.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.content.id_for_label }}">Your Review *</label>
+                        {{ form.content }}
+                        {% if form.content.errors %}
+                        <span class="form-error">{{ form.content.errors.0 }}</span>
+                        {% endif %}
+                        <span class="form-help">Share details about your experience. What did you like? What could be improved?</span>
+                    </div>
+
+                    {{ formset.management_form }}
+
+                    {% for image_form in formset %}
+                        <div class="form-group">
+                            {{ image_form.id }}  
+
+                            {{ image_form.image.label_tag }}
+                            {{ image_form.image }}
+
+                            {{ image_form.caption.label_tag }}
+                            {{ image_form.caption }}
+                        </div>
+                    {% endfor %}
+
+                    {% if form.errors %}
+                        <div class="form-error">
+                            {{ form.errors }}
+                        </div>
+                    {% endif %}
+
+                    {% if formset.errors %}
+                        <div class="form-error">
+                            {{ formset.errors }}
+                        </div>
+                    {% endif %}
+                                    
                 <div class="form-section">
                     <h3 class="form-section-title">Your Rating</h3>
                     <div class="rating-select">
                         {% for value, label in form.rating.field.choices %}
-                        <label class="rating-option">
-                            <input type="radio" name="rating" value="{{ value }}" {% if forloop.first %}checked{% endif %}>
-                            <span class="rating-star">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                                </svg>
-                            </span>
-                            <span class="rating-label">{{ label }}</span>
-                        </label>
-                        {% endfor %}
+                    <label class="rating-option">
+                        <input type="radio" name="rating" value="{{ value }}"
+                        {% if form.rating.value|stringformat:"s" == value|stringformat:"s" %}checked{% endif %}>
+
+                        <span class="rating-star">
+                            ★
+                        </span>
+                        <span class="rating-label">{{ label }}</span>
+                    </label>
+                    {% endfor %}
                     </div>
                     {% if form.rating.errors %}
                     <span class="form-error">{{ form.rating.errors.0 }}</span>
                     {% endif %}
-                </div>
-                
-                <div class="form-group">
-                    <label for="{{ form.title.id_for_label }}">Review Title *</label>
-                    {{ form.title }}
-                    {% if form.title.errors %}
-                    <span class="form-error">{{ form.title.errors.0 }}</span>
-                    {% endif %}
-                </div>
-                
-                <div class="form-group">
-                    <label for="{{ form.content.id_for_label }}">Your Review *</label>
-                    {{ form.content }}
-                    {% if form.content.errors %}
-                    <span class="form-error">{{ form.content.errors.0 }}</span>
-                    {% endif %}
-                    <span class="form-help">Share details about your experience. What did you like? What could be improved?</span>
                 </div>
                 
                 <div class="form-notice">

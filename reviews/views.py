@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from bikes.models import Bike
+from reservations.models import Reservation
 from .models import Review, ReviewHelpfulVote
 from .forms import ReviewForm, ReviewImageFormSet
 
@@ -73,70 +74,107 @@ def review_list(request):
 
 @login_required
 def submit_review(request):
-    """Submit a new review."""
     bike_id = request.GET.get('bike')
+    reservation_id = request.GET.get('reservation')
+
     bike = None
-    if bike_id:
+    reservation = None
+
+    if reservation_id:
+        reservation = get_object_or_404(
+            Reservation,
+            id=reservation_id,
+            user=request.user
+        )
+        bike = reservation.bike
+
+    elif bike_id:
         bike = get_object_or_404(Bike, id=bike_id)
-    
+
     if request.method == 'POST':
         form = ReviewForm(request.POST)
-        if form.is_valid():
+        formset = ReviewImageFormSet(request.POST, request.FILES)
+
+        # ✅ validate BOTH together
+        if form.is_valid() and formset.is_valid():
+
+            # prevent duplicate reviews
+            if reservation and Review.objects.filter(
+                reservation=reservation,
+                user=request.user
+            ).exists():
+                messages.warning(request, "You already reviewed this ride.")
+                return redirect('profile')
+
             review = form.save(commit=False)
             review.user = request.user
-            if bike:
+
+            # connect properly BEFORE saving
+            if reservation:
+                review.reservation = reservation
+                review.bike = reservation.bike
+            elif bike:
                 review.bike = bike
+
+            review.is_approved = False
             review.save()
-            
-            # Handle images
-            formset = ReviewImageFormSet(request.POST, request.FILES, instance=review)
-            if formset.is_valid():
-                formset.save()
-            
-            messages.success(
-                request,
-                'Thank you for your review! It will be visible after approval.'
-            )
-            return redirect('reviews')
+
+            # attach images
+            formset.instance = review
+            formset.save()
+
+            messages.success(request, "Review submitted!")
+            return redirect('profile' if reservation else 'reviews')
+
     else:
         form = ReviewForm()
         formset = ReviewImageFormSet()
-    
-    context = {
+
+    return render(request, 'reviews/submit_review.html', {
         'form': form,
         'formset': formset,
         'bike': bike,
-    }
-    return render(request, 'reviews/submit_review.html', context)
-
-
+        'reservation': reservation,
+    })
+    
 @login_required
 def edit_review(request, pk):
-    """Edit an existing review."""
     review = get_object_or_404(Review, pk=pk, user=request.user)
-    
+
     if request.method == 'POST':
         form = ReviewForm(request.POST, instance=review)
-        if form.is_valid():
-            form.save()
-            
-            # Handle images
-            formset = ReviewImageFormSet(request.POST, request.FILES, instance=review)
-            if formset.is_valid():
-                formset.save()
-            
-            messages.success(request, 'Your review has been updated.')
-            return redirect('reviews')
+        formset = ReviewImageFormSet(request.POST, request.FILES, instance=review)
+
+        if form.is_valid() and formset.is_valid():
+            review = form.save(commit=False)
+
+            review.user = request.user
+            review.is_approved = False  # 🔥 force re-approval
+
+            review.save()
+
+            formset.instance = review
+            formset.save()
+
+            messages.success(
+                request,
+                "Your review was updated and is pending approval."
+            )
+
+            return redirect('profile' if review.reservation else 'reviews')
+
+        else:
+            messages.error(request, "Please fix the errors below.")
+
     else:
         form = ReviewForm(instance=review)
         formset = ReviewImageFormSet(instance=review)
-    
-    context = {
+
+    return render(request, 'reviews/submit_review.html', {
         'form': form,
         'formset': formset,
         'review': review,
-    }
-    return render(request, 'reviews/edit_review.html', context)
+    })
 
 
 @login_required
@@ -145,9 +183,12 @@ def delete_review(request, pk):
     review = get_object_or_404(Review, pk=pk, user=request.user)
     
     if request.method == 'POST':
+        next_url = request.POST.get('next')  # 👈 get where to go next
+
         review.delete()
         messages.success(request, 'Your review has been deleted.')
-        return redirect('reviews')
+
+        return redirect(next_url if next_url else 'reviews')  # 👈 smart redirect
     
     context = {
         'review': review,

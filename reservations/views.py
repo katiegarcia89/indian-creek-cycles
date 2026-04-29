@@ -1,11 +1,9 @@
 import json
 import os
-from datetime import datetime, timedelta
 from email.mime.image import MIMEImage
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.utils import timezone
 from django.db import transaction
 from django.http import JsonResponse
@@ -14,14 +12,18 @@ from django.db.models import Q
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.conf import settings
 
 # Local app models and forms
 from .models import Reservation, ReservationAccessory, Waiver, PromoCode
 from .forms import ReservationForm, WaiverForm, PromoCodeForm, ReservationCancelForm
 from bikes.models import Accessory, Bike
 from payments.models import Payment
+
+from django.contrib import messages
+from django.utils import timezone
+from datetime import datetime, timedelta, time
 from locations.models import Location
-from datetime import time
 
 
 def _collect_accessory_items(form, post_data):
@@ -185,7 +187,11 @@ def create_reservation(request, bike_slug):
                     
                     reservation.calculate_prices()
                     reservation.save()
-                    
+                    try:
+                        send_confirmation_email(reservation)
+                    except Exception as e:
+                        print(f"Email failed: {e}")          
+                                  
                     # --- SMART-DOCK LOGIC ---
                     from django.utils import timezone
                     today = timezone.now().date()
@@ -235,7 +241,41 @@ def create_reservation(request, bike_slug):
     }
     return render(request, 'reservations/create_reservation.html', context)
 
+def send_confirmation_email(reservation):
+    logo_path = settings.BASE_DIR / 'static' / 'images' / 'logo' / 'logo-email.png'
 
+    subject = f"Reservation Confirmed - {reservation.bike.name}"
+
+    context = {
+        'user': reservation.user,
+        'reservation': reservation,
+        'bike': reservation.bike,
+    }
+
+    html_content = render_to_string('emails/confirmation_email.html', context)
+    text_content = strip_tags(html_content)
+
+    email = EmailMultiAlternatives(
+        subject=subject,
+        body=text_content,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[reservation.user.email],
+    )
+
+    email.attach_alternative(html_content, "text/html")
+
+    try:
+        with open(logo_path, 'rb') as f:
+            img = MIMEImage(f.read())
+            img.add_header('Content-ID', '<logo_image>')
+            email.attach(img)
+    except FileNotFoundError:
+        print("Logo not found")
+
+    email.send()
+    # print(f"Reminder would send to {reservation.user.email} for {reservation.rental_date}")
+
+    
 @login_required
 def waiver(request, reservation_id):
     """Waiver signing view."""
@@ -295,7 +335,8 @@ def reservation_detail(request, pk):
 def my_reservations(request):
     """List all user reservations."""
     reservations = Reservation.objects.filter(
-        user=request.user
+        user=request.user,
+        status__in=['pending', 'confirmed', 'paid']
     ).select_related('bike').order_by('-created_at')
 
     context = {
@@ -356,12 +397,6 @@ def reservation_confirmation(request, pk):
         'accessories': reservation.reservation_accessories.select_related('accessory').all(),
     }
     return render(request, 'reservations/reservation_confirmation.html', context)
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from django.utils import timezone
-from datetime import datetime, time
-from .models import Reservation, Location
 
 def unlock_bike(request, pk):
     # 1. FETCH THE 'ANCHOR' RESERVATION (The one in the URL)
@@ -538,65 +573,66 @@ def confirm_pickup_location(request, reservation_id):
     
 
 
+from django.http import HttpResponse
+
 def send_daily_reminders(request):
-    """
-    Finds all confirmed reservations for tomorrow and sends a 
-    branded HTML email with the specific background logo.
-    """
-    tomorrow = timezone.now().date() + timedelta(days=1)
-    
+    from django.utils import timezone
+    from datetime import timedelta
+
+    # tomorrow = timezone.now().date() + timedelta(days=1)
+    tomorrow = timezone.now().date()
+
     reservations = Reservation.objects.filter(
-        rental_date=tomorrow, 
-        status__in=['confirmed', 'paid']
+        rental_date=tomorrow,
+        status__in=['confirmed', 'paid'],
+        reminder_sent=False
     )
-    
+
     count = 0
     logo_path = settings.BASE_DIR / 'static' / 'images' / 'logo' / 'logo-email.png'
 
     for res in reservations:
         subject = f"Reminder: Your Ride Tomorrow at {res.pickup_location.name}"
-        
+
         context = {
             'user': res.user,
             'reservation': res,
             'bike': res.bike,
-            'request': request,
         }
-        
+
         html_content = render_to_string('emails/reminder_email.html', context)
         text_content = strip_tags(html_content)
-        
+
         email = EmailMultiAlternatives(
             subject=subject,
             body=text_content,
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=[res.user.email],
         )
-        
+
         email.attach_alternative(html_content, "text/html")
-        email.mixed_subtype = 'related' 
 
         try:
             with open(logo_path, 'rb') as f:
-                logo_data = f.read()
-                img = MIMEImage(logo_data)
+                img = MIMEImage(f.read())
                 img.add_header('Content-ID', '<logo_image>')
-                img.add_header('Content-Disposition', 'inline', filename='logo-email.png')
                 email.attach(img)
         except FileNotFoundError:
-            print(f"ERROR: Logo not found at: {logo_path}")
+            print("Logo not found")
 
         email.send()
-        count += 1
-        
-    if count > 0:
-        messages.success(request, f"Successfully sent {count} reminder emails!")
-    else:
-        messages.info(request, "No confirmed rentals found for tomorrow.")
 
-    return redirect('admin_reservations')
+        res.reminder_sent = True
+        res.save()
+
+        count += 1
+
+    return HttpResponse(f"Sent {count} reminder emails")
 
 
 def help_page(request):
+    locations = Location.objects.filter(is_active=True).order_by('station_number')
 
-    return render(request, 'reservations/help.html')
+    return render(request, 'reservations/help.html', {
+        'locations': locations
+    })

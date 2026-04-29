@@ -40,11 +40,13 @@
                         ← Back to Dashboard
                     </a>
                 </div>
+                {% if user.is_superuser %}
                 <div class="admin-header-actions">
-                    <a href="{% url 'send_reminders' %}" class="admin-btn" style="background-color: #182557; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; display: inline-block;">
-                        ✉️ Send Tomorrow's Reminders
+                    <a href="{% url 'send_reminders' %}" class="admin-btn admin-btn-secondary">
+                        ⚠️ Force Send Reminders (Backup)
                     </a>
                 </div>
+                {% endif %}
             </div>
 
             <div class="admin-card">
