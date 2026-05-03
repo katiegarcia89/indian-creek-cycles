@@ -393,6 +393,18 @@
     color: #555;
 }
 
+.profile-email-link {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(85, 85, 85, 0.35);
+    transition: 0.2s ease;
+}
+
+.profile-email-link:hover {
+    color: #1f6d43;
+    border-bottom-color: rgba(31, 109, 67, 0.55);
+}
+
 .profile-meta-row span::before {
     font-size: 0.9rem;
     opacity: 0.8;

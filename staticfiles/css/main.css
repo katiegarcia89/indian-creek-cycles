@@ -2091,6 +2091,91 @@ textarea.form-control {
     object-fit: cover;
 }
 
+.about-image-placeholder {
+    min-height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #16324f 0%, #1f6d43 100%);
+    color: rgba(255, 255, 255, 0.85);
+    box-shadow: var(--shadow-lg);
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+}
+
+.team-card {
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+}
+
+.team-avatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #16324f 0%, #1f6d43 100%);
+    color: var(--color-white);
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.team-name {
+    margin-bottom: 0.4rem;
+    color: var(--color-primary-dark);
+    font-size: 1.2rem;
+}
+
+.team-role {
+    margin-bottom: 0.75rem;
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.team-bio {
+    margin: 0;
+    color: var(--color-gray-600);
+    line-height: 1.7;
+}
+
+.faq-list {
+    display: grid;
+    gap: 1rem;
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 1.2rem 1.35rem;
+}
+
+.faq-question {
+    margin: 0 0 0.65rem;
+    color: var(--color-primary-dark);
+    font-size: 1.1rem;
+}
+
+.faq-answer {
+    margin: 0;
+    color: var(--color-gray-600);
+    line-height: 1.75;
+}
+
 /* ============================================
    CTA Section
    ============================================ */

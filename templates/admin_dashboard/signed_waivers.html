@@ -3,6 +3,36 @@
 {% block title %}Signed Waivers | Indian Creek Cycles{% endblock %}
 {% block meta_description %}Review signed rental waivers for Indian Creek Cycles{% endblock %}
 
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .waiver-pending-table .admin-actions-inline {
+        min-width: 230px;
+    }
+
+    .waiver-link-note {
+        margin: 0.4rem 0 1rem;
+        color: #64748b;
+        font-size: 0.92rem;
+    }
+
+    .waiver-status-stack {
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .waiver-status-stack .muted {
+        font-size: 0.82rem;
+    }
+
+    .waiver-copy-btn.copied {
+        background: #ecfdf3;
+        color: #166534;
+        border-color: #bbf7d0;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <section class="admin-page">
     <div class="admin-shell">
@@ -36,15 +66,18 @@
             {% if unsigned_active_reservations %}
             <div class="panel" style="margin-bottom: 1.25rem;">
                 <h2>Needs Signature</h2>
+                <p class="waiver-link-note">Copy the waiver link for a customer reminder, or open their profile if you need to follow up manually.</p>
                 <div class="admin-table-wrap">
-                    <table class="admin-table">
+                    <table class="admin-table waiver-pending-table">
                         <thead>
                             <tr>
                                 <th>Reservation</th>
                                 <th>Customer</th>
                                 <th>Bike</th>
                                 <th>Dates</th>
-                                <th>Status</th>
+                                <th>Reservation Status</th>
+                                <th>Waiver</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,6 +99,26 @@
                                             {{ reservation.status }}
                                         </span>
                                     {% endif %}
+                                </td>
+                                <td>
+                                    <div class="waiver-status-stack">
+                                        <span class="status-pill {{ reservation.waiver_urgency_class }}">
+                                            {{ reservation.waiver_urgency_label }}
+                                        </span>
+                                        <span class="muted">Needs signature</span>
+                                    </div>
+                                </td>
+                                <td class="admin-action-cell">
+                                    <div class="admin-actions admin-actions-inline admin-actions-compact">
+                                        <button
+                                            type="button"
+                                            class="admin-btn admin-btn-success waiver-copy-btn"
+                                            data-waiver-url="{{ reservation.waiver_url }}"
+                                        >
+                                            Copy Waiver Link
+                                        </button>
+                                        <a class="admin-btn" href="{% url 'user_profile_detail' reservation.user.id %}">View Customer</a>
+                                    </div>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -130,4 +183,30 @@
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.querySelectorAll('.waiver-copy-btn').forEach((button) => {
+        button.addEventListener('click', async () => {
+            const waiverUrl = button.dataset.waiverUrl;
+            const originalText = button.textContent.trim();
+
+            try {
+                await navigator.clipboard.writeText(waiverUrl);
+                button.textContent = 'Copied';
+                button.classList.add('copied');
+            } catch (error) {
+                window.prompt('Copy this waiver link:', waiverUrl);
+                button.textContent = 'Link Ready';
+                button.classList.add('copied');
+            }
+
+            window.setTimeout(() => {
+                button.textContent = originalText;
+                button.classList.remove('copied');
+            }, 1800);
+        });
+    });
+</script>
 {% endblock %}

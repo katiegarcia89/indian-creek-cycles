@@ -15,6 +15,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.urls import reverse
 
 # Local app models and forms
 from bikes.models import Accessory, Bike, BikeCategory
@@ -861,6 +862,26 @@ def admin_waivers(request):
         waiver_signed=False,
     ).order_by("rental_date", "created_at")
 
+    today = timezone.localdate()
+    soon_cutoff = today + timedelta(days=1)
+    for reservation in unsigned_active_reservations:
+        if reservation.rental_date < today:
+            reservation.waiver_urgency_label = "Overdue"
+            reservation.waiver_urgency_class = "status-cancelled"
+        elif reservation.rental_date == today:
+            reservation.waiver_urgency_label = "Due Today"
+            reservation.waiver_urgency_class = "status-pending"
+        elif reservation.rental_date <= soon_cutoff:
+            reservation.waiver_urgency_label = "Due Soon"
+            reservation.waiver_urgency_class = "status-confirmed"
+        else:
+            reservation.waiver_urgency_label = "Upcoming"
+            reservation.waiver_urgency_class = "status-active"
+
+        reservation.waiver_url = request.build_absolute_uri(
+            reverse("waiver", args=[reservation.id])
+        )
+
     return render(
         request,
         "admin_dashboard/signed_waivers.html",
@@ -869,6 +890,7 @@ def admin_waivers(request):
             "unsigned_active_reservations": unsigned_active_reservations,
             "signed_waiver_count": signed_waivers.count(),
             "unsigned_active_waiver_count": unsigned_active_reservations.count(),
+            "today": today,
         },
     )
 
