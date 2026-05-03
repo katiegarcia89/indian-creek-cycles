@@ -2423,7 +2423,6 @@ textarea.form-control {
     padding: 15px;
     display: flex;
     align-items: center;
-    cursor: pointer;
     background: white;
     transition: 0.3s;
 }
@@ -2861,6 +2860,12 @@ textarea.form-control {
     color: white;
 }
 
+.summary-header h2,
+.summary-header .summary-label,
+.summary-header .summary-id {
+    color: white;
+}
+
 .summary-top {
     display: flex;
     justify-content: space-between;
@@ -3200,16 +3205,6 @@ textarea.form-control {
     font-weight: 700;
 }
 
-.btn-cancel {
-    background: #fee2e2;
-    color: #b91c1c;
-    padding: 12px;
-    text-align: center;
-    border-radius: var(--radius-lg);
-    border: 1px solid #fecaca;
-    font-weight: 600;
-}
-
 /* ================================
    RESPONSIVE
 ================================ */
@@ -3226,4 +3221,22 @@ textarea.form-control {
         border-radius: var(--radius-lg);
         border-top: 1px solid var(--color-gray-200);
     }
+}
+
+.admin-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.admin-actions-inline {
+    display: flex;
+}
+
+.admin-btn {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
 }

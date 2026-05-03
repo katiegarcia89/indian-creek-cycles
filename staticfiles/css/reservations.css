@@ -500,6 +500,12 @@
     color: white;
 }
 
+.summary-header h2,
+.summary-header .summary-label,
+.summary-header .summary-id {
+    color: white;
+}
+
 .summary-top {
     display: flex;
     justify-content: space-between;
@@ -917,4 +923,9 @@
     width: 45px !important;
     font-weight: 800 !important;
     color: #0c3c19 !important; /* Your Indian Creek Green */
+}
+
+.section-subtitle {
+    color: #bec3c3;
+    font-size: 14px;
 }
