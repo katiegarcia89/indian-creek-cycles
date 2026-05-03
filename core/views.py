@@ -19,6 +19,7 @@ from django.utils.html import strip_tags
 # Local app models and forms
 from bikes.models import Accessory, Bike, BikeCategory
 from reviews.models import Review
+from reviews.forms import AdminReviewCommentForm
 from reservations.models import PromoCode, Reservation, Waiver
 from payments.models import Payment
 from .models import Trail
@@ -764,6 +765,35 @@ def update_reservation_status(request, reservation_id, new_status):
 def admin_reviews(request):
     reviews = Review.objects.select_related("user", "bike").order_by("-created_at")
     return render(request, "admin_dashboard/admin_reviews.html", {"reviews": reviews})
+
+
+@staff_member_required
+def edit_review_comment(request, review_id):
+    review = get_object_or_404(Review.objects.select_related("user", "bike"), id=review_id)
+
+    if request.method == "POST":
+        form = AdminReviewCommentForm(request.POST, instance=review)
+        if form.is_valid():
+            updated_review = form.save(commit=False)
+            if "admin_response" in form.changed_data:
+                if updated_review.admin_response:
+                    updated_review.admin_response_date = timezone.now()
+                else:
+                    updated_review.admin_response_date = None
+            updated_review.save()
+            messages.success(request, f"Comment updated for review #{review.id}.")
+            return redirect("admin_reviews")
+    else:
+        form = AdminReviewCommentForm(instance=review)
+
+    return render(
+        request,
+        "admin_dashboard/admin_review_comment.html",
+        {
+            "review": review,
+            "form": form,
+        },
+    )
 
 
 @staff_member_required

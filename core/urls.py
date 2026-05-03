@@ -39,6 +39,7 @@ urlpatterns = [
     path("admin-dashboard/reservations/<int:reservation_id>/status/<str:new_status>/", views.update_reservation_status, name="update_reservation_status"),
 
     path("admin-dashboard/reviews/", views.admin_reviews, name="admin_reviews"),
+    path("admin-dashboard/reviews/<int:review_id>/comment/", views.edit_review_comment, name="edit_review_comment"),
     path("admin-dashboard/reviews/<int:review_id>/approve/", views.approve_review, name="approve_review"),
     path("admin-dashboard/reviews/<int:review_id>/unapprove/", views.unapprove_review, name="unapprove_review"),
 

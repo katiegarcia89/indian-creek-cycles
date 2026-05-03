@@ -1830,6 +1830,146 @@ textarea.form-control {
     gap: 0.75rem;
 }
 
+.reviews-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.review-card-full {
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+}
+
+.review-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.reviewer-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+}
+
+.reviewer-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.reviewer-name {
+    margin: 0 0 0.2rem;
+    color: var(--color-primary-dark);
+    font-size: 1.05rem;
+}
+
+.reviewer-bike {
+    margin: 0;
+    color: var(--color-gray-500);
+    font-size: 0.92rem;
+}
+
+.review-header-actions {
+    display: grid;
+    justify-items: end;
+    gap: 0.6rem;
+}
+
+.review-date {
+    color: var(--color-gray-500);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.review-title {
+    color: var(--color-primary-dark);
+}
+
+.review-content {
+    font-style: italic;
+}
+
+.helpful-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid #d9e5ee;
+    background: #f8fbfd;
+    color: var(--color-primary-dark);
+    border-radius: 999px;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.helpful-btn:hover {
+    background: #edf4fb;
+    transform: translateY(-1px);
+}
+
+.helpful-btn.voted {
+    background: #ecfdf3;
+    color: #166534;
+    border-color: #bbf7d0;
+}
+
+.admin-response {
+    margin-top: 1.25rem;
+    padding: 1rem 1.15rem;
+    background: linear-gradient(180deg, #f8fbfd 0%, #f3f8f6 100%);
+    border: 1px solid #dce9e2;
+    border-left: 4px solid var(--color-primary);
+    border-radius: var(--radius-md);
+}
+
+.admin-response h5 {
+    margin: 0 0 0.3rem;
+    font-size: 0.98rem;
+    color: var(--color-primary-dark);
+}
+
+.admin-response-date {
+    display: inline-block;
+    margin-bottom: 0.55rem;
+    color: var(--color-gray-500);
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+.admin-response p {
+    margin: 0;
+    color: var(--color-gray-700);
+    font-style: normal;
+}
+
+@media (max-width: 720px) {
+    .review-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .review-header-actions {
+        justify-items: start;
+    }
+}
+
 .author-avatar {
     width: 44px;
     height: 44px;

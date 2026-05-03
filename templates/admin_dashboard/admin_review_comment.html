@@ -1,0 +1,191 @@
+{% extends "admin_dashboard/base.html" %}
+{% block title %}{% if review.admin_response %}Edit Comment{% else %}Add Comment{% endif %} | Indian Creek Cycles{% endblock %}
+{% block meta_description %}Respond to customer reviews for Indian Creek Cycles{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .review-response-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+        gap: 1.25rem;
+    }
+
+    .review-response-card {
+        padding: 1.4rem;
+    }
+
+    .review-response-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+
+    .review-response-header h2,
+    .review-response-form h2 {
+        margin: 0 0 0.35rem;
+        color: #16324f;
+        font-size: 1.25rem;
+    }
+
+    .review-response-meta {
+        color: #64748b;
+        font-size: 0.95rem;
+    }
+
+    .review-rating-summary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        background: #f8fafc;
+        border: 1px solid #dbe5ee;
+        color: #16324f;
+        font-weight: 600;
+    }
+
+    .review-body-block {
+        padding: 1rem 1.1rem;
+        border-radius: 14px;
+        border: 1px solid #e5ebf1;
+        background: #f8fbfd;
+        margin-top: 1rem;
+    }
+
+    .review-body-block h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.05rem;
+        color: #16324f;
+    }
+
+    .review-body-block p:last-child {
+        margin-bottom: 0;
+    }
+
+    .review-response-form label {
+        display: block;
+        margin-bottom: 0.45rem;
+        color: #16324f;
+        font-weight: 700;
+    }
+
+    .review-response-form textarea {
+        width: 100%;
+        border: 1px solid #d7e2eb;
+        border-radius: 12px;
+        padding: 0.85rem 0.95rem;
+        resize: vertical;
+        min-height: 180px;
+        font: inherit;
+        color: #1f2937;
+        background: #ffffff;
+    }
+
+    .review-response-form textarea:focus {
+        outline: none;
+        border-color: #1f6d43;
+        box-shadow: 0 0 0 3px rgba(31, 109, 67, 0.12);
+    }
+
+    .review-response-note {
+        margin-top: 0.75rem;
+        color: #64748b;
+        font-size: 0.92rem;
+    }
+
+    .review-response-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+    }
+
+    .review-status-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        margin-top: 1rem;
+    }
+
+    @media (max-width: 900px) {
+        .review-response-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="admin-page">
+    <div class="admin-shell">
+        <div class="admin-wrap">
+            <div class="admin-page-header">
+                <div>
+                    <h1 class="admin-title-row">
+                        <span>{% if review.admin_response %}Edit Review Comment{% else %}Add Review Comment{% endif %}</span>
+                    </h1>
+                    <p>Reply as Indian Creek Cycles and update the message anytime.</p>
+                    <a href="{% url 'admin_reviews' %}" class="admin-back-link">← Back to Moderate Reviews</a>
+                </div>
+            </div>
+
+            <div class="review-response-grid">
+                <div class="admin-card review-response-card">
+                    <div class="review-response-header">
+                        <div>
+                            <h2>{{ review.user.get_full_name|default:review.user.username }}</h2>
+                            <div class="review-response-meta">
+                                {% if review.bike %}{{ review.bike.name }}{% else %}General Review{% endif %} • {{ review.created_at|date:"M d, Y" }}
+                            </div>
+                        </div>
+                        <div class="review-rating-summary">
+                            <span>{{ review.rating }}/5</span>
+                            <span>{{ review.rating_label }}</span>
+                        </div>
+                    </div>
+
+                    <div class="review-status-pills">
+                        <span class="boolean-pill {% if review.is_approved %}boolean-yes{% else %}boolean-no{% endif %}">
+                            {% if review.is_approved %}Approved{% else %}Not Approved{% endif %}
+                        </span>
+                        {% if review.admin_response %}
+                        <span class="boolean-pill boolean-no">Comment Posted</span>
+                        {% else %}
+                        <span class="boolean-pill boolean-yes">Awaiting Comment</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="review-body-block">
+                        <h3>{{ review.title }}</h3>
+                        <p>{{ review.content }}</p>
+                    </div>
+                </div>
+
+                <div class="admin-card review-response-card review-response-form">
+                    <h2>{% if review.admin_response %}Revise Comment{% else %}Write Comment{% endif %}</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div>
+                            <label for="{{ form.admin_response.id_for_label }}">Admin Comment</label>
+                            {{ form.admin_response }}
+                        </div>
+                        <div class="review-response-note">
+                            This reply will appear under the public review as an official response from Indian Creek Cycles.
+                        </div>
+                        <div class="review-response-actions">
+                            <button type="submit" class="admin-btn admin-btn-success">
+                                {% if review.admin_response %}Update Comment{% else %}Save Comment{% endif %}
+                            </button>
+                            <a href="{% url 'admin_reviews' %}" class="admin-btn">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
