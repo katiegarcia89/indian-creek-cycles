@@ -272,7 +272,8 @@ def send_confirmation_email(reservation):
     except FileNotFoundError:
         print("Logo not found")
 
-    email.send()
+    # Email sending is temporarily disabled until live mail is configured.
+    # email.send()
     # print(f"Reminder would send to {reservation.user.email} for {reservation.rental_date}")
 
     
@@ -620,12 +621,13 @@ def send_daily_reminders(request):
         except FileNotFoundError:
             print("Logo not found")
 
-        email.send()
-
-        res.reminder_sent = True
-        res.save()
-
-        count += 1
+        # Email sending is temporarily disabled until live mail is configured.
+        # email.send()
+        #
+        # res.reminder_sent = True
+        # res.save()
+        #
+        # count += 1
 
     return HttpResponse(f"Sent {count} reminder emails")
 

@@ -52,4 +52,5 @@ def send_confirmation_on_save(sender, instance, created, **kwargs):
             except FileNotFoundError:
                 pass
 
-        email.send(fail_silently=False) 
+        # Email sending is temporarily disabled until live mail is configured.
+        # email.send(fail_silently=False)
