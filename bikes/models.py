@@ -83,12 +83,10 @@ class Bike(models.Model):
     price_per_hour = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     image = models.ImageField(upload_to='bikes/', blank=True, null=True)
     
-    # Availability Flags
     is_available = models.BooleanField(default=True)
     is_maintenance = models.BooleanField(default=False, help_text="Bike is under maintenance")
     maintenance_note = models.TextField(blank=True, help_text="Reason for maintenance")
     
-    # Decentralized Tracking
     location = models.ForeignKey(
         'locations.Location', 
         on_delete=models.SET_NULL, 
@@ -117,7 +115,7 @@ class Bike(models.Model):
     def get_absolute_url(self):
         return reverse('bike_detail', kwargs={'slug': self.slug})
     
-    # --- NEW: INDIVIDUAL AVAILABILITY LOGIC ---
+    # --- INDIVIDUAL AVAILABILITY LOGIC ---
     def get_available_quantity(self, date=None):
         """Returns 1 if this specific bike is available, 0 if not."""
         from reservations.models import Reservation

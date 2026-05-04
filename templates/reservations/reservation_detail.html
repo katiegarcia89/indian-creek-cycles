@@ -24,7 +24,7 @@
                 <div class="detail-card">
                     
                     <div class="detail-header">
-                        <h2>Booking #{{ reservation.id }}</h2>
+                        <h2>Reservation #{{ reservation.id }}</h2>
                         <span class="bike-badge {% if reservation.status == 'confirmed' or reservation.status == 'active' or reservation.status == 'paid' %}badge-secondary{% endif %}">
                             {{ reservation.get_status_display }}
                         </span>
@@ -90,7 +90,7 @@
                         <span class="qr-label">Scan at Smart-Dock</span>
 
                         <div class="qr-box">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=ICC-RES-{{ reservation.id }}">
+                            <img src="{{ reservation.qr_code.url }}" alt="QR Code">
                         </div>
 
                         <div class="unlock-code">

@@ -8,31 +8,6 @@
 {% block content %}
 
 <div class="profile-layout-wrapper">
-    <!-- SIDEBAR -->
-    <aside class="profile-sidebar-nav">
-        <div class="sidebar-logo">
-            <img src="{% static 'images/logo/logo-email.png' %}" alt="Indian Creek">
-        </div>
-
-        <nav class="sidebar-links">
-            <a href="{% url 'home' %}" class="side-link"><i class="fas fa-home"></i> Home</a>
-            <a href="{% url 'bike_list' %}" class="side-link"><i class="fas fa-bicycle"></i> Bikes</a>
-            <a href="{% url 'trails' %}" class="side-link"><i class="fas fa-map-marked-alt"></i> Trails</a>
-            <a href="{% url 'accessories' %}" class="side-link"><i class="fas fa-shirt"></i> Accessories</a>
-            <a href="{% url 'help' %}" class="side-link"><i class="fas fa-info-circle"></i> Ride Guide</a>
-            <a href="{% url 'reviews' %}" class="side-link"><i class="fas fa-star"></i> Reviews</a>
-            <a href="{% url 'about' %}" class="side-link"><i class="fas fa-users"></i> About</a>
-            <a href="{% url 'contact' %}" class="side-link"><i class="fas fa-phone"></i> Contact Us</a>
-            <a href="{% url 'my_reservations' %}" class="side-link"><i class="fas fa-calendar-check"></i> My Reservations</a>
-            {% if user.is_staff %}
-            <a href="{% url 'admin_dashboard' %}" class="side-link">
-                <i class="fas fa-shield-alt"></i> Admin Dashboard
-            </a>
-            {% endif %}
-
-            <a href="{% url 'logout' %}" class="side-link logout"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
-        </nav>
-    </aside>
 
     <!-- MAIN -->
     <main class="profile-main-content">
@@ -43,7 +18,7 @@
                 🔒 ADMIN MODE — Viewing {{ profile_user.get_full_name }}'s Profile
             </div>
             {% endif %}
-
+            
             <div class="hero-cover-small">
                 <img src="{% if profile_user.cover_photo %}{{ profile_user.cover_photo.url }}{% else %}{% static 'images/profile/bgforest.jpg' %}{% endif %}" 
                 class="cover-photo">
@@ -301,19 +276,19 @@
 
                                                     <!-- REVIEW ACTIONS -->
                                                     <div class="review-actions">
-                                                    <a href="{% url 'edit_review' reservation.review.id %}" class="btn-small">
-                                                        Edit
-                                                    </a>
+                                                        <a href="{% url 'edit_review' reservation.review.id %}" class="btn-small">
+                                                            Edit
+                                                        </a>
 
-                                                    <form method="POST" action="{% url 'delete_review' reservation.review.id %}">
-                                                        {% csrf_token %}
-                                                        <input type="hidden" name="next" value="{% url 'profile' %}">
+                                                        <form method="POST" action="{% url 'delete_review' reservation.review.id %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="next" value="{% url 'profile' %}">
 
-                                                        <button type="submit" class="delete-icon-btn">
-                                                            <i class="fa-solid fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
+                                                            <button type="submit" class="delete-icon-btn">
+                                                                <i class="fa-solid fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -509,6 +484,11 @@
         </div>
         <!-- TAB SCRIPT -->
         <script>
+        
+            function toggleMenu() {
+                document.querySelector(".sidebar-links").classList.toggle("active");
+            }
+            
         document.addEventListener("DOMContentLoaded", function () {
             if ('scrollRestoration' in history) {
                 history.scrollRestoration = 'manual';

@@ -8,13 +8,14 @@ __pycache__/
 .venv/
 venv/
 
+# Database and Secrets
+.env
+db.sqlite3
 
+# Media and Assets
+media/
+# You can keep this specific one if you only want to ignore QR codes:
+# media/qr_codes/
 
-#mac
+# macOS
 .DS_Store
-
-
-__pycache__/
-*.pyc
-media/qr_codes/
-

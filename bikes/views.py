@@ -120,7 +120,6 @@ def bike_category(request, slug):
     }
     return render(request, 'bikes/bike_list.html', context) 
 
-# In bikes/views.py
 def adult_bikes(request):  
     """View adult bikes."""
     bikes = Bike.objects.filter(
@@ -169,14 +168,12 @@ def mountain_bikes(request):
     return render(request, 'bikes/bike_type_list.html', context)
 
 def add_accessory(request, accessory_id):
-    # basic placeholder for now
     return HttpResponse(f"Accessory {accessory_id} added")
 
 def accessories_list(request):
     """List all accessories."""
     accessories = Accessory.objects.filter(is_available=True)
     
-    # Filter by category
     category = request.GET.get('category')
     if category:
         accessories = accessories.filter(category=category)
@@ -200,7 +197,6 @@ def bike_sizes_guide(request):
 
 
 def admin_inventory_summary(request):
-    # This counts how many of EACH SPECIFIC NAME you have
     inventory = Bike.objects.values('name', 'category__name', 'price_per_day').annotate(
         count=Count('id'),
         available=Count('id', filter=Q(is_available=True, is_maintenance=False)),
@@ -213,26 +209,21 @@ def admin_inventory_summary(request):
 def fleet_dispatch(request):
     from locations.models import Location
     
-    # Get EVERY active location so the driver can see the whole system status
     all_locations = Location.objects.filter(is_active=True).order_by('name')
     
-    # Filter only those that physically have bikes for the task cards
     tasks = [l for l in all_locations if l.needs_pickup_dispatch]
     
     return render(request, 'admin_dashboard/fleet_dispatch.html', {
-        'all_locations_list': all_locations,  # This fills the "Live Dock Status"
-        'locations_needing_pickup': tasks     # This fills the "Active Pickup Tasks"
+        'all_locations_list': all_locations,  
+        'locations_needing_pickup': tasks    
     })
 
 def confirm_pickup(request, location_id):
-    # Find the trailhead and the Hub
     trailhead = get_object_or_404(Location, id=location_id)
-    hub = Location.objects.get(name__icontains="Hub") # Or "Main Shop"
+    hub = Location.objects.get(name__icontains="Hub")
     
-    # Get all bikes currently at this trailhead
     bikes_to_move = Bike.objects.filter(location=trailhead)
     
-    # Move them back to the Hub
     for bike in bikes_to_move:
         bike.location = hub
         bike.save()
@@ -240,19 +231,15 @@ def confirm_pickup(request, location_id):
     return redirect('fleet_dispatch')
 
 
-# Add this to your bikes/views.py
 def add_accessory(request, accessory_id):
     """Add an accessory to the session cart before the reservation is created."""
-    # Ensure the accessory actually exists
     accessory = get_object_or_404(Accessory, id=accessory_id)
     
-    # Simple session-based cart
     cart = request.session.get('accessory_cart', [])
     if accessory_id not in cart:
         cart.append(accessory_id)
         request.session['accessory_cart'] = cart
         
-    # Redirect back to the accessories list page
     return redirect('accessories')
 
 

@@ -131,44 +131,44 @@
 
 /* FLATPICKR CUSTOM */
 .flatpickr-calendar.hasTime.noCalendar {
-    width: 180px !important;
-    padding: 10px 0 !important;
+    width: 180px;
+    padding: 10px 0;
 }
 
 .flatpickr-time .numInputWrapper:nth-child(3),
 .flatpickr-time .flatpickr-time-separator {
-    display: none !important;
+    display: none;
 }
 
 .flatpickr-time {
-    display: flex !important;
+    display: flex;
     align-items: center;
     justify-content: center;
-    height: 50px !important;
+    height: 50px;
 }
 
 .flatpickr-time .numInputWrapper span {
-    position: static !important;
-    width: 30px !important;
-    height: 30px !important;
-    background: #f1f2f6 !important;
-    border: 1px solid #ddd !important;
+    position: static;
+    width: 30px;
+    height: 30px;
+    background: #f1f2f6;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    display: flex !important;
+    display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 5px !important;
+    margin: 0 5px;
 }
 
 .flatpickr-hour {
-    width: 40px !important;
-    font-size: 1.2rem !important;
+    width: 40px;
+    font-size: 1.2rem;
 }
 
 .flatpickr-am-pm {
-    width: 45px !important;
-    font-weight: 800 !important;
-    color: #0c3c19 !important;
+    width: 45px;
+    font-weight: 800;
+    color: #0c3c19;
 }
 
 /* --- My Reservations Styles --- */
@@ -317,7 +317,6 @@
     color: var(--color-primary);
 }
 
-/* Card Footer */
 .res-card-footer {
     padding: 1.25rem 1.5rem;
     background: var(--color-white);
@@ -331,18 +330,8 @@
     align-items: center;
 }
 
-.btn-cancel {
-    color: var(--color-danger);
-    margin-left: 1rem;
-    text-decoration: none;
-    font-weight: 600;
-}
 
-.btn-cancel:hover {
-    text-decoration: underline;
-}
 
-/* Status Badges */
 .status-badge {
     padding: 4px 12px;
     border-radius: var(--radius-sm);
@@ -362,7 +351,6 @@
     color: #2e7d32;
 }
 
-/* Empty State */
 .empty-reservations {
     text-align: center;
     padding: 5rem 2rem;
@@ -379,15 +367,15 @@
 .reservation-header .container {
     display: flex;
     flex-direction: column;
-    align-items: center;    /* Centers horizontally in a flex container */
+    align-items: center;    
     justify-content: center;
-    text-align: center;      /* Ensures the text itself is centered */
+    text-align: center;      
 }
 
 .reservation-header .page-title {
     margin-left: auto;
     margin-right: auto;
-    width: fit-content;      /* Ensures the block doesn't span the whole width */
+    width: fit-content;     
 }
 
 /* SPACING */
@@ -651,7 +639,6 @@
     border: 1px solid var(--color-gray-200);
     margin-bottom: 20px;
 
-    /* 🔥 helps fill vertical space */
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -709,7 +696,6 @@
     padding-top: 20px;
     border-top: 1px solid var(--color-gray-200);
 
-    /* 🔥 THIS removes empty space */
     margin-top: auto;
 }
 
@@ -830,8 +816,9 @@
 
 .btn-cancel {
     background: #fee2e2;
-    color: #b91c1c;
-    padding: 12px;
+    color: #9b0909;
+    padding: 10px;
+    margin-right: 20px;
     text-align: center;
     border-radius: var(--radius-lg);
     border: 1px solid #fecaca;
@@ -861,47 +848,47 @@
 
 /* 1. Set a clean width for the dropdown popup */
 .flatpickr-calendar.hasTime.noCalendar {
-    width: 180px !important;
-    padding: 10px 0 !important;
+    width: 180px;
+    padding: 10px 0;
 }
 
 /* 2. Hide minutes and the colon separator */
 .flatpickr-time .numInputWrapper:nth-child(3), 
 .flatpickr-time .flatpickr-time-separator {
-    display: none !important;
+    display: none;
 }
 
 /* 3. Reorder into a horizontal row: [Up] [Hour] [Down] [AM/PM] */
 .flatpickr-time {
-    display: flex !important;
+    display: flex;
     align-items: center;
     justify-content: center;
-    height: 50px !important;
+    height: 50px;
 }
 
 .flatpickr-time .numInputWrapper:nth-child(1) {
-    display: flex !important;
+    display: flex;
     align-items: center;
     flex: 2;
 }
 
 /* 4. Style the Arrow Buttons to be on the sides */
 .flatpickr-time .numInputWrapper span {
-    position: static !important;
-    width: 30px !important;
-    height: 30px !important;
-    background: #f1f2f6 !important;
-    border: 1px solid #ddd !important;
+    position: static;
+    width: 30px;
+    height: 30px;
+    background: #f1f2f6;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    display: flex !important;
+    display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 5px !important;
+    margin: 0 5px;
 }
 
 /* Reordering the elements visually */
 .flatpickr-time .numInputWrapper span.arrowUp { order: 1; }
-.flatpickr-hour { order: 2; width: 40px !important; font-size: 1.2rem !important; }
+.flatpickr-hour { order: 2; width: 40px; font-size: 1.2rem; }
 .flatpickr-time .numInputWrapper span.arrowDown { order: 3; }
 
 /* 5. Static :00 and AM/PM Toggle */
@@ -914,9 +901,9 @@
 
 .flatpickr-am-pm {
     order: 5;
-    width: 45px !important;
-    font-weight: 800 !important;
-    color: #0c3c19 !important; /* Your Indian Creek Green */
+    width: 45px;
+    font-weight: 800;
+    color: #0c3c19; /* Your Indian Creek Green */
 }
 
 .section-subtitle {

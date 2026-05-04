@@ -128,8 +128,10 @@ img {
 }
 
 .navbar-logo {
-    height: 230px;
-    width: auto;
+    max-height: 235px;
+    max-width: 235px;
+    padding-left: 45px;
+    padding-bottom: 5px;
     display: block;
     object-fit: contain;
     flex-shrink: 0;
@@ -206,18 +208,22 @@ img {
 .navbar-auth {
     display: flex;
     align-items: center;
-    gap: 0.625rem;
-    flex: 0 0 auto;
-}
-
-.navbar-account {
-    display: none;
+    gap: 0.5rem;
+    padding: 0;
+    margin-left: 1rem;
 }
 
 .nav-auth-btn {
     justify-content: center;
-    min-width: 96px;
-    min-height: 52px;
+    min-width: 82px;
+    min-height: 42px;
+    padding: 0.45rem 0.9rem !important;
+    font-size: 0.9rem;
+    border-radius: 10px;
+}
+
+.navbar-account {
+    display: none;
 }
 
 .nav-account-btn {
@@ -2696,7 +2702,7 @@ textarea.form-control {
     color: var(--color-danger);
     margin-left: 1rem;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 1000;
 }
 
 .btn-cancel:hover {
@@ -3200,16 +3206,6 @@ textarea.form-control {
     font-weight: 700;
 }
 
-.btn-cancel {
-    background: #fee2e2;
-    color: #b91c1c;
-    padding: 12px;
-    text-align: center;
-    border-radius: var(--radius-lg);
-    border: 1px solid #fecaca;
-    font-weight: 600;
-}
-
 /* ================================
    RESPONSIVE
 ================================ */
@@ -3227,3 +3223,22 @@ textarea.form-control {
         border-top: 1px solid var(--color-gray-200);
     }
 }
+
+.admin-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.admin-actions-inline {
+    display: flex;
+}
+
+.admin-btn {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+

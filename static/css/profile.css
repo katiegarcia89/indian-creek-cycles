@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 .profile-layout-wrapper.dark {
     background: #121212;
     color: #eee;
@@ -22,12 +26,6 @@
     object-fit: cover;
 }
 
-.header-text-block {
-    padding-top: 15px;
-    padding-bottom: 10px;
-    flex-grow: 1;
-}
-
 .stats-grid {
     display: grid;
     gap: 20px;
@@ -46,14 +44,13 @@
     color: #888;
 }
 
-/* RATING */
+
 .rating {
     margin-top: 6px;
     color: #f5b301;
     font-size: 0.9rem;
 }
 
-/* Empty */
 .empty-state {
     text-align: center;
     color: #888;
@@ -82,7 +79,7 @@
 
 .profile-layout-wrapper .reservation-card {
     display: grid;
-    grid-template-columns: 1.7fr 1px 1fr; /* bigger left side */
+    grid-template-columns: 1.7fr 1px 1fr; 
     gap: 25px;
     align-items: stretch;
     background: #fff;
@@ -91,14 +88,12 @@
     box-shadow: 0 6px 18px rgba(0,0,0,0.06);
 }
 
-/* LEFT BLOCK LAYOUT */
 .profile-layout-wrapper .reservation-left-block {
     display: flex;
     gap: 20px;
     align-items: flex-start;
 }
 
-/* STACK CONTENT NICELY */
 .bike-info {
     display: flex;
     flex-direction: column;
@@ -118,7 +113,6 @@
     font-weight: bold;
 }
 
-/* DATES */
 .receipt-dates {
     display: flex;
     gap: 20px;
@@ -137,7 +131,6 @@
     color: #918e8e;
 }
 
-/* EQUIPMENT TAGS */
 .equipment-tags {
     display: flex;
     flex-wrap: wrap;
@@ -153,7 +146,6 @@
     font-size: 0.7rem;
 }
 
-/* PRICE */
 .price-breakdown {
     margin-top: 8px; 
     padding-top: 8px;
@@ -180,7 +172,6 @@
     font-size: 14px;
 }
 
-/* IMAGE */
 .reservation-image img {
     width: 20px;
     height: 20px;
@@ -188,7 +179,6 @@
     border-radius: 10px;
 }
 
-/* DETAILS */
 .reservation-details {
     flex: 1;
 }
@@ -210,7 +200,6 @@
     margin-top: 3px;
 }
 
-/* RIGHT SIDE */
 .reservation-actions {
     text-align: right;
 }
@@ -242,7 +231,7 @@
     display: flex;
     gap: 10px;
     margin-top: 12px;
-    flex-wrap: nowrap;  
+    flex-wrap: wrap; 
 }
 
 .btn-small {
@@ -253,25 +242,21 @@
     border: 1px solid #5f5d5d;
 }
 
-/* VIEW (slightly stronger border) */
 .btn-small.view {
     background: #fff;
     border: 1px solid #5f5d5d;
 }
 
-/* PRIMARY */
 .btn-small.primary {
     background: #fff;
     border: 1px solid #5f5d5d;
 }
 
-/* GHOST */
 .btn-small.ghost {
     background: #fff;
     border: 1px solid #5f5d5d;
 }
 
-/* MAKE ROW FEEL MORE "BLOCKY" */
 .profile-layout-wrapper .timeline-item {
     margin-bottom: 45px;
 }
@@ -364,26 +349,42 @@
 }
 
 .profile-layout-wrapper {
-    display: flex;
+    display: flex;   
     width: 100%;
     min-height: 100vh;
-    background-color: #f8f9fa;
 }
+
 .profile-tabs {
     display: flex;
-    gap: 30px;
-    padding: 0 40px;
+    margin-top: 20px;
+    gap: 25px;
+    padding: 15px 75px 10px; 
     border-bottom: 1px solid #eee;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.name-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.profile-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .profile-meta-row {
     display: flex;
-    flex-direction: column; 
-    padding-left: 5px;
-    gap: 6px;
-    margin-top: 10px;
-    color: #666;
-    font-size: 0.85rem;
+    flex-wrap: wrap; 
+    gap: 10px;
+    font-size: 14px;
+}
+
+.profile-meta-row span {
+    flex: 1 1 auto;
+    min-width: 140px;
 }
 
 .profile-meta-row span {
@@ -391,6 +392,8 @@
     align-items: center;
     gap: 10px;
     color: #555;
+    flex: 1 1 auto;
+    min-width: 140px;
 }
 
 .profile-meta-row span::before {
@@ -400,33 +403,49 @@
 
 .tab {
     position: relative;
+    padding: 10px 0;
+    font-size: 20px;
+    color: #777;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab:hover {
+    color: #1a1a1a;
 }
 
 .tab.active {
     color: #1a1a1a;
+    font-weight: 800;
 }
 
 .tab.active::after {
     content: "";
     position: absolute;
-    bottom: -1px;
+    bottom: -12px;
     left: 0;
     width: 100%;
     height: 3px;
     background: #2d3e2d;
+    border-radius: 2px;
 }
 
 .profile-sidebar-nav {
     width: 215px;
+    min-width: 215px;
+    flex-shrink: 0;
+
     background-color: #1a1a1a;
     color: white;
     padding: 8px 8px;
+
     display: flex;
     flex-direction: column;
+
     position: sticky;
     top: 0;
     height: 100vh;
-    flex-shrink: 0;
+
     z-index: 1000;
 }
 
@@ -437,13 +456,17 @@
 
 .btn-edit-profile {
     padding: 8px 10px;
-    border: 1px solid #ccc;
+    margin-bottom: 50px;
+    border: 1px solid #868484;
     border-radius: 6px;
     background: white;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 800;
     transition: all 0.2s ease;
     font-size: 14px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
 }
 
 .btn-edit-profile:hover {
@@ -485,31 +508,32 @@
     color: #ff6b6b;
 }
 
-/* 3. Main Content Area */
 .profile-main-content {
     flex-grow: 1;
     padding: 0;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    margin-left: 0;
 }
 
-/* 4. Hero Section & Images */
+
 .hero-cover-small {
-    height: 300px;
+    height: 445px;
     width: 100%;
     overflow: hidden;
 }
 
 .avatar-overlap {
-    margin-top: -155px; 
-    margin-left: 40px;
+    margin-top: -195px; 
+    margin-left: 15px; 
     position: relative;
     z-index: 5;
 }
 
 .avatar-large-img {
-    width: 210px;
-    height: 210px;
+    width: clamp(120px, 25vw, 320px);
+    height: clamp(120px, 25vw, 320px);
     border-radius: 50%;
     border: 5px solid #fff;
     overflow: hidden;
@@ -524,17 +548,21 @@
 }
 
 .profile-header-integrated {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 25px;
-    padding: 0 40px 25px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+}
+
+.header-text-block {
+    margin-left: 15px; 
+    flex: 1;
+    margin-top: 30px;
 }
 
 .profile-name {
-    font-size: 2.5rem;
+    font-size: clamp(1.5rem, 4vw, 3rem);
     font-weight: 800;
-    margin: 0;
+    padding-top: 40px;
+    padding-bottom: 5px;
     color: #1a1a1a;
 }
 
@@ -562,7 +590,6 @@
     color: #3d6b3d;
 }
 
-/* SETTINGS IMAGE PREVIEWS */
 .settings-preview {
     width: 90px;
     height: 90px;
@@ -574,8 +601,8 @@
 
 .profile-content-card {
     background: white;
-    margin: 20px 40px;
-    margin-top: 10px;
+    margin: 20px 60px;
+    margin-top: 25px;
     border-radius: 16px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.08);
     padding-bottom: 20px;
@@ -607,7 +634,6 @@
     box-shadow: 0 12px 28px rgba(0,0,0,0.10);
 }
 
-/* left accent bar */
 .stat-card::before {
     content: "";
     position: absolute;
@@ -664,7 +690,6 @@
     }
 }
 
-/* 7. Buttons */
 .btn-edit {
     padding: 10px 20px;
     background: #1a1a1a;
@@ -704,7 +729,6 @@
     gap: 15px;
 }
 
-/* Left */
 .reservation-left h3 {
     margin: 0;
     font-size: 1.1rem;
@@ -715,12 +739,10 @@
     color: #777;
 }
 
-/* Right */
 .reservation-right {
     text-align: right;
 }
 
-/* Empty */
 .empty-state {
     text-align: center;
     color: #888;
@@ -761,7 +783,6 @@
 }
 
 
-/* DETAILS */
 .reservation-details {
     flex: 1;
 }
@@ -783,7 +804,6 @@
     margin-top: 3px;
 }
 
-/* RIGHT SIDE */
 .reservation-actions {
     text-align: right;
 }
@@ -822,10 +842,9 @@
     display: flex;
     gap: 10px;
     margin-top: 12px;
-    flex-wrap: nowrap;  
+    flex-wrap: wrap; 
 }
 
-/* MAKE ROW FEEL MORE "BLOCKY" */
 .timeline-item {
     margin-bottom: 45px;
 }
@@ -888,7 +907,7 @@
     align-items: center;
     gap: 12px;
     margin-top: 12px;
-    flex-wrap: wrap; /* prevents overflow on smaller screens */
+    flex-wrap: wrap; 
 }
 
 .timeline-actions a {
@@ -896,16 +915,16 @@
 }
 
 .timeline-actions .btn-small.ghost {
-    margin-left: auto; /* pushes it to the right */
+    margin-left: auto; 
 }
 
 .review-stars .star {
     font-size: 16px;
-    color: #ccc; /* empty stars */
+    color: #ccc; 
 }
 
 .review-stars .star.filled {
-    color: #f5a623; /* gold stars */
+    color: #f5a623; 
 }
 
 .review-badge.success {
@@ -978,7 +997,7 @@
 }
 
 .save-btn.saved {
-    color: #e63946; /* red */
+    color: #e63946; 
 }
 
 .save-btn:hover {
@@ -989,11 +1008,10 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* spreads content vertically */
+    justify-content: space-between; 
     height: 100%;
 }
 
-/* TEXT CONTENT AREA */
 .saved-trail-card .card-body {
     display: flex;
     flex-direction: column;
@@ -1002,7 +1020,6 @@
     padding: 16px 18px;
 }
 
-/* TITLE + LOCATION */
 .saved-trail-card h3 {
     margin-bottom: 6px;
 }
@@ -1013,7 +1030,6 @@
     margin-bottom: 12px;
 }
 
-/* STATS ROW (distance + difficulty) */
 .saved-trail-card .trail-meta {
     display: flex;
     justify-content: space-between;
@@ -1021,7 +1037,6 @@
     margin-bottom: 16px;
 }
 
-/* VIEW BUTTON */
 .saved-trail-card .view-btn {
     align-self: flex-start;
     margin-top: auto;
@@ -1089,7 +1104,6 @@
     gap: 24px;
 }
 
-/* LEFT SIDE */
 .bike-image-section {
     width: 260px;
     display: flex;
@@ -1108,7 +1122,6 @@
     white-space: nowrap;
 }
 
-/* RIGHT SIDE */
 .bike-info {
     flex: 1;
     display: flex;
@@ -1140,7 +1153,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 280px; /* 👈 key */
+    min-height: 280px; 
 }
 
 .settings-card h3 {
@@ -1228,7 +1241,6 @@
   width: 100%;
 }
 
-/* HERO */
 .profile-hero-modern {
     position: relative;
     margin-bottom: 80px;
@@ -1262,7 +1274,6 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* TEXT */
 .profile-info h1 {
     margin: 0;
     font-size: 22px;
@@ -1273,7 +1284,6 @@
     color: #777;
 }
 
-/* BUTTON */
 .edit-btn {
     margin-left: auto;
     background: black;
@@ -1352,202 +1362,562 @@
     color: #888;
     margin-top: 6px;
 }
-/* --- MOBILE RESPONSIVE OVERRIDES --- */
 
+.sidebar-links {
+    display: flex; /* 👈 normal nav */
+}
+
+.menu-toggle {
+    display: none;
+}
+
+.sidebar-links {
+    display: flex;
+}
+
+.profile-hero-minimal,
+.hero-cover-small {
+    position: relative;
+    z-index: 1;
+}
+
+
+.menu-toggle {
+    display: none;
+}
+
+.profile-header-integrated {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 0 20px 20px;
+}
+
+.profile-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.profile-meta-row span {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #555;
+    min-width: 140px;
+}
+
+
+/* ===============================
+   RESPONSIVE PROFILE PAGE
+================================ */
+
+/* DESKTOP ONLY */
+@media (min-width: 993px) {
+    .profile-layout-wrapper {
+        flex-direction: row;
+    }
+
+    .profile-sidebar-nav {
+        width: 215px;
+        min-width: 215px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        flex-direction: column;
+    }
+
+    .sidebar-links {
+        position: static;
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        background: transparent;
+        padding: 0;
+    }
+}
+
+/* TABLET / SMALL LAPTOP */
 @media (max-width: 992px) {
-    /* 1. Layout Container: Stack Sidebar and Content */
     .profile-layout-wrapper {
         flex-direction: column;
     }
 
-    /* 2. Sidebar: Reset to full width */
     .profile-sidebar-nav {
         width: 100%;
         height: auto;
-        position: relative; /* Remove sticky on mobile */
+        position: relative;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px;
     }
 
-    /* 3. Stats: Collapse to 2 columns */
+    .sidebar-logo {
+        display: none;
+    }
+
+    .sidebar-links {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    .side-link {
+        flex: 0 0 auto;
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+
+    .hero-cover-small {
+        height: 340px;
+    }
+
+    .profile-header-integrated {
+        display: grid;
+        grid-template-columns: 140px 1fr auto;
+        gap: 18px;
+        align-items: end;
+        padding: 0 25px 22px;
+        margin-top: -75px;
+    }
+
+    .avatar-overlap {
+        margin: 0;
+        display: block;
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        z-index: 5;
+    }
+
+    .avatar-large-img {
+        width: 140px;
+        height: 140px;
+    }
+
+    .header-text-block {
+        margin-left: 0;
+        min-width: 0;
+    }
+
+    .profile-name {
+        font-size: 2rem;
+        line-height: 1.15;
+        padding: 0;
+        margin: 0 0 8px;
+    }
+
+    .profile-meta-row {
+        justify-content: flex-start;
+        font-size: 0.85rem;
+        gap: 8px;
+    }
+
+    .profile-meta-row span {
+        min-width: 45%;
+    }
+
+    .profile-actions {
+        width: auto;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .btn-edit-profile {
+        margin-bottom: 0;
+        white-space: nowrap;
+    }
+
+    .profile-tabs {
+        margin: 0;
+        padding: 12px 25px;
+        gap: 14px;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .tab {
+        font-size: 0.95rem;
+    }
+
+    .profile-content-card {
+        margin: 20px 25px;
+    }
+
     .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        padding: 20px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 24px;
     }
 
-    /* 4. Reservations: Stack the card layout */
-    .profile-layout-wrapper .reservation-card {
-        grid-template-columns: 1fr; /* Single column */
-        gap: 15px;
+    .saved-trails-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    .navbar-auth.navbar-account {
+        display: none;
+    }
+
+    .profile-name {
+        grid-column: 2;
+        grid-row: 1;
+
+        display: block;
+        margin: 38px 0 0;
+        padding-left: 55px;
+        padding-top: 25px;
+
+        font-size: 1.25rem;
+        line-height: 1.15;
+        color: #1a1a1a;
+        position: relative;
+        z-index: 20;
+    }
+
+    .profile-layout-wrapper {
+        flex-direction: column;
+    }
+
+    .profile-sidebar-nav {
+        width: 100%;
+        height: 60px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 15px;
+        z-index: 2000;
+    }
+
+    .profile-main-content {
+        width: 100%;
+        margin-top: 60px;
+    }
+
+    .menu-toggle {
+        display: block;
+        font-size: 26px;
+        cursor: pointer;
+        z-index: 2001;
+    }
+
+    .sidebar-links {
+        position: fixed;
+        top: 60px;
+        left: -100%;
+        width: 260px;
+        height: calc(100dvh - 60px);
+        max-height: calc(100dvh - 60px);
+        background: #111;
+        flex-direction: column;
+        padding: 20px;
+        overflow-y: scroll;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        transition: 0.3s ease;
+        z-index: 2000;
+    }
+
+    .sidebar-links.active {
+        left: 0;
+    }
+
+    .hero-cover-small {
+        height: 230px;
+        overflow: visible;
+    }
+
+    .profile-hero-minimal {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .profile-header-integrated {
+        display: grid;
+        grid-template-columns: 130px 1fr;
+        grid-template-rows: auto auto auto;
+        column-gap: 12px;
+        padding: 0 16px 16px;
+        margin-top: -50px;
+        align-items: start;
+        background: white;
+    }
+
+    
+    .avatar-overlap {
+        grid-column: 1;
+        grid-row: 1;
+        transform: translate(-8px, -40px);
+        z-index: 10;
     }
     
-    /* Hide the visual divider on mobile */
+    .header-text-block {
+        grid-column: 2;
+        grid-row: 1;
+        margin: 38px 0 0;
+        padding: 0;
+        text-align: left;
+
+        display: contents;
+    }
+
+    .badge {
+        margin-top: 4px;
+        font-size: 0.7rem;
+    }
+
+    .profile-meta-row {
+        grid-column: 1 / -1;
+        grid-row: 2;
+
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;   
+        justify-content: center;
+
+        text-align: center;
+
+        gap: 10px;
+        padding-right: 20;
+        font-size: 14px;
+        width: 100%;
+        max-width: 300px; 
+    }
+    
+    .profile-meta-row span {
+        display: flex;
+        align-items: center;
+        justify-content: center; 
+        gap: 8px;
+
+        width: 100%;
+        text-align: center;
+}
+
+   .profile-actions {
+        grid-column: 1 / -1;
+        grid-row: 3;
+        display: flex;
+        justify-content: center;
+        margin-top: 18px;
+        padding-left: 0;
+    }
+
+    .btn-edit-profile {
+        font-size: 0.40rem;
+        padding: 4px 7px;
+    }
+
+    .profile-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 0;
+        padding: 8px 10px;
+        gap: 18px 12px;
+        white-space: normal;
+        overflow: visible;
+    }
+
+    .tab {
+        flex: 0 1 auto;
+        font-size: 0.78rem;
+        padding: 7px 8px;
+        text-align: center;
+        line-height: 1.15;
+    }
+
+    .tab.active::after {
+        bottom: 0;
+    }
+
+    .profile-content-card {
+        margin: 12px 8px;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .stat-card {
+        padding: 14px 8px;
+        justify-content: center;
+        text-align: center;
+        min-width: 0;
+    }
+
+    .stat-info h3 {
+        font-size: 1.45rem;
+    }
+
+    .stat-info p {
+        font-size: 0.6rem;
+        letter-spacing: 0.4px;
+    }
+
+    .profile-quote-card {
+        margin: 0 12px 16px;
+        padding: 14px;
+        text-align: center;
+    }
+
+    .reservation-card,
+    .profile-layout-wrapper .reservation-card {
+        display: block;
+        padding: 14px;
+    }
+
+    .bike-card-layout {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .bike-image-section {
+        width: 100%;
+    }
+
+    .bike-img {
+        width: 100%;
+        height: auto;
+        max-height: 220px;
+    }
+
+    .left-actions,
+    .right-actions {
+        width: 100%;
+        gap: 8px;
+    }
+
+    .left-actions a,
+    .right-actions a {
+        font-size: 0.72rem;
+        padding: 7px 6px;
+    }
+
     .reservation-divider {
+        display: none;
+    }
+
+    .reservation-review-block {
+        margin-top: 15px;
+    }
+
+ 
+    .saved-trails-grid {
+        grid-template-columns: repeat(2, minmax(130px, 1fr));
+        gap: 14px;
+        padding: 12px;
+    }
+
+    .saved-trail-card {
+        min-width: 0;
+    }
+
+    .saved-trail-image img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .saved-trail-info {
+        padding: 10px;
+    }
+
+    .saved-trail-info h3 {
+        font-size: 1rem;
+        line-height: 1.1;
+    }
+
+    .settings-grid {
+        grid-template-columns: 1fr;
+        padding: 0 12px;
+    }
+
+    .settings-card {
+        width: 100%;
+        padding: 16px;
+    }
+
+    .settings-cover {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+    .settings-avatar {
+        width: 160px;
+        height: 160px;
+    }
+
+    .settings-actions {
+        margin: 12px;
+        gap: 12px;
+    }
+
+    .navbar-user,
+    .user-menu,
+    .profile-user-button,
+    .nav-user {
         display: none;
     }
 }
 
-@media (max-width: 768px) {
-    /* 5. Adjust padding/margins for smaller screens */
-    .profile-content-card, 
-    .profile-layout-wrapper .timeline-row,
-    .profile-layout-wrapper .profile-header-integrated {
-        margin-left: 15px !important;
-        margin-right: 15px !important;
-        padding-left: 15px !important;
-        padding-right: 15px !important;
-    }
-
-    /* 6. Timeline: Stack timeline items */
-    .profile-layout-wrapper .timeline-row {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    /* 7. Stats: Collapse to 1 column */
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /* 8. Fix image sizes */
-    .timeline-image img, 
-    .bike-img {
-        width: 100% !important;
-        height: auto;
-    }
-}
-
 @media (max-width: 480px) {
-    /* 9. Hero Card: Scale down */
-    .profile-card {
-        width: 95%;
-        padding: 15px;
-        flex-direction: column;
-        text-align: center;
+    .hero-cover-small {
+        height: 250px;
     }
 
-    .edit-btn {
-        margin-left: 0;
-        width: 100%;
+    .profile-header-integrated {
+        grid-template-columns: 85px 1fr;
+        margin-top: -48px;
+        padding: 0 12px 16px;
     }
-    
-    /* 10. Forms/Inputs */
-    .settings-grid {
-        grid-template-columns: 1fr;
+
+    .avatar-large-img {
+        width: 135px;
+        height: 135px;
+        border-width: 4px;
+        margin-left: 10px;
     }
-}
 
+    .profile-name {
+        font-size: 1.25rem;
+    }
 
+    .profile-meta-row {
+        font-size: 0.78rem;
+        padding-right: 0;
+    }
 
-.profile-header-integrated {
-    position: relative;
-}
+    .btn-edit-profile {
+        font-size: 0.72rem;
+        padding: 6px 9px;
+    }
 
-/* Header row (name + button side by side) */
-.header-top-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+    .profile-content-card {
+        margin: 12px 8px;
+    }
 
-/* Keep name + badge clean */
-.profile-name {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Fix edit button position */
-.btn-edit-profile {
-    padding: 8px 14px;
-    border: 1px solid #ccc;
-    background: white;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 14px;
-    transition: 0.2s ease;
-}
-
-.btn-edit-profile:hover {
-    background: #f5f5f5;
-}
-
-/* 🔴 ADMIN BANNER (make it ACTUALLY visible) */
-.admin-banner {
-    background: #ff3b3b;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    position: relative;
-    z-index: 5;
-}
-
-/* 🔒 Admin badge */
-.admin-badge {
-    background: #111;
-    color: #fff;
-    font-size: 11px;
-    padding: 4px 10px;
-    border-radius: 20px;
-}
-
-.admin-hero .admin-actions {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    display: flex;
-    gap: 10px;
-}
-
-.admin-table .admin-actions {
-    position: static;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-/* Back button */
-.btn-admin-back {
-    padding: 6px 12px;
-    background: #333;
-    color: white;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 12px;
-}
-
-.btn-admin-back:hover {
-    background: black;
-}
-
-/* Optional: whole page tint */
-body.admin-mode {
-    background-color: #fff5f5;
-}
-
-/* ONLY affect admin version */
-.admin-hero .profile-header-integrated {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    padding: 30px 50px;
-}
-
-/* Keep normal profile untouched */
-.admin-hero .header-text-block {
-    flex-grow: 1;
-}
-
-.admin-hero .profile-name {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.admin-hero .profile-meta-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    color: #555;
-    font-size: 14px;
+    .stats-grid {
+        padding: 12px;
+        gap: 10px;
+    }
 }
