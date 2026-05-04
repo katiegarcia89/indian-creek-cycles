@@ -91,3 +91,18 @@ class ReviewModerationForm(forms.ModelForm):
                 'placeholder': 'Optional response to the review...'
             }),
         }
+
+
+class AdminReviewCommentForm(forms.ModelForm):
+    """Focused admin form for adding or editing only the public response."""
+
+    class Meta:
+        model = Review
+        fields = ['admin_response']
+        widgets = {
+            'admin_response': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 6,
+                'placeholder': 'Write a polished response from Indian Creek Cycles...'
+            }),
+        }

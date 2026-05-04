@@ -134,7 +134,7 @@ For production, update `DEBUG`, `SECRET_KEY`, and `ALLOWED_HOSTS`.
 
 ### Prerequisite
 
-- Python 3.12 must be installed and available as `python3.12`
+- Python 3.12, 3.13 
 
 Make the script executable once:
 
@@ -173,7 +173,117 @@ If port `8000` is busy:
 python manage.py runserver 8001
 ```
 
-## Useful Commands
+### Access Admin Panel (Optional)
+
+Navigate to: **http://127.0.0.1:8000/admin/**
+
+Login with:
+- Username: `admin`
+- Password: `admin123`
+
+## Default Users
+
+| Username | Password | Role |
+|----------|----------|------|
+| admin | admin123 | Superuser/Admin |
+| john_doe | demo123 | Regular user |
+| jane_smith | demo123 | Regular user |
+| mike_johnson | demo123 | Regular user |
+| sarah_williams | demo123 | Regular user |
+
+## URL Routes
+
+### Public Pages
+- `/` - Homepage
+- `/about/` - About page
+- `/trails/` - Trails listing
+- `/contact/` - Contact form
+- `/bikes/` - Bike listing
+- `/bikes/adults/` - Adult bikes
+- `/bikes/kids/` - Kids bikes
+- `/bikes/mountain/` - Mountain bikes
+- `/bikes/sizes/` - Bike size guide
+- `/bikes/<slug>/` - Bike detail page
+- `/bikes/accessories/` - Bike accessories
+- `/reviews/` - Reviews listing
+
+### Account Pages
+- `/accounts/login/` - Login
+- `/accounts/register/` - Registration
+- `/accounts/logout/` - Logout
+- `/accounts/profile/` - User profile
+- `/accounts/profile/edit/` - Edit profile
+
+### Reservation Pages (Login Required)
+- `/reservations/create/<bike_slug>/` - Create reservation
+- `/reservations/waiver/<reservation_id>/` - Sign waiver
+- `/reservations/my-reservations/` - My reservations
+- `/reservations/detail/<pk>/` - Reservation detail
+- `/reservations/cancel/<pk>/` - Cancel reservation
+- `/reservations/confirmation/<pk>/` - Reservation confirmation
+
+### Payment Pages (Login Required)
+- `/payments/process/<reservation_id>/` - Process payment
+- `/payments/confirmation/<payment_id>/` - Payment confirmation
+- `/payments/history/` - Payment history
+
+### Admin Dashboard Pages (Staff/Superuser Only)
+- `/admin-dashboard/` - Admin dashboard overview
+- `/admin-dashboard/bikes/` - Manage bikes
+- `/admin-dashboard/reservations/` - Manage reservations
+- `/admin-dashboard/reviews/` - Moderate reviews
+- `/admin-dashboard/payments/` - View/manage payments
+- `/admin-dashboard/bikes/<bike_id>/toggle-availability/` - Toggle bike availability
+- `/admin-dashboard/bikes/<bike_id>/toggle-maintenance/` - Toggle bike maintenance
+- `/admin-dashboard/reservations/<reservation_id>/status/<new_status>/` - Update reservation status
+- `/admin-dashboard/reviews/<review_id>/approve/` - Approve review
+- `/admin-dashboard/reviews/<review_id>/unapprove/`- Unapprove review
+- `/admin-dashboard/payments/<payment_id>/refund/` - Refund payment
+- `/admin-dashboard/payments/<payment_id>/void/` - Void payment
+
+### API Endpoints
+- `/api/weather/?zip_code=<zip>` - Get weather data
+- `/reservations/check-availability/?bike_id=<id>&date=<date>` - Check bike availability
+
+## Weather API Configuration
+
+The weather feature works in two modes:
+
+### Demo Mode (Default)
+Without an API key, the weather endpoint returns mock data for demonstration purposes.
+
+### Live Mode (With OpenWeather API)
+1. Sign up for a free API key at [OpenWeatherMap](https://openweathermap.org/api)
+2. Add the key to your `.env` file:
+   ```
+   OPENWEATHER_API_KEY=your-api-key-here
+   ```
+3. Restart the server
+
+## Customization
+
+### Adding a Homepage Video
+
+1. Place your video file in `static/video/`
+2. Name it `family-biking.mp4` (or update the reference in `templates/core/home.html`)
+3. The video should be:
+   - MP4 format
+   - Optimized for web (compressed)
+   - Family-friendly cycling content
+
+### Changing Colors
+
+Edit CSS variables in `static/css/main.css`:
+
+```css
+:root {
+    --color-primary: #1a472a;      /* Dark green */
+    --color-primary-dark: #0d2916; /* Darker green */
+    --color-accent: #c9a227;       /* Gold */
+    /* ... other variables */
+}
+
+### Useful Commands
 
 Activate virtual environment:
 
@@ -211,44 +321,77 @@ Django checks:
 python manage.py check
 ```
 
-## Main Routes
 
-### Public
-- `/`
-- `/about/`
-- `/contact/`
-- `/trails/`
-- `/bikes/`
-- `/bikes/accessories/`
-- `/bikes/sizes/`
-- `/reviews/`
+## URL Routes
+
+### Public Pages
+- `/` - Homepage
+- `/about/` - About page
+- `/trails/` - Trails listing
+- `/contact/` - Contact form
+- `/bikes/` - Bike listing
+- `/bikes/adults/` - Adult bikes
+- `/bikes/kids/` - Kids bikes
+- `/bikes/mountain/` - Mountain bikes
+- `/bikes/sizes/` - Bike size guide
+- `/bikes/<slug>/` - Bike detail page
+- `/bikes/accessories/` - Bike accessories
+- `/reviews/` - Reviews listing
 - `/help/` - Ride Guide
 
-### Accounts
-- `/accounts/login/`
-- `/accounts/register/`
-- `/accounts/logout/`
-- `/accounts/profile/`
-- `/accounts/profile/edit/`
+### Account Pages
+- `/accounts/login/` - Login
+- `/accounts/register/` - Registration
+- `/accounts/logout/` - Logout
+- `/accounts/profile/` - User profile
+- `/accounts/profile/edit/` - Edit profile
 
-### Reservations and Payments
-- `/reservations/create/<bike_slug>/`
-- `/reservations/my-reservations/`
-- `/reservations/detail/<pk>/`
-- `/payments/process/<reservation_id>/`
-- `/payments/history/`
+### Reservation Pages (Login Required)
+- `/reservations/create/<bike_slug>/` - Create reservation
+- `/reservations/waiver/<reservation_id>/` - Sign waiver
+- `/reservations/my-reservations/` - My reservations
+- `/reservations/detail/<pk>/` - Reservation detail
+- `/reservations/cancel/<pk>/` - Cancel reservation
+- `/reservations/confirmation/<pk>/` - Reservation confirmation
 
-### Staff Dashboard
-- `/admin-dashboard/`
-- `/admin-dashboard/bikes/`
-- `/admin-dashboard/accessories/`
-- `/admin-dashboard/users/`
-- `/admin-dashboard/staff/`
-- `/admin-dashboard/reservations/`
-- `/admin-dashboard/payments/`
-- `/admin-dashboard/promos/`
-- `/admin-dashboard/reviews/`
-- `/admin-dashboard/signed-waivers/`
+### Payment Pages (Login Required)
+- `/payments/process/<reservation_id>/` - Process payment
+- `/payments/confirmation/<payment_id>/` - Payment confirmation
+- `/payments/history/` - Payment history
+
+### Admin Dashboard Pages 
+### (Staff/Superuser Only)
+- `/admin-dashboard/` - Admin dashboard overview
+- `/admin-dashboard/bikes/` - Manage bikes
+- `/admin-dashboard/reservations/` - Manage reservations
+- `/admin-dashboard/reviews/` - Moderate reviews
+- `/admin-dashboard/payments/` - View/manage payments
+- `/admin-dashboard/bikes/<bike_id>/toggle-availability/` - Toggle bike availability
+- `/admin-dashboard/bikes/<bike_id>/toggle-maintenance/` - Toggle bike maintenance
+- `/admin-dashboard/reservations/<reservation_id>/status/<new_status>/` - Update reservation status
+- `/admin-dashboard/reviews/<review_id>/approve/` - Approve review
+- `/admin-dashboard/reviews/<review_id>/unapprove/`- Unapprove review
+- `/admin-dashboard/payments/<payment_id>/refund/` - Refund payment
+- `/admin-dashboard/payments/<payment_id>/void/` - Void payment
+
+### API Endpoints
+- `/api/weather/?zip_code=<zip>` - Get weather data
+- `/reservations/check-availability/?bike_id=<id>&date=<date>` - Check bike availability
+
+### Public
+- `/` - Homepage
+- `/about/` - About page
+- `/trails/` - Trails listing
+- `/contact/` - Contact form
+- `/bikes/` - Bike listing
+- `/bikes/adults/` - Adult bikes
+- `/bikes/kids/` - Kids bikes
+- `/bikes/mountain/` - Mountain bikes
+- `/bikes/sizes/` - Bike size guide
+- `/bikes/<slug>/` - Bike detail page
+- `/bikes/accessories/` - Bike accessories
+- `/reviews/` - Reviews listing
+- `/help/` - Ride Guide`
 
 ## Notes About Demo Data
 

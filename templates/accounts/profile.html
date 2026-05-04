@@ -78,7 +78,18 @@
 
                     <div class="profile-meta-row">
                         <span><i class="fas fa-phone"></i> {{ profile_user.phone }}</span>
-                        <span><i class="fas fa-envelope"></i> {{ profile_user.email }}</span>
+                        <span>
+                            <i class="fas fa-envelope"></i>
+                            <a
+                                href="https://mail.google.com/mail/?view=cm&fs=1&to={{ profile_user.email|urlencode }}&su={{ customer_email_subject|urlencode }}&body={{ customer_email_body|urlencode }}&authuser=indiancreekcycles@gmail.com"
+                                class="profile-email-link"
+                                title="Open a pre-filled email draft"
+                                target="_blank"
+                                rel="noopener"
+                            >
+                                {{ profile_user.email }}
+                            </a>
+                        </span>
                         <span><i class="fas fa-map-marker-alt"></i> {{ profile_user.city }}, {{ profile_user.state }}</span>
                         <span><i class="fas fa-calendar"></i> Member since {{ profile_user.date_joined|date:"F Y" }}</span>
                     </div>

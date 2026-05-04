@@ -13,6 +13,22 @@ from core.models import SavedTrail
 User = get_user_model()
 
 
+def _build_customer_email_body(profile_user):
+    greeting_name = profile_user.first_name or profile_user.get_full_name() or profile_user.username
+    return (
+        f"Hello {greeting_name},\n\n"
+        "This is Indian Creek Cycles reaching out about your account and reservation details.\n\n"
+        "We wanted to follow up with you regarding:\n"
+        "- your upcoming reservation\n"
+        "- waiver or payment questions\n"
+        "- any changes you may need before pickup\n\n"
+        "Please feel free to reply if you need anything from us.\n\n"
+        "Thanks,\n"
+        "Indian Creek Cycles\n"
+        "indiancreekcycles@gmail.com"
+    )
+
+
 def register(request):
     """User registration view."""
     if request.user.is_authenticated:
@@ -128,6 +144,8 @@ def profile(request):
         'total_spent': total_spent,
         'saved_trails': saved_trails,
         'is_profile_page': True,
+        'customer_email_subject': 'Indian Creek Cycles Reservation Follow-Up',
+        'customer_email_body': _build_customer_email_body(request.user),
     }
 
     return render(request, 'accounts/profile.html', context)
@@ -180,6 +198,8 @@ def user_profile_detail(request, user_id):
         'saved_trails': saved_trails,
 
         'is_profile_page': True,
+        'customer_email_subject': 'Indian Creek Cycles Reservation Follow-Up',
+        'customer_email_body': _build_customer_email_body(profile_user),
     }
 
     return render(request, 'accounts/profile.html', context)

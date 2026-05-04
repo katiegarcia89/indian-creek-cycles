@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     {% comment %} <link rel="stylesheet" href="{% static 'css/styles.css' %}"> {% endcomment %}
     <link rel="stylesheet" href="{% static 'css/reservations.css' %}">
-    <link rel="stylesheet" href="{% static 'css/help.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -187,8 +186,10 @@
                     <ul class="footer-links">
                         <li><a href="{% url 'bike_list' %}">Browse Bikes</a></li>
                         <li><a href="{% url 'trails' %}">Trails</a></li>
+                        <li><a href="{% url 'accessories' %}">Accessories</a></li>
+                        <li><a href="{% url 'help' %}">Ride Guide</a></li>
                         <li><a href="{% url 'reviews' %}">Reviews</a></li>
-                        <li><a href="{% url 'about' %}">About Us</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
                         <li><a href="{% url 'contact' %}">Contact</a></li>
                     </ul>
                 </div>
