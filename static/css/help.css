@@ -80,6 +80,7 @@
     list-style: none;
     margin: 6px 0 0 0;
     padding-left: 0;
+    font-size: 12px;
 }
 
 .mini-list li {
@@ -351,8 +352,8 @@
 
 .help-image img {
     width: 100%;
-    max-width: 700px;
-    max-height: 600px;
+    max-width: 600px;
+    max-height: 500px;
     padding-top: 50px;
     display: block;
     margin: auto;
