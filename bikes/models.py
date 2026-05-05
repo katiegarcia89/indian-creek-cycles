@@ -83,12 +83,10 @@ class Bike(models.Model):
     price_per_hour = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     image = models.ImageField(upload_to='bikes/', blank=True, null=True)
     
-    # Availability Flags
     is_available = models.BooleanField(default=True)
     is_maintenance = models.BooleanField(default=False, help_text="Bike is under maintenance")
     maintenance_note = models.TextField(blank=True, help_text="Reason for maintenance")
     
-    # Decentralized Tracking
     location = models.ForeignKey(
         'locations.Location', 
         on_delete=models.SET_NULL, 
@@ -117,26 +115,34 @@ class Bike(models.Model):
     def get_absolute_url(self):
         return reverse('bike_detail', kwargs={'slug': self.slug})
     
-    # --- NEW: INDIVIDUAL AVAILABILITY LOGIC ---
+    # --- INDIVIDUAL AVAILABILITY LOGIC ---
     def get_available_quantity(self, date=None):
         """Returns 1 if this specific bike is available, 0 if not."""
         from reservations.models import Reservation
-        
-        # If the bike itself is disabled or in the shop, it's not available
+        import datetime
+
+        # 1. PHYSICAL CHECK: If bike is disabled or under maintenance
         if not self.is_available or self.is_maintenance:
             return 0
         
-        # If a specific date is provided, check if this serial number is already booked
+        # 2. IMMEDIATE RENTAL CHECK: If someone wants it TODAY
+        # If the bike is 'at_dock', it's not physically ready at the shop.
+        current_date = datetime.date.today()
+        if date == current_date and self.status == 'at_dock':
+            return 0
+
+        # 3. SCHEDULE CHECK: Look for future date conflicts
         if date:
             is_reserved = Reservation.objects.filter(
                 bike=self,
-                status__in=['pending', 'confirmed', 'paid'],
-                rental_date=date # Ensure 'rental_date' matches your Reservation model field
+                status__in=['pending', 'confirmed', 'paid', 'active'],
+                # This checks if the requested date falls between the rental and return dates
+                rental_date__lte=date,
+                return_date__gte=date
             ).exists()
             
             return 0 if is_reserved else 1
             
-        # If no date is provided, we just assume it's available based on the flags above
         return 1
     
     def is_available_for_date(self, date):

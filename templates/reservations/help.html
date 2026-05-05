@@ -55,15 +55,19 @@
 
             <!-- LEFT: TEXT + LEGEND -->
             <div class="help-text help-panel">
-                <h2 class="step-green">02. Pick Your Station</h2>
+                <h2 class="step-green">02. View Pickup Locations</h2>
                 
                 <p>
-                    Locate your preferred starting point on the map. Each blue pin represents an 
-                    <strong>ICC Dock Location</strong>—these are the only locations where bikes can be picked up and returned.
+                    Choose your starting point on the map. Each blue pin represents an 
+                    <strong>ICC Smart Dock location</strong>—where bikes can be picked up and returned.
+                </p>
+                <p>
+                    You can also pick up and return bikes and gear at the ICC Hub.
                 </p>                
 
                 <div class="info-box mb-4">
-                    <strong>⚡ Energy Tip:</strong> Choosing a closer dock saves bike battery and effort.
+                    <strong><i class="fas fa-compass"></i> Navigation Tip:</strong> 
+                    Don't forget to check the trail difficulty ratings on our 'Trails' page to find the best route for your skill level.
                 </div>
 
             </div>
@@ -108,7 +112,7 @@
                 <!-- MAP -->
                 <iframe src="https://www.google.com/maps/d/u/0/embed?mid=19EvCrXARE227MeP8XjE-1VH8x8FGejM&ehbc=2E312F"></iframe>
 
-                <!-- ✅ FLOATING LEGEND -->
+                <!-- FLOATING LEGEND -->
                 <div class="map-legend-overlay">
 
                     <div class="legend-pill">
@@ -137,26 +141,41 @@
         <div class="help-split">
 
             <div class="help-text">
-                <h2 class="step-brown">03. One-Touch Unlock & Return</h2>
-                
-                <ol class="help-step-list">
-                    <li>
-                        <strong>Locate & Scan:</strong> 
-                        Find your reserved bike and scan the QR code on the Smart-Dock for an instant release.
-                    </li>
-                    <li>
-                        <strong>Digital Dashboard:</strong> 
-                        Alternatively, use our app interface to remotely unlock gear, check real-time dock availability, or manage multiple reservations.
-                    </li>
-                    <li>
-                        <strong>Go & Return:</strong> 
-                        Once your ride is complete, return your bike to <strong>any ICC Smart Dock Hub</strong>. 
-                        Bikes cannot be left on the trail and must be returned to a designated hub.                    </li>
-                                        </ol>
+                <h2 class="step-brown">03. Unlock & Return</h2>
 
-                <div class="info-box mt-3">
-                    <strong><i class="fas fa-map-location-dot"></i> Flexible Returns:</strong> 
-                    Check the app to see which stations have open docks before you arrive to ensure a smooth drop-off.
+                <div class="unlock-guide-card">
+
+                    <div class="mini-step">
+                        <span class="mini-icon">📍</span>
+                        <div>
+                            <h4>Go to your dock</h4>
+                            <p>Find your bike at your selected Smart Dock Location.</p>
+                        </div>
+                    </div>
+
+                    <div class="mini-step">
+                        <span class="mini-icon">🔓</span>
+                        <div>
+                            <h4>Unlock your bike</h4>
+                            <ul class="mini-list">
+                                <li><strong>Option 1:</strong> Show your QR code from your confirmation email to the dock scanner to unlock your bike.</li>
+                                <li><strong>Alternatively:</strong> Scan the QR code with your phone to open your ride dashboard for unlocking, checking dock availability, or managing your reservation.</li>
+                                <strong>No internet?</strong> The dock can unlock your bike directly using your QR code.
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mini-step">
+                        <span class="mini-icon">↩️</span>
+                        <div>
+                            <h4>Return your bike</h4>
+                            <ul class="mini-list">
+                                <li>Return your bike to any ICC Smart Dock location or the ICC Hub.</li>
+                                <li>Bikes must be returned to a dock — they cannot be left on the trail.</li>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
 
                 <p class="note">Hardware Tip: Look for flashing green lights on the dock!</p>
@@ -164,20 +183,21 @@
 
             <div class="help-image">
                 <img src="{% static 'images/help/biker2.png' %}" alt="Dock Instructions">
+                <div class="guide-tip under-image">
+                    <strong>Tip:</strong> Check your dashboard before returning to see which docks have open space.
+                </div>
             </div>
 
         </div>
     </div>
     <div class="help-section faq-section">
-        <h2>Common Questions</h2>
-
         <div class="faq-item">
             <button class="faq-question">
                 Can I start a ride anywhere on the trail?
                 <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
             </button>
             <div class="faq-answer">
-                <p>No. Bikes can only be picked up and returned at ICC Smart Dock Hubs.</p>
+                <p>No. Bikes can only be picked up at ICC Smart Dock locations or the ICC Hub.</p>
             </div>
         </div>
 
@@ -187,10 +207,19 @@
                 <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
             </button>
             <div class="faq-answer">
-                <p>Choose the nearest hub on the map and start your ride there. You can still access nearby trails once unlocked.</p>
+                <p>Choose the nearest Smart Dock location or the ICC Hub to start your ride. You can access nearby trails once your bike is unlocked or picked up.</p>
             </div>
         </div>
-    </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                Can I unlock a bike at the ICC Hub?
+                <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div class="faq-answer">
+                <p>Bikes at the ICC Hub are picked up directly from staff. QR code unlocking is only used at Smart Dock locations.</p>
+            </div>
+        </div>
     <!-- SAFETY -->
     <div class="help-safety">
         <h2>Trail Safety & Etiquette</h2>

@@ -40,7 +40,6 @@ class ReviewForm(forms.ModelForm):
         return int(rating)
 
 
-# ✅ CLEAN IMAGE FORM (no forced validation)
 class ReviewImageForm(forms.ModelForm):
     """Form for adding images to reviews (optional)."""
 
@@ -62,7 +61,6 @@ class ReviewImageForm(forms.ModelForm):
         image = cleaned_data.get('image')
         caption = cleaned_data.get('caption')
 
-        # ✅ If BOTH are empty → ignore this form completely
         if not image and not caption:
             self.cleaned_data = {}
         
@@ -73,9 +71,9 @@ ReviewImageFormSet = inlineformset_factory(
     Review,
     ReviewImage,
     form=ReviewImageForm,
-    extra=1,              # show 3 upload slots
+    extra=1,              
     max_num=1,
-    can_delete=True       # allows skipping/removing
+    can_delete=True       
 )
 
 class ReviewModerationForm(forms.ModelForm):

@@ -8,7 +8,7 @@ from django.conf import settings
 from reservations.models import Reservation, PromoCode
 from .models import Payment
 from .forms import PaymentForm, SimulatedPaymentForm
-
+from reservations.utils import send_confirmation_email
 
 @login_required
 def payment(request, reservation_id):
@@ -99,6 +99,11 @@ def payment(request, reservation_id):
                 reservation.status = 'paid'
                 reservation.save()
                 
+                try:
+                    send_confirmation_email(reservation)
+                except Exception as e:
+                    print(f"Email failed: {e}")
+    
                 messages.success(
                     request,
                     f'Payment successful! Your reservation is confirmed.'

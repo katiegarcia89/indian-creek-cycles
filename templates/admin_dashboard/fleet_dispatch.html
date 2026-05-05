@@ -6,7 +6,6 @@
 <style>
     .dispatch-container { max-width: 1200px !important; margin: 120px auto 50px !important; padding: 0 20px; }
     
-    /* Back Link Styling */
     .admin-back-link { 
         display: inline-flex; 
         align-items: center; 
@@ -16,40 +15,93 @@
         margin-bottom: 25px;
         transition: transform 0.2s ease;
     }
+
     .admin-back-link:hover { transform: translateX(-5px); color: #000 !important; }
 
-    /* Layout Sections */
     .full-width-panel { margin-bottom: 3.5rem; }
-    .column-header { font-size: 0.85rem; color: #64748b; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+
+    .column-header {
+        font-size: 0.85rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
     
-    /* Grid for Saturation Cards */
     .dock-grid { 
         display: grid; 
         grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
         gap: 1.25rem; 
     }
 
-    /* Grid for Task Cards */
     .task-grid { 
         display: grid; 
         grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); 
         gap: 2rem; 
     }
 
-    /* Status Bar Styling */
-    .status-bar-bg { width: 100%; max-width: 280px; height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden; margin-top: 6px; }
-    .status-bar-fill { height: 100%; transition: width 0.6s ease; border-radius: 3px; }
+    .status-bar-bg {
+        width: 100%;
+        max-width: 280px;
+        height: 6px;
+        background: #f1f5f9;
+        border-radius: 3px;
+        overflow: hidden;
+        margin-top: 6px;
+    }
+
+    .status-bar-fill {
+        height: 100%;
+        transition: width 0.6s ease;
+        border-radius: 3px;
+    }
     
-    /* Logic: Green = Empty/Ready for returns, Red = Full/Action Needed */
     .bg-green { background: #22c55e; }
     .bg-yellow { background: #f59e0b; }
     .bg-red { background: #dc3545; }
 
-    .urgent-dot { height: 10px; width: 10px; background-color: #dc3545; border-radius: 50%; animation: pulse 2s infinite; }
+    .urgent-dot {
+        height: 10px;
+        width: 10px;
+        background-color: #dc3545;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+    }
+
     @keyframes pulse {
         0% { box-shadow: 0 0 0 0px rgba(220, 53, 69, 0.7); }
         70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
         100% { box-shadow: 0 0 0 0px rgba(220, 53, 69, 0); }
+    }
+
+    .dispatch-card {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .confirm-pickup-btn {
+        padding: 16px;
+        text-align: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.9rem;
+        background: #16324f;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        font-family: inherit;
+    }
+
+    .confirm-pickup-btn:hover {
+        background: #0f2438;
+    }
+
+    .confirm-pickup-btn:disabled {
+        background: #22c55e;
+        cursor: default;
     }
 
     @media (max-width: 600px) {
@@ -64,29 +116,37 @@
 
     <div class="full-width-panel">
         <h3 class="column-header">Live System Saturation</h3>
+
         <a class="admin-back-link" href="{% url 'admin_bikes' %}">
-            <span style="margin-right: 8px;">← Back to Manage Bikes </span>
+            <span style="margin-right: 19px;">← Back to Manage Bikes </span>
         </a>
+
         <a href="{% url 'admin_dashboard' %}" class="admin-back-link">
-              ← Back to Dashboard
-            </a>
+            ← Back to Dashboard
+        </a>
+
         <div class="admin-card dock-grid" style="padding: 1.5rem; background: white; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
             {% for loc in all_locations_list %}
                 {% if "Hub" not in loc.name and "Main Shop" not in loc.name %}
-                <div style="padding: 10px; border-radius: 8px; border: 1px solid #f8fafc;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 4px;">
-                        <span style="color: #1e293b;">{{ loc.name }}</span>
-                        <span style="color: #64748b; font-family: monospace;">{{ loc.current_bike_count }}/5</span>
-                    </div>
-                    <div class="status-bar-bg">
-                        <div class="status-bar-fill 
-                            {% if loc.current_bike_count <= 1 %}bg-green
-                            {% elif loc.current_bike_count >= 5 %}bg-red
-                            {% else %}bg-yellow{% endif %}" 
-                            style="width: {% widthratio loc.current_bike_count 5 100 %}%;">
+                    <div 
+                        class="saturation-location-card"
+                        data-location-id="{{ loc.id }}"
+                        style="padding: 10px; border-radius: 8px; border: 1px solid #f8fafc;">
+
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 4px;">
+                            <span style="color: #1e293b;">{{ loc.name }}</span>
+                            <span class="saturation-count" style="color: #64748b; font-family: monospace;">{{ loc.current_bike_count }}/5</span>
+                        </div>
+
+                        <div class="status-bar-bg">
+                            <div class="status-bar-fill saturation-fill
+                                {% if loc.current_bike_count <= 1 %}bg-green
+                                {% elif loc.current_bike_count >= 4 %}bg-red
+                                {% else %}bg-yellow{% endif %}" 
+                                style="width: {% widthratio loc.current_bike_count 5 100 %}%;">
+                            </div>
                         </div>
                     </div>
-                </div>
                 {% endif %}
             {% endfor %}
         </div>
@@ -96,52 +156,75 @@
         <h3 class="column-header">
             Active Pickup Tasks 
             {% if locations_needing_pickup %}
-                <span style="background: #dc3545; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; margin-left: 8px;">{{ locations_needing_pickup|length }}</span>
+                <span id="pickup-count" style="background: #dc3545; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; margin-left: 8px;">
+                    {{ locations_needing_pickup|length }}
+                </span>
             {% endif %}
         </h3>
         
-        <div class="task-grid">
+        <div class="task-grid" id="task-grid">
             {% for location in locations_needing_pickup %}
                 {% if "Hub" not in location.name and "Main Shop" not in location.name %}
-                <div class="dispatch-card" style="background: white; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; border-top: 5px solid {% if location.current_bike_count >= 5 %}#dc3545{% else %}#ffc107{% endif %};">
-                    <div style="padding: 1.5rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <h2 style="margin: 0; font-size: 1.3rem; color: #16324f;">{{ location.name }}</h2>
-                            {% if location.current_bike_count >= 5 %}
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <span style="font-size: 0.7rem; font-weight: 800; color: #dc3545;">URGENT</span>
-                                    <div class="urgent-dot"></div>
+                    <div 
+                        class="dispatch-card"
+                        style="background: white; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; border-top: 5px solid {% if location.current_bike_count >= 5 %}#dc3545{% else %}#ffc107{% endif %};">
+
+                        <div style="padding: 1.5rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h2 style="margin: 0; font-size: 1.3rem; color: #16324f;">{{ location.name }}</h2>
+
+                                {% if location.current_bike_count <= 1 %}
+                                    <span style="background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800;">
+                                        LOW
+                                    </span>
+                                {% elif location.current_bike_count >= 4 %}
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <span style="font-size: 0.7rem; font-weight: 800; color: #dc3545;">URGENT</span>
+                                        <div class="urgent-dot"></div>
+                                    </div>
+                                {% else %}
+                                    <span style="background: #fef3c7; color: #955229; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800;">
+                                        MODERATE
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 20px;">
+                                📍 {{ location.address|default:"Trailhead Location" }}
+                            </p>
+                            
+                            <div style="background: #f8fafc; display: flex; padding: 15px; border-radius: 12px; border: 1px solid #f1f5f9;">
+                                <div style="flex: 1; text-align: center;">
+                                    <small style="display: block; color: #94a3b8; font-weight: 700; font-size: 0.65rem; text-transform: uppercase; margin-bottom: 5px;">Bikes</small>
+                                    <strong style="font-size: 1.8rem; color: #1e293b;">{{ location.current_bike_count }}</strong>
                                 </div>
-                            {% else %}
-                                <span style="background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800;">HIGH</span>
-                            {% endif %}
-                        </div>
-                        <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 20px;">📍 {{ location.address|default:"Trailhead Location" }}</p>
-                        
-                        <div style="background: #f8fafc; display: flex; padding: 15px; border-radius: 12px; border: 1px solid #f1f5f9;">
-                            <div style="flex: 1; text-align: center;">
-                                <small style="display: block; color: #94a3b8; font-weight: 700; font-size: 0.65rem; text-transform: uppercase; margin-bottom: 5px;">Bikes</small>
-                                <strong style="font-size: 1.8rem; color: #1e293b;">{{ location.current_bike_count }}</strong>
-                            </div>
-                            <div style="width: 1px; background: #e2e8f0; margin: 0 15px;"></div>
-                            <div style="flex: 1; text-align: center;">
-                                <small style="display: block; color: #94a3b8; font-weight: 700; font-size: 0.65rem; text-transform: uppercase; margin-bottom: 5px;">Capacity</small>
-                                <strong style="font-size: 1.8rem; color: #94a3b8;">5</strong>
+
+                                <div style="width: 1px; background: #e2e8f0; margin: 0 15px;"></div>
+
+                                <div style="flex: 1; text-align: center;">
+                                    <small style="display: block; color: #94a3b8; font-weight: 700; font-size: 0.65rem; text-transform: uppercase; margin-bottom: 5px;">Capacity</small>
+                                    <strong style="font-size: 1.8rem; color: #94a3b8;">5</strong>
+                                </div>
                             </div>
                         </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1.2fr; border-top: 1px solid #f1f5f9;">
+                            <a href="https://www.google.com/maps/search/?api=1&query={{ location.name|urlencode }}" target="_blank" style="padding: 16px; text-align: center; text-decoration: none; color: #16324f; font-weight: 600; font-size: 0.9rem; background: #fff;">
+                                📍 Directions
+                            </a>
+
+                            <button 
+                                type="button"
+                                class="confirm-pickup-btn"
+                                data-url="{% url 'confirm_pickup' location.id %}"
+                                data-location-id="{{ location.id }}">
+                                Confirm Pickup
+                            </button>
+                        </div>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1.2fr; border-top: 1px solid #f1f5f9;">
-                        <a href="https://www.google.com/maps/search/?api=1&query={{ location.name|urlencode }}" target="_blank" style="padding: 16px; text-align: center; text-decoration: none; color: #16324f; font-weight: 600; font-size: 0.9rem; background: #fff;">
-                            📍 Directions
-                        </a>
-                        <a href="{% url 'confirm_pickup' location.id %}" style="padding: 16px; text-align: center; text-decoration: none; color: #fff; font-weight: 700; font-size: 0.9rem; background: #16324f;">
-                            Confirm Pickup
-                        </a>
-                    </div>
-                </div>
                 {% endif %}
             {% empty %}
-                <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: #fff; border-radius: 16px; border: 2px dashed #e2e8f0;">
+                <div id="empty-message" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: #fff; border-radius: 16px; border: 2px dashed #e2e8f0;">
                     <span style="font-size: 2rem;">✅</span>
                     <p style="margin-top: 15px; font-weight: 600; color: #475569;">No pickups required. All trailheads have sufficient space.</p>
                 </div>
@@ -149,4 +232,83 @@
         </div>
     </div>
 </div>
+
+<script>
+document.querySelectorAll('.confirm-pickup-btn').forEach(button => {
+    button.addEventListener('click', async function () {
+        const card = this.closest('.dispatch-card');
+        const url = this.dataset.url;
+        const locationId = this.dataset.locationId;
+
+        this.disabled = true;
+        this.textContent = 'Confirmed';
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (response.ok) {
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.96)';
+
+                setTimeout(() => {
+                    const saturationCard = document.querySelector(
+                        `.saturation-location-card[data-location-id="${locationId}"]`
+                    );
+
+                    if (saturationCard) {
+                        const countText = saturationCard.querySelector('.saturation-count');
+                        const fillBar = saturationCard.querySelector('.saturation-fill');
+
+                        if (countText) {
+                            countText.textContent = '0/5';
+                        }
+
+                        if (fillBar) {
+                            fillBar.style.width = '0%';
+                            fillBar.classList.remove('bg-yellow', 'bg-red');
+                            fillBar.classList.add('bg-green');
+                        }
+                    }
+
+                    card.remove();
+
+                    const countBadge = document.getElementById('pickup-count');
+                    const remainingCards = document.querySelectorAll('.dispatch-card').length;
+
+                    if (countBadge) {
+                        countBadge.textContent = remainingCards;
+
+                        if (remainingCards === 0) {
+                            countBadge.remove();
+                        }
+                    }
+
+                    if (remainingCards === 0) {
+                        const taskGrid = document.getElementById('task-grid');
+                        taskGrid.innerHTML = `
+                            <div id="empty-message" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: #fff; border-radius: 16px; border: 2px dashed #e2e8f0;">
+                                <span style="font-size: 2rem;">✅</span>
+                                <p style="margin-top: 15px; font-weight: 600; color: #475569;">No pickups required. All trailheads have sufficient space.</p>
+                            </div>
+                        `;
+                    }
+                }, 300);
+            } else {
+                this.disabled = false;
+                this.textContent = 'Confirm Pickup';
+                alert('Pickup could not be confirmed.');
+            }
+        } catch (error) {
+            this.disabled = false;
+            this.textContent = 'Confirm Pickup';
+            alert('Something went wrong.');
+        }
+    });
+});
+</script>
 {% endblock %}

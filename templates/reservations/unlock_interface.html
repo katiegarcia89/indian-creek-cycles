@@ -39,41 +39,41 @@
             </span>
         </div>
 
-      <div class="action-area">
-        <div class="status-badge-container {% if reservation.status == 'active' %}is-active-status{% endif %}">
+        <div class="action-area">
+            <div class="status-badge-container {% if reservation.status == 'active' %}is-active-status{% endif %}">
+                
+                <span class="status-pulse {% if reservation.status == 'active' %}pulse-blue{% endif %}" 
+                    style="background-color: {% if reservation.status != 'active' %}#d4af37{% endif %};"></span>
+                
+                <span class="status-text">
+                    {% if reservation.status == 'active' %}
+                        Rental Active
+                    {% elif reservation.status == 'completed' %}
+                        Session Archived
+                    {% elif reservation.status == 'paid' %}
+                        Ready to Unlock
+                    {% else %}
+                        Bike Secured
+                    {% endif %}
+                </span>
+            </div>
+        
+            <button id="action-btn" 
+                onclick="handleDockAction('{{ reservation.status }}', '{{ reservation.id }}', '{% url 'process_unlock' reservation.id %}', '{% url 'process_return' reservation.id %}')" 
+                class="action-btn btn-{{ reservation.status }}"
+                {% if reservation.status == 'completed' or reservation.rental_date > now.date %}disabled{% endif %}>
             
-            <span class="status-pulse {% if reservation.status == 'active' %}pulse-blue{% endif %}" 
-                style="background-color: {% if reservation.status != 'active' %}#d4af37{% endif %};"></span>
-            
-            <span class="status-text">
-                {% if reservation.status == 'active' %}
-                    Rental Active
+                {% if reservation.status == 'paid' %}
+                    Unlock Bike
+                {% elif reservation.status == 'active' %}
+                    Return Bike
                 {% elif reservation.status == 'completed' %}
-                    Session Archived
-                {% elif reservation.status == 'paid' %}
-                    Ready to Unlock
+                    Rental Complete
+                {% elif reservation.rental_date > now.date %}
+                    Locked until {{ reservation.rental_date|date:"M d" }}
                 {% else %}
-                    Bike Secured
+                    Unlock Bike
                 {% endif %}
-            </span>
-        </div>
-        
-        <button id="action-btn" 
-            onclick="handleDockAction('{{ reservation.status }}', '{{ reservation.id }}', '{% url 'process_unlock' reservation.id %}', '{% url 'process_return' reservation.id %}')" 
-            class="action-btn btn-{{ reservation.status }}"
-            {% if reservation.status == 'completed' or reservation.rental_date > now.date %}disabled{% endif %}>
-        
-            {% if reservation.status == 'paid' %}
-                Unlock Bike
-            {% elif reservation.status == 'active' %}
-                Return Bike
-            {% elif reservation.status == 'completed' %}
-                Rental Complete
-            {% elif reservation.rental_date > now.date %}
-                Locked until {{ reservation.rental_date|date:"M d" }}
-            {% else %}
-                Unlock Bike
-            {% endif %}
             </button>
         </div>
     </div>
