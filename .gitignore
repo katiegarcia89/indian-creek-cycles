@@ -4,18 +4,11 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Virtual environment
-.venv/
-venv/
-
-# Database and Secrets
+# Environment variables (keep secrets out of Git)
 .env
-db.sqlite3
-
-# Media and Assets
-media/
-# You can keep this specific one if you only want to ignore QR codes:
-# media/qr_codes/
 
 # macOS
 .DS_Store
+
+# Static build files (if using collectstatic)
+staticfiles/

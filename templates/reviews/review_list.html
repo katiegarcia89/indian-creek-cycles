@@ -93,7 +93,15 @@
                             {% endif %}
                         </div>
                     </div>
-                    <span class="review-date">{{ review.created_at|date:"M d, Y" }}</span>
+                    <div class="review-header-actions">
+                        <span class="review-date">{{ review.created_at|date:"M d, Y" }}</span>
+                        <button class="helpful-btn" data-review-id="{{ review.id }}">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/>
+                            </svg>
+                            Helpful ({{ review.helpful_count }})
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="review-rating">
@@ -117,18 +125,13 @@
                 {% if review.admin_response %}
                 <div class="admin-response">
                     <h5>Response from Indian Creek Cycles</h5>
+                    {% if review.admin_response_date %}
+                    <span class="admin-response-date">{{ review.admin_response_date|date:"M d, Y" }}</span>
+                    {% endif %}
                     <p>{{ review.admin_response }}</p>
                 </div>
                 {% endif %}
                 
-                <div class="review-footer">
-                    <button class="helpful-btn" data-review-id="{{ review.id }}">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/>
-                        </svg>
-                        Helpful ({{ review.helpful_count }})
-                    </button>
-                </div>
             </div>
             {% empty %}
             <div class="empty-state">

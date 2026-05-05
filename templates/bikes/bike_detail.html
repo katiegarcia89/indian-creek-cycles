@@ -99,20 +99,20 @@
         {% if accessories %}
         <div class="bike-accessories-section">
             <h2 class="section-title-sm">Recommended Accessories</h2>
-            <div class="accessory-grid">
+            <ul class="feature-list">
                 {% for accessory in accessories %}
-                <div class="accessory-card">
-                    <div class="accessory-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M12 8v8M8 12h8"/>
-                        </svg>
-                    </div>
-                    <h4 class="accessory-name">{{ accessory.name }}</h4>
-                    <p class="accessory-price">{{ accessory.display_price }}</p>
-                </div>
+                <li class="feature-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    <span>
+                        {{ accessory.name }}
+                        <span style="color: #636e72; font-size: 0.9rem;">{{ accessory.display_price }}</span>
+                    </span>
+                </li>
                 {% endfor %}
-            </div>
+            </ul>
         </div>
         {% endif %}
         

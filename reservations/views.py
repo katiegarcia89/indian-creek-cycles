@@ -262,8 +262,45 @@ def create_reservation(request, bike_slug):
     return render(request, 'reservations/create_reservation.html', {
         'form': form,
         'bike': bike,
-        'booked_dates_json': booked_dates_json,
-    })
+        'booked_dates_json': booked_dates_json, 
+    }
+    return render(request, 'reservations/create_reservation.html', context)
+
+def send_confirmation_email(reservation):
+    logo_path = settings.BASE_DIR / 'static' / 'images' / 'logo' / 'logo-email.png'
+
+    subject = f"Reservation Confirmed - {reservation.bike.name}"
+
+    context = {
+        'user': reservation.user,
+        'reservation': reservation,
+        'bike': reservation.bike,
+    }
+
+    html_content = render_to_string('emails/confirmation_email.html', context)
+    text_content = strip_tags(html_content)
+
+    email = EmailMultiAlternatives(
+        subject=subject,
+        body=text_content,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[reservation.user.email],
+    )
+
+    email.attach_alternative(html_content, "text/html")
+
+    try:
+        with open(logo_path, 'rb') as f:
+            img = MIMEImage(f.read())
+            img.add_header('Content-ID', '<logo_image>')
+            email.attach(img)
+    except FileNotFoundError:
+        print("Logo not found")
+
+    # Email sending is temporarily disabled until live mail is configured.
+    # email.send()
+    # print(f"Reminder would send to {reservation.user.email} for {reservation.rental_date}")
+
     
 @login_required
 def waiver(request, reservation_id):
@@ -644,12 +681,13 @@ def send_daily_reminders(request):
         except FileNotFoundError:
             print("Logo not found")
 
-        email.send()
-
-        res.reminder_sent = True
-        res.save()
-
-        count += 1
+        # Email sending is temporarily disabled until live mail is configured.
+        # email.send()
+        #
+        # res.reminder_sent = True
+        # res.save()
+        #
+        # count += 1
 
     return HttpResponse(f"Sent {count} reminder emails")
 

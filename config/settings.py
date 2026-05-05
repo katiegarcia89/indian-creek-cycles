@@ -5,28 +5,17 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
-
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from the project root explicitly
+load_dotenv(BASE_DIR / '.env')
 
 # Security settings
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-me-in-production')
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
-# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '192.168.1.2',
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    'http://192.168.1.2:8000',
-]
-SITE_URL = "http://192.168.1.2:8000"
-# SITE_URL = os.getenv('SITE_URL', 'http://192.168.1.2:8000').rstrip('/')
-
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if host.strip()]
+SITE_URL = os.getenv('SITE_URL', 'http://127.0.0.1:8000').rstrip('/')
 
 # Application definition
 INSTALLED_APPS = [
@@ -147,16 +136,24 @@ MESSAGE_TAGS = {
     messages.ERROR: 'error',
 }
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-EMAIL_PORT = 2525
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = os.getenv('EMAIL_HOST', '')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() == 'true'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'rentals@indiancreekcycles.com')
 
-EMAIL_HOST_USER = '467a44c4431584'
-EMAIL_HOST_PASSWORD = '820d52bc2d740a'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-EMAIL_TIMEOUT = 10 
-DEFAULT_FROM_EMAIL = 'rentals@indiancreekcycles.com'
+# EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+# EMAIL_PORT = 2525
+
+# EMAIL_HOST_USER = 'b6c329bfa190db'
+# EMAIL_HOST_PASSWORD = '25d13ac2c8bdae'
+
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+
+# DEFAULT_FROM_EMAIL = 'rentals@indiancreekcycles.com'

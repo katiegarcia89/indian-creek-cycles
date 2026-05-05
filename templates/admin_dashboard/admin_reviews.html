@@ -5,12 +5,25 @@
 {{ block.super }}
 <style>
     .review-table .admin-actions-inline {
-        min-width: 130px;
+        min-width: 225px;
     }
 
     .review-table .review-bike-cell,
     .review-table .review-title-cell {
         white-space: normal;
+    }
+
+    .review-table .review-title-cell strong {
+        display: block;
+        margin-bottom: 0.3rem;
+        color: #16324f;
+    }
+
+    .review-table .review-comment-status {
+        display: block;
+        color: #64748b;
+        font-size: 0.82rem;
+        line-height: 1.35;
     }
 </style>
 {% endblock %}
@@ -65,6 +78,9 @@
                                 {% else %}
                                     <a class="admin-btn admin-btn-danger" href="{% url 'unapprove_review' review.id %}">Unapprove</a>
                                 {% endif %}
+                                <a class="admin-btn {% if review.admin_response %}admin-btn-danger{% else %}admin-btn-success{% endif %}" href="{% url 'edit_review_comment' review.id %}">
+                                    {% if review.admin_response %}Edit Comment{% else %}Comment{% endif %}
+                                </a>
                             </div>
                         </td>
                     </tr>

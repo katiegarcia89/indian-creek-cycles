@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}About Us - Indian Creek Cycles{% endblock %}
 {% block meta_description %}Learn about Indian Creek Cycles, your trusted source for premium bike rentals. Our story, mission, and commitment to quality.{% endblock %}
@@ -17,17 +18,13 @@
         <div class="about-grid">
             <div class="about-content">
                 <h2 class="section-title">Our Story</h2>
-                <p class="about-text">Indian Creek Cycles began in 2010 with a simple mission: to share the joy of cycling with everyone. What started as a small bike repair shop has grown into the region's premier bike rental destination.</p>
-                <p class="about-text">Founded by lifelong cycling enthusiasts Mike and Sarah Thompson, our business was born from a passion for two-wheeled adventure and a desire to make quality bikes accessible to all.</p>
-                <p class="about-text">Over the years, we've helped thousands of families, couples, and solo adventurers discover the beauty of our local trails and create memories that last a lifetime.</p>
+                <p class="about-text">Indian Creek Cycles was created to make it easier for riders to browse bikes, plan routes, reserve with confidence, and get out on the trail with less friction.</p>
+                <p class="about-text">This website was built as a collaborative team project focused on creating a polished bike-rental experience from first click to confirmed reservation.</p>
+                <p class="about-text">From reservations and waivers to reviews, profiles, admin tools, and ride-planning support, every part of the site was shaped to feel welcoming, practical, and ready for real use.</p>
             </div>
             <div class="about-image">
-                <div class="about-image-placeholder">
-                    <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                        <path d="M2 17l10 5 10-5"/>
-                        <path d="M2 12l10 5 10-5"/>
-                    </svg>
+                <div class="about-image-wrapper">
+                    <img src="{% static 'images/hero/family-biking-hero.jpg' %}" alt="Family enjoying a bike ride together">
                 </div>
             </div>
         </div>
@@ -93,21 +90,21 @@
     <div class="container">
         <div class="section-header">
             <h2 class="section-title">Meet Our Team</h2>
-            <p class="section-subtitle">The passionate people behind Indian Creek Cycles</p>
+            <p class="section-subtitle">The passionate people behind Indian Creek Cycles.</p>
         </div>
         
         <div class="team-grid">
             <div class="team-card">
                 <div class="team-avatar">MT</div>
                 <h3 class="team-name">Mike Thompson</h3>
-                <p class="team-role">Founder & Head Mechanic</p>
+                <p class="team-role">Founder &amp; Head Mechanic</p>
                 <p class="team-bio">With 20+ years of cycling experience, Mike ensures every bike is in perfect condition.</p>
             </div>
             
             <div class="team-card">
                 <div class="team-avatar">ST</div>
                 <h3 class="team-name">Sarah Thompson</h3>
-                <p class="team-role">Co-Founder & Operations</p>
+                <p class="team-role">Co-Founder &amp; Operations</p>
                 <p class="team-bio">Sarah manages day-to-day operations and creates memorable customer experiences.</p>
             </div>
             
@@ -123,6 +120,46 @@
                 <h3 class="team-name">Emily Martinez</h3>
                 <p class="team-role">Customer Service</p>
                 <p class="team-bio">Emily helps customers find the perfect bike and plan their adventures.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Website Project Team Section -->
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Website Project Team</h2>
+            <p class="section-subtitle">The team who designed, built, tested, and refined the Indian Creek Cycles website.</p>
+        </div>
+
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-avatar">KG</div>
+                <h3 class="team-name">Katie Garcia</h3>
+                <p class="team-role">Admin Dashboard, Deployment, Integration, and Site Polish</p>
+                <p class="team-bio">Worked on the admin dashboard creation and improvements, the accessories and merchandise page, reservation accessory display adjustments, deployment and hosting setup for the live website, database work, and bug fixes and polish across the site.</p>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">KE</div>
+                <h3 class="team-name">Katie Elder</h3>
+                <p class="team-role">Reservation Flow, Pricing Logic, and Ride Guide</p>
+                <p class="team-bio">Built booking reservation functionality, pricing logic, and rental flow support, created the Ride Guide, helped with email configuration, and contributed to the database and QR creation work.</p>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">AM</div>
+                <h3 class="team-name">Abdel Mahouel</h3>
+                <p class="team-role">Website Remodel, Backend Logic, and App Structure</p>
+                <p class="team-bio">Led major website remodel work with combined backend and frontend improvements, structural updates to how the app functions and looks, backend logic, API structure, and data handling.</p>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">WM</div>
+                <h3 class="team-name">Walid Mouhab</h3>
+                <p class="team-role">Frontend Styling, Layout, and Brand Visuals</p>
+                <p class="team-bio">Contributed HTML and CSS styling, frontend layout and visual design support, the main video feature on the front page, and the company logo.</p>
             </div>
         </div>
     </div>
