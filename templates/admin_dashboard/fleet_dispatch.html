@@ -141,7 +141,7 @@
                         <div class="status-bar-bg">
                             <div class="status-bar-fill saturation-fill
                                 {% if loc.current_bike_count <= 1 %}bg-green
-                                {% elif loc.current_bike_count >= 5 %}bg-red
+                                {% elif loc.current_bike_count >= 4 %}bg-red
                                 {% else %}bg-yellow{% endif %}" 
                                 style="width: {% widthratio loc.current_bike_count 5 100 %}%;">
                             </div>
@@ -177,13 +177,13 @@
                                     <span style="background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800;">
                                         LOW
                                     </span>
-                                {% elif location.current_bike_count >= 5 %}
+                                {% elif location.current_bike_count >= 4 %}
                                     <div style="display: flex; align-items: center; gap: 8px;">
                                         <span style="font-size: 0.7rem; font-weight: 800; color: #dc3545;">URGENT</span>
                                         <div class="urgent-dot"></div>
                                     </div>
                                 {% else %}
-                                    <span style="background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800;">
+                                    <span style="background: #fef3c7; color: #955229; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800;">
                                         MODERATE
                                     </span>
                                 {% endif %}

@@ -116,24 +116,30 @@ def check_availability(request):
     except ValueError:
         return JsonResponse({'error': 'Invalid date format'}, status=400)
 
-
 @login_required
 def create_reservation(request, bike_slug):
-    """Create a new reservation and DO NOT send confirmation until payment is complete."""
-    bike = get_object_or_404(Bike, slug=bike_slug, is_available=True)
+    """Create a new reservation and block only dates already reserved for this bike."""
 
-    if bike.is_maintenance:
-        messages.error(request, 'This bike is currently under maintenance.')
-        return redirect('bike_detail', slug=bike_slug)
+    bike = get_object_or_404(
+        Bike,
+        slug=bike_slug,
+        is_maintenance=False
+    )
 
     active_bookings = Reservation.objects.filter(
         bike=bike,
-        status__in=['pending', 'confirmed', 'paid', 'active']
-    ).exclude(status='cancelled')
+        status__in=['pending', 'confirmed', 'paid', 'active', 'completed']
+    )
 
     booked_dates = []
+
+    # Block today so users cannot reserve for the same day
+    today = timezone.localtime(timezone.now()).date()
+    booked_dates.append(today.strftime('%Y-%m-%d'))
+
     for booking in active_bookings:
         current_date = booking.rental_date
+
         while current_date <= booking.return_date:
             booked_dates.append(current_date.strftime('%Y-%m-%d'))
             current_date += timedelta(days=1)
@@ -142,6 +148,9 @@ def create_reservation(request, bike_slug):
 
     if request.method == 'POST':
         post_data = request.POST.copy()
+
+        # Use the exact value your form/model expects.
+        # If your choices use lowercase daily, keep this.
         post_data['rental_type'] = 'daily'
 
         location_id = post_data.get('pickup_location')
@@ -149,10 +158,11 @@ def create_reservation(request, bike_slug):
         if not location_id:
             messages.error(request, "Please select a Smart-Dock location.")
             form = ReservationForm(post_data, bike=bike)
+
             return render(request, 'reservations/create_reservation.html', {
                 'form': form,
                 'bike': bike,
-                'booked_dates_json': booked_dates_json
+                'booked_dates_json': booked_dates_json,
             })
 
         location = get_object_or_404(Location, id=location_id)
@@ -160,15 +170,38 @@ def create_reservation(request, bike_slug):
         if location.is_full:
             messages.error(request, f"{location.name} is currently at capacity.")
             form = ReservationForm(post_data, bike=bike)
+
             return render(request, 'reservations/create_reservation.html', {
                 'form': form,
                 'bike': bike,
-                'booked_dates_json': booked_dates_json
+                'booked_dates_json': booked_dates_json,
             })
 
         form = ReservationForm(post_data, bike=bike)
 
         if form.is_valid():
+            rental_date = form.cleaned_data['rental_date']
+            return_date = form.cleaned_data['return_date']
+
+            overlapping_reservation = Reservation.objects.filter(
+                bike=bike,
+                status__in=['pending', 'confirmed', 'paid', 'active', 'completed'],
+                rental_date__lte=return_date,
+                return_date__gte=rental_date
+            ).exists()
+
+            if overlapping_reservation:
+                messages.error(
+                    request,
+                    "This bike is already reserved for one or more of those dates."
+                )
+
+                return render(request, 'reservations/create_reservation.html', {
+                    'form': form,
+                    'bike': bike,
+                    'booked_dates_json': booked_dates_json,
+                })
+
             accessory_line_items, accessory_errors = _collect_accessory_items(form, post_data)
 
             if accessory_errors:
@@ -188,9 +221,6 @@ def create_reservation(request, bike_slug):
                     reservation.bike = bike
                     reservation.pickup_location = location
 
-                    rental_date = form.cleaned_data['rental_date']
-                    return_date = form.cleaned_data['return_date']
-
                     reservation.rental_type = 'daily'
                     reservation.status = 'pending'
 
@@ -205,9 +235,6 @@ def create_reservation(request, bike_slug):
                     reservation.calculate_prices()
                     reservation.save()
 
-                    bike.location = None
-                    bike.save()
-
                     messages.success(
                         request,
                         f'Reservation created for {bike.name} on {rental_date.strftime("%b %d")}.'
@@ -218,21 +245,19 @@ def create_reservation(request, bike_slug):
             except Exception as e:
                 messages.error(request, f"System error: {e}")
 
-        else:
-            return render(request, 'reservations/create_reservation.html', {
-                'form': form,
-                'bike': bike,
-                'booked_dates_json': booked_dates_json,
-            })
+        return render(request, 'reservations/create_reservation.html', {
+            'form': form,
+            'bike': bike,
+            'booked_dates_json': booked_dates_json,
+        })
 
-    else:
-        initial = {}
+    initial = {}
 
-        if 'date' in request.GET:
-            initial['rental_date'] = request.GET.get('date')
-            initial['return_date'] = request.GET.get('date')
+    if 'date' in request.GET:
+        initial['rental_date'] = request.GET.get('date')
+        initial['return_date'] = request.GET.get('date')
 
-        form = ReservationForm(bike=bike, initial=initial)
+    form = ReservationForm(bike=bike, initial=initial)
 
     return render(request, 'reservations/create_reservation.html', {
         'form': form,
@@ -355,10 +380,13 @@ def reservation_confirmation(request, pk):
     except Payment.DoesNotExist:
         payment = None
 
+    qr_url = f"{settings.SITE_URL}{reverse('unlock_bike', kwargs={'pk': reservation.id})}"
+    print("EMAIL QR URL:", qr_url)
     context = {
         'reservation': reservation,
         'payment': payment,
         'accessories': reservation.reservation_accessories.select_related('accessory').all(),
+        'qr_url': qr_url,
     }
     return render(request, 'reservations/reservation_confirmation.html', context)
 
@@ -404,6 +432,13 @@ def unlock_bike(request, pk):
 
     bike = reservation.bike
     pickup_location = reservation.pickup_location
+
+    if pickup_location and "hub" in pickup_location.name.lower():
+        messages.warning(
+            request,
+            "This reservation is for ICC Hub pickup. Smart Dock unlock is only available at dock locations."
+        )
+        return redirect('reservation_detail', pk=reservation.id)
 
     if reservation.status != 'active' and reservation.rental_date <= today:
         if bike.location != pickup_location:
@@ -476,30 +511,50 @@ def process_unlock(request, reservation_id):
     return redirect('unlock_bike', pk=reservation.id)
 
 
+@login_required
 def process_return(request, reservation_id):
     """
-    Finalizes the reservation and docks the bike back at its location.
+    Finalizes the rental return.
+    Bike goes back to the trail dock, but it is NOT rentable yet.
+    Dispatch must pick it up and return it to ICC Hub / In Shop before it becomes available again.
     """
-    reservation = get_object_or_404(Reservation, id=reservation_id)
-    
+    reservation = get_object_or_404(
+        Reservation.objects.select_related('bike', 'pickup_location'),
+        id=reservation_id,
+        user=request.user
+    )
+
     if reservation.status == 'completed':
         messages.info(request, "This return has already been processed.")
         return redirect('unlock_bike', pk=reservation.id)
 
+    if reservation.status != 'active':
+        messages.warning(request, "This bike can only be returned after it has been unlocked.")
+        return redirect('unlock_bike', pk=reservation.id)
+
     bike = reservation.bike
-    return_location = reservation.pickup_location 
-    
-    # Dock the bike
-    bike.status = 'available'
-    bike.location = return_location 
-    bike.is_available = True  
+    return_location = reservation.pickup_location
+
+    if not return_location:
+        messages.error(request, "Return failed: this reservation does not have a pickup dock.")
+        return redirect('unlock_bike', pk=reservation.id)
+
+    # Bike is physically back at the trail dock,
+    # but it should NOT be rentable yet.
+    bike.location = return_location
+    bike.status = 'at_dock'
+    bike.is_available = False
     bike.save()
-    
-    # Finalize Reservation
+
+    # Close the reservation
     reservation.status = 'completed'
     reservation.save()
-    
-    messages.success(request, f"Return Successful! {bike.name} is locked at {return_location.name}.")
+
+    messages.success(
+        request,
+        f"Return successful! {bike.name} is locked at {return_location.name}. Dispatch pickup is required before it can be rented again."
+    )
+
     return redirect('unlock_bike', pk=reservation.id)
 
 def find_next_reservation(request):

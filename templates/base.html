@@ -26,6 +26,7 @@
 </head>
 <body> 
     <!-- Navigation -->
+    {% block navbar %}
     <nav class="navbar" id="navbar">
         <div class="container">
             <a href="{% url 'home' %}" class="navbar-brand">
@@ -135,6 +136,7 @@
             {% endif %}
         </div>
     </nav>
+    {% endblock navbar %}
 
     <!-- Messages -->
     {% if messages %}

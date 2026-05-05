@@ -1,5 +1,3 @@
-
-
 """
 Django settings for Indian Creek Cycles project.
 """
@@ -16,8 +14,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security settings
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-me-in-production')
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-SITE_URL = os.getenv('SITE_URL', 'http://127.0.0.1:8000').rstrip('/')
+# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '192.168.1.2',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://192.168.1.2:8000',
+]
+SITE_URL = "http://192.168.1.2:8000"
+# SITE_URL = os.getenv('SITE_URL', 'http://192.168.1.2:8000').rstrip('/')
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -138,16 +147,16 @@ MESSAGE_TAGS = {
     messages.ERROR: 'error',
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-# EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-# EMAIL_PORT = 2525
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_PORT = 2525
 
-# EMAIL_HOST_USER = 'b6c329bfa190db'
-# EMAIL_HOST_PASSWORD = '25d13ac2c8bdae'
+EMAIL_HOST_USER = '467a44c4431584'
+EMAIL_HOST_PASSWORD = '820d52bc2d740a'
 
-# EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = False
-
-# DEFAULT_FROM_EMAIL = 'rentals@indiancreekcycles.com'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_TIMEOUT = 10 
+DEFAULT_FROM_EMAIL = 'rentals@indiancreekcycles.com'

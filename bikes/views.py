@@ -9,10 +9,14 @@ from django.http import HttpResponse
 
 def bike_list(request):
     """List all available bikes."""
+
+    hub = Location.objects.get(name__icontains="Hub")  # ✅ ADD THIS LINE
+
     bikes = Bike.objects.filter(
         is_available=True, 
-        is_maintenance=False
-    ).select_related('category', 'size')
+        is_maintenance=False,
+        location=hub
+    ).select_related('category', 'size').select_related('category', 'size')
     
     category_slug = request.GET.get('category')
     if category_slug:
@@ -226,6 +230,8 @@ def confirm_pickup(request, location_id):
     
     for bike in bikes_to_move:
         bike.location = hub
+        bike.status = 'in_shop'
+        bike.is_available = True
         bike.save()
         
     return redirect('fleet_dispatch')
@@ -241,5 +247,4 @@ def add_accessory(request, accessory_id):
         request.session['accessory_cart'] = cart
         
     return redirect('accessories')
-
 
