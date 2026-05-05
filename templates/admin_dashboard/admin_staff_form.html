@@ -1,0 +1,75 @@
+{% extends "admin_dashboard/base.html" %}
+
+{% block title %}Add Staff | Indian Creek Cycles{% endblock %}
+{% block meta_description %}Create a new staff account for Indian Creek Cycles{% endblock %}
+
+{% block content %}
+<section class="admin-page">
+    <div class="admin-shell">
+        <div class="admin-wrap">
+            <div class="admin-page-header">
+                <div>
+                    <h1 class="admin-title-row">
+                        <span>Add Staff Account</span>
+                    </h1>
+                    <p>Create a staff login without leaving the Indian Creek Cycles dashboard.</p>
+                    <a href="{% url 'admin_staff' %}" class="admin-back-link">
+                        ← Back to Staff Accounts
+                    </a>
+                </div>
+            </div>
+
+            <div class="panel" style="margin-bottom: 1.25rem;">
+                <h2>Access Notes</h2>
+                    <div class="list-stack">
+                        <div class="list-item">
+                            <strong>Staff Access</strong><br>
+                            <span class="muted">New accounts created here automatically get staff access.</span>
+                        </div>
+                        <div class="list-item">
+                            <strong>Active Status</strong><br>
+                            <span class="muted">Leave the account active if the person should be able to sign in right away.</span>
+                        </div>
+                        <div class="list-item">
+                            <strong>Password Setup</strong><br>
+                            <span class="muted">This page creates the staff account without showing password fields. Password access can be set later if needed.</span>
+                        </div>
+                        <div class="list-item">
+                            <strong>Superuser Access</strong><br>
+                            <span class="muted">Use the superuser option only when someone should have full admin-level control.</span>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="panel">
+                <form method="post" class="admin-form">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                    <div class="empty-state">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+
+                    <div class="admin-form-grid">
+                        {% for field in form %}
+                        <div class="admin-form-field">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% for error in field.errors %}
+                            <span class="admin-form-error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="admin-actions" style="margin-top: 1.25rem;">
+                        <button class="admin-btn admin-btn-success" type="submit">Create Staff Account</button>
+                        <a class="admin-btn" href="{% url 'admin_staff' %}">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

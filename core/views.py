@@ -24,7 +24,15 @@ from reviews.forms import AdminReviewCommentForm
 from reservations.models import PromoCode, Reservation, Waiver
 from payments.models import Payment
 from .models import Trail
-from .forms import AccessoryForm, AdminPromoCodeForm, AdminUserForm, ContactForm, WeatherZipForm
+from .forms import (
+    AdminAccountCreateForm,
+    AccessoryForm,
+    AdminPromoCodeForm,
+    AdminStaffCreateForm,
+    AdminUserForm,
+    ContactForm,
+    WeatherZipForm,
+)
 
 
 def home(request):
@@ -307,6 +315,73 @@ def admin_staff(request):
             "superuser_count": superuser_count,
         },
     )
+
+
+@staff_member_required
+def admin_add_staff(request):
+    if request.method == "POST":
+        form = AdminStaffCreateForm(request.POST)
+        if form.is_valid():
+            new_staff = form.save(commit=False)
+            new_staff.is_staff = True
+            new_staff.set_unusable_password()
+            new_staff.save()
+            messages.success(request, f"{new_staff.get_full_name()} was added as a staff account.")
+            return redirect("admin_staff")
+    else:
+        form = AdminStaffCreateForm(initial={"is_active": True})
+
+    return render(
+        request,
+        "admin_dashboard/admin_staff_form.html",
+        {
+            "form": form,
+        },
+    )
+
+
+@staff_member_required
+def admin_add_user(request):
+    if request.method == "POST":
+        form = AdminAccountCreateForm(request.POST)
+        if form.is_valid():
+            new_user = form.save(commit=False)
+            new_user.is_staff = False
+            new_user.is_superuser = False
+            new_user.set_unusable_password()
+            new_user.save()
+            messages.success(request, f"{new_user.get_full_name()} was added as a user account.")
+            return redirect("admin_users")
+    else:
+        form = AdminAccountCreateForm(initial={"is_active": True})
+
+    return render(
+        request,
+        "admin_dashboard/admin_user_create_form.html",
+        {
+            "form": form,
+        },
+    )
+
+
+@staff_member_required
+@require_POST
+def toggle_user_active(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    if user == request.user:
+        messages.error(request, "You cannot change your own active status from this page.")
+        return redirect("admin_staff")
+
+    user.is_active = not user.is_active
+    user.save(update_fields=["is_active"])
+
+    if user.is_active:
+        messages.success(request, f"{user.get_full_name()} is now active.")
+    else:
+        messages.warning(request, f"{user.get_full_name()} is now inactive.")
+
+    return redirect("admin_staff")
 
 
 @staff_member_required

@@ -1,0 +1,71 @@
+{% extends "admin_dashboard/base.html" %}
+
+{% block title %}Add User | Indian Creek Cycles{% endblock %}
+{% block meta_description %}Create a new user account for Indian Creek Cycles{% endblock %}
+
+{% block content %}
+<section class="admin-page">
+    <div class="admin-shell">
+        <div class="admin-wrap">
+            <div class="admin-page-header">
+                <div>
+                    <h1 class="admin-title-row">
+                        <span>Add User Account</span>
+                    </h1>
+                    <p>Create a customer account without leaving the Indian Creek Cycles dashboard.</p>
+                    <a href="{% url 'admin_users' %}" class="admin-back-link">
+                        ← Back to Users
+                    </a>
+                </div>
+            </div>
+
+            <div class="panel" style="margin-bottom: 1.25rem;">
+                <h2>Account Notes</h2>
+                <div class="list-stack">
+                    <div class="list-item">
+                        <strong>User Accounts</strong><br>
+                        <span class="muted">Accounts created here are standard user accounts, not staff accounts.</span>
+                    </div>
+                    <div class="list-item">
+                        <strong>Active Status</strong><br>
+                        <span class="muted">Leave the account active if the person should be able to sign in right away.</span>
+                    </div>
+                    <div class="list-item">
+                        <strong>Password Setup</strong><br>
+                        <span class="muted">This page does not ask for a password. Password access can be set later if needed.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <form method="post" class="admin-form">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                    <div class="empty-state">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+
+                    <div class="admin-form-grid">
+                        {% for field in form %}
+                        <div class="admin-form-field">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% for error in field.errors %}
+                            <span class="admin-form-error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="admin-actions" style="margin-top: 1.25rem;">
+                        <button class="admin-btn admin-btn-success" type="submit">Create User Account</button>
+                        <a class="admin-btn" href="{% url 'admin_users' %}">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
