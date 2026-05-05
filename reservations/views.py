@@ -263,7 +263,7 @@ def create_reservation(request, bike_slug):
         'form': form,
         'bike': bike,
         'booked_dates_json': booked_dates_json, 
-    }
+    })
     return render(request, 'reservations/create_reservation.html', context)
 
 def send_confirmation_email(reservation):
