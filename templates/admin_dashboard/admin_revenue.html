@@ -131,6 +131,16 @@
                     <div class="revenue-stat-label">Merchandise</div>
                     <div class="revenue-stat-value">${{ merchandise_revenue|floatformat:2 }}</div>
                 </div>
+                <div class="revenue-stat">
+                    <div class="revenue-stat-label">Average Reservation Value</div>
+                    <div class="revenue-stat-value">
+                        {% if average_reservation_value %}
+                            ${{ average_reservation_value|floatformat:2 }}
+                        {% else %}
+                            $0.00
+                        {% endif %}
+                    </div>
+                </div>
             </div>
 
             <div class="admin-card" style="padding: 1.25rem;">
@@ -192,6 +202,66 @@
                         </div>
                         {% else %}
                         <p class="muted">No merchandise revenue yet.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="revenue-panel">
+                        <h2>Current Bike Rates</h2>
+                        <p>The highest daily rental rates in the current bike catalog.</p>
+                        {% if highest_bike_rates %}
+                        <div class="revenue-list">
+                            {% for bike in highest_bike_rates %}
+                            <div class="revenue-item">
+                                <div>
+                                    <strong>{{ bike.name }}</strong>
+                                    <span>{{ bike.category.name }}</span>
+                                </div>
+                                <div class="revenue-amount">${{ bike.price_per_day|floatformat:2 }}/day</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="muted">No bike pricing available yet.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="revenue-panel">
+                        <h2>Current Rental Add-On Rates</h2>
+                        <p>The highest daily prices for rentable accessories and add-ons.</p>
+                        {% if highest_rental_addon_rates %}
+                        <div class="revenue-list">
+                            {% for accessory in highest_rental_addon_rates %}
+                            <div class="revenue-item">
+                                <div>
+                                    <strong>{{ accessory.name }}</strong>
+                                    <span>{{ accessory.get_category_display }}</span>
+                                </div>
+                                <div class="revenue-amount">${{ accessory.price_per_day|floatformat:2 }}/day</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="muted">No rental add-on pricing available yet.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="revenue-panel">
+                        <h2>Current Merchandise Prices</h2>
+                        <p>The highest priced merchandise items in the current catalog.</p>
+                        {% if highest_merch_prices %}
+                        <div class="revenue-list">
+                            {% for accessory in highest_merch_prices %}
+                            <div class="revenue-item">
+                                <div>
+                                    <strong>{{ accessory.name }}</strong>
+                                    <span>{{ accessory.get_category_display }}</span>
+                                </div>
+                                <div class="revenue-amount">${{ accessory.price|floatformat:2 }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="muted">No merchandise pricing available yet.</p>
                         {% endif %}
                     </div>
                 </div>

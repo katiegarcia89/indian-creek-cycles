@@ -1089,14 +1089,34 @@ def admin_revenue(request):
         key=lambda row: (-row["total"], row["label"])
     )[:6]
 
+    average_reservation_value = (
+        revenue_reservations.aggregate(avg=Sum("total_price") / Count("id")).get("avg")
+        if revenue_reservations.exists()
+        else None
+    )
+
+    highest_bike_rates = Bike.objects.filter(is_available=True).order_by("-price_per_day", "name")[:5]
+    highest_rental_addon_rates = Accessory.objects.filter(
+        is_available=True,
+        price_per_day__isnull=False
+    ).order_by("-price_per_day", "name")[:5]
+    highest_merch_prices = Accessory.objects.filter(
+        is_available=True,
+        price__gt=0
+    ).order_by("-price", "name")[:5]
+
     context = {
         "total_revenue": total_revenue,
         "rental_revenue": rental_revenue,
         "rental_addon_revenue": rental_addon_revenue,
         "merchandise_revenue": merchandise_revenue,
+        "average_reservation_value": average_reservation_value,
         "top_bike_revenue": top_bike_revenue,
         "top_rental_addon_revenue": top_rental_addon_revenue,
         "top_merchandise_revenue": top_merchandise_revenue,
+        "highest_bike_rates": highest_bike_rates,
+        "highest_rental_addon_rates": highest_rental_addon_rates,
+        "highest_merch_prices": highest_merch_prices,
     }
     return render(request, "admin_dashboard/admin_revenue.html", context)
 
