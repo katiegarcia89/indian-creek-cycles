@@ -29,4 +29,4 @@ function handleDockAction(status, resId, unlockUrl, returnUrl) {
             }, 800);
         }
     }
-}
+} 

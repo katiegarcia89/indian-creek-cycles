@@ -47,6 +47,7 @@ urlpatterns = [
     path("admin-dashboard/reviews/<int:review_id>/unapprove/", views.unapprove_review, name="unapprove_review"),
 
     path("admin-dashboard/payments/", views.admin_payments, name="admin_payments"),
+    path("admin-dashboard/revenue/", views.admin_revenue, name="admin_revenue"),
     path("admin-dashboard/payments/<int:payment_id>/refund/", views.refund_payment, name="refund_payment"),
     path("admin-dashboard/payments/<int:payment_id>/void/", views.void_payment, name="void_payment"),
 

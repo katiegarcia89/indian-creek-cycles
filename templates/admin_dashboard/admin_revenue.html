@@ -1,0 +1,202 @@
+{% extends "admin_dashboard/base.html" %}
+
+{% block title %}Revenue Breakdown | Indian Creek Cycles{% endblock %}
+{% block meta_description %}Revenue breakdown for rentals, add-ons, and merchandise at Indian Creek Cycles.{% endblock %}
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .revenue-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .revenue-stat {
+        background: #f8fbff;
+        border: 1px solid #dbe5ee;
+        border-radius: 16px;
+        padding: 1rem 1.1rem;
+    }
+
+    .revenue-stat-label {
+        color: #64748b;
+        font-size: .92rem;
+        margin-bottom: .4rem;
+    }
+
+    .revenue-stat-value {
+        color: #16324f;
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .revenue-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .revenue-panel {
+        border: 1px solid #e5ebf1;
+        border-radius: 16px;
+        padding: 1rem;
+        background: #fbfdff;
+    }
+
+    .revenue-panel h2 {
+        margin: 0 0 .25rem;
+        font-size: 1.05rem;
+        color: #16324f;
+    }
+
+    .revenue-panel p {
+        margin: 0 0 1rem;
+        color: #64748b;
+        font-size: .9rem;
+    }
+
+    .revenue-list {
+        display: grid;
+        gap: .75rem;
+    }
+
+    .revenue-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: flex-start;
+        padding-bottom: .75rem;
+        border-bottom: 1px solid #e5ebf1;
+    }
+
+    .revenue-item:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .revenue-item strong {
+        color: #16324f;
+        display: block;
+        margin-bottom: .2rem;
+    }
+
+    .revenue-item span {
+        color: #64748b;
+        font-size: .85rem;
+    }
+
+    .revenue-amount {
+        color: #1f6d43;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    @media (max-width: 900px) {
+        .revenue-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="admin-page">
+    <div class="admin-shell">
+        <div class="admin-wrap">
+            <div class="admin-page-header">
+                <div>
+                    <h1 class="admin-title-row">
+                        <span>Revenue Breakdown</span>
+                    </h1>
+                    <p>See how revenue is split across bike rentals, rental add-ons, and merchandise sales.</p>
+                    <a href="{% url 'admin_dashboard' %}" class="admin-back-link">← Back to Dashboard</a>
+                </div>
+            </div>
+
+            <div class="revenue-summary">
+                <div class="revenue-stat">
+                    <div class="revenue-stat-label">Total Revenue</div>
+                    <div class="revenue-stat-value">${{ total_revenue|floatformat:2 }}</div>
+                </div>
+                <div class="revenue-stat">
+                    <div class="revenue-stat-label">Bike Rentals</div>
+                    <div class="revenue-stat-value">${{ rental_revenue|floatformat:2 }}</div>
+                </div>
+                <div class="revenue-stat">
+                    <div class="revenue-stat-label">Rental Add-Ons</div>
+                    <div class="revenue-stat-value">${{ rental_addon_revenue|floatformat:2 }}</div>
+                </div>
+                <div class="revenue-stat">
+                    <div class="revenue-stat-label">Merchandise</div>
+                    <div class="revenue-stat-value">${{ merchandise_revenue|floatformat:2 }}</div>
+                </div>
+            </div>
+
+            <div class="admin-card" style="padding: 1.25rem;">
+                <div class="revenue-grid">
+                    <div class="revenue-panel">
+                        <h2>Top Bike Rental Revenue</h2>
+                        <p>Which bikes are bringing in the most rental revenue.</p>
+                        {% if top_bike_revenue %}
+                        <div class="revenue-list">
+                            {% for item in top_bike_revenue %}
+                            <div class="revenue-item">
+                                <div>
+                                    <strong>{{ item.bike__name|default:"Unknown Bike" }}</strong>
+                                    <span>{{ item.count }} reservation{{ item.count|pluralize }}</span>
+                                </div>
+                                <div class="revenue-amount">${{ item.total|floatformat:2 }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="muted">No rental revenue yet.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="revenue-panel">
+                        <h2>Top Rental Add-Ons</h2>
+                        <p>Which rented accessories are adding the most revenue.</p>
+                        {% if top_rental_addon_revenue %}
+                        <div class="revenue-list">
+                            {% for item in top_rental_addon_revenue %}
+                            <div class="revenue-item">
+                                <div>
+                                    <strong>{{ item.label }}</strong>
+                                    <span>{{ item.quantity }} rented</span>
+                                </div>
+                                <div class="revenue-amount">${{ item.total|floatformat:2 }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="muted">No rental add-on revenue yet.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="revenue-panel">
+                        <h2>Top Merchandise Sales</h2>
+                        <p>Which merchandise items are bringing in the most sales revenue.</p>
+                        {% if top_merchandise_revenue %}
+                        <div class="revenue-list">
+                            {% for item in top_merchandise_revenue %}
+                            <div class="revenue-item">
+                                <div>
+                                    <strong>{{ item.label }}</strong>
+                                    <span>{{ item.quantity }} sold</span>
+                                </div>
+                                <div class="revenue-amount">${{ item.total|floatformat:2 }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="muted">No merchandise revenue yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

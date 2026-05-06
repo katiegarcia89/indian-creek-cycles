@@ -10,12 +10,12 @@ Use this in order.
 
 - Hosting site: PythonAnywhere
 - Username: `katie.garcia.c@gmail.com`
-- Password: `indiancreeyckcyles123`
+- Password: ***************
 
 ### Project Gmail
 
 - Email: `indiancreekrentals@gmail.com`
-- Password: `indiancreekcycles123`
+- Password: ***************
 
 ## 2. Open the Right Place in PythonAnywhere
 
@@ -135,6 +135,14 @@ EMAIL_USE_TLS=True
 EMAIL_HOST_USER=
 EMAIL_HOST_PASSWORD=
 ```
+--------------------------
+DEBUG=True
+SECRET_KEY=your-secret-key-here-change-in-production
+ALLOWED_HOSTS=localhost,127.0.0.1,www.indiancreekcycles.com,indiancreekcycles.com,kgarci11.pythonanywhere.com
+SITE_URL=https://www.indiancreekcycles.com
+OPENWEATHER_API_KEY=your-openweather-api-key-here
+CSRF_TRUSTED_ORIGINS=https://www.indiancreekcycles.com,https://indiancreekcycles.com,https://kgarci11.pythonanywhere.com
+EMAIL_HOST_PASSWORD=uiydwpvyqqgwungl
 
 Save and exit `nano`:
 

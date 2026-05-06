@@ -1,6 +1,14 @@
+* {
+    box-sizing: border-box;
+}
+
 .profile-layout-wrapper.dark {
     background: #121212;
     color: #eee;
+}
+
+.main-navbar {
+    display: none;
 }
 
 .profile-layout-wrapper.dark .settings-section {
@@ -242,7 +250,7 @@
     display: flex;
     gap: 10px;
     margin-top: 12px;
-    flex-wrap: nowrap;  
+    flex-wrap: wrap; 
 }
 
 .btn-small {
@@ -369,11 +377,19 @@
     min-height: 100vh;
     background-color: #f8f9fa;
 }
+
 .profile-tabs {
     display: flex;
-    gap: 30px;
-    padding: 0 40px;
+    gap: 20px;
+    padding: 0 40px; /* 🔥 match content card */
     border-bottom: 1px solid #eee;
+
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.profile-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .profile-meta-row {
@@ -391,18 +407,6 @@
     align-items: center;
     gap: 10px;
     color: #555;
-}
-
-.profile-email-link {
-    color: inherit;
-    text-decoration: none;
-    border-bottom: 1px dashed rgba(85, 85, 85, 0.35);
-    transition: 0.2s ease;
-}
-
-.profile-email-link:hover {
-    color: #1f6d43;
-    border-bottom-color: rgba(31, 109, 67, 0.55);
 }
 
 .profile-meta-row span::before {
@@ -430,15 +434,20 @@
 
 .profile-sidebar-nav {
     width: 215px;
+    min-width: 215px;
+    flex-shrink: 0;
+
     background-color: #1a1a1a;
     color: white;
     padding: 8px 8px;
+
     display: flex;
     flex-direction: column;
+
     position: sticky;
     top: 0;
     height: 100vh;
-    flex-shrink: 0;
+
     z-index: 1000;
 }
 
@@ -503,7 +512,9 @@
     padding: 0;
     display: flex;
     flex-direction: column;
+    width: calc(100% - 215px);
 }
+
 
 /* 4. Hero Section & Images */
 .hero-cover-small {
@@ -520,13 +531,14 @@
 }
 
 .avatar-large-img {
-    width: 210px;
-    height: 210px;
+    width: 230px;
+    height: 230px;
     border-radius: 50%;
     border: 5px solid #fff;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     background: #fff;
+    margin-right: 20px;
 }
 
 .avatar-large-img img {
@@ -834,7 +846,7 @@
     display: flex;
     gap: 10px;
     margin-top: 12px;
-    flex-wrap: nowrap;  
+    flex-wrap: wrap; 
 }
 
 /* MAKE ROW FEEL MORE "BLOCKY" */
@@ -1364,202 +1376,223 @@
     color: #888;
     margin-top: 6px;
 }
-/* --- MOBILE RESPONSIVE OVERRIDES --- */
 
+/* DESKTOP DEFAULT */
+.menu-toggle {
+    display: none; /* 👈 hides hamburger */
+}
+
+.sidebar-links {
+    display: flex; /* 👈 normal nav */
+}
+
+/* DESKTOP DEFAULT */
+.menu-toggle {
+    display: none;
+}
+
+.sidebar-links {
+    display: flex;
+}
+
+/* ===== BASE LAYOUT FIX ===== */
+.profile-hero-minimal,
+.hero-cover-small {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* --- MOBILE RESPONSIVE  --- */
+
+/* ===== TABLET ===== */
 @media (max-width: 992px) {
-    /* 1. Layout Container: Stack Sidebar and Content */
+
+    /* Sidebar → horizontal scroll */
+    .profile-sidebar-nav {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 10px;
+    }
+
+    .sidebar-links {
+        display: flex;
+        gap: 10px;
+    }
+
+    .side-link {
+        flex: 0 0 auto;
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+
+    .sidebar-logo {
+        display: none;
+    }
+
+    /* Stats → 2 columns */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Saved trails → 2 columns */
+    .saved-trails-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* DESKTOP ONLY */
+@media (min-width: 769px) {
+
+    .profile-layout-wrapper {
+        flex-direction: row;
+    }
+
+    .profile-sidebar-nav {
+        width: 215px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        flex-direction: column;
+    }
+
+    .sidebar-links {
+        position: static;
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        background: transparent;
+        padding: 0;
+    }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+
     .profile-layout-wrapper {
         flex-direction: column;
     }
 
-    /* 2. Sidebar: Reset to full width */
+    /* TOP BAR */
     .profile-sidebar-nav {
         width: 100%;
-        height: auto;
-        position: relative; /* Remove sticky on mobile */
+        height: 60px;
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 0 15px;
+        z-index: 2000; /* 🔥 above EVERYTHING */
     }
 
-    /* 3. Stats: Collapse to 2 columns */
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+    /* MAIN CONTENT FIX */
+    .profile-main-content {
+        width: 100%;
+        margin-top: 60px; /* prevents overlap */
+    }
+
+    /* HAMBURGER */
+    .menu-toggle {
+        display: block;
+        font-size: 26px;
+        cursor: pointer;
+        z-index: 2001;
+    }
+
+    .sidebar-links {
+        position: fixed;
+        top: 60px;
+        left: -100%;
+        width: 260px;
+        height: calc(100vh - 60px); /* 👈 key fix */
+
+        background: #111;
+        flex-direction: column;
         padding: 20px;
+
+        overflow-y: auto; /* 👈 enables scroll */
+        -webkit-overflow-scrolling: touch;
+
+        transition: 0.3s ease;
+        z-index: 2000;
     }
 
-    /* 4. Reservations: Stack the card layout */
-    .profile-layout-wrapper .reservation-card {
-        grid-template-columns: 1fr; /* Single column */
+    .sidebar-links.active {
+        left: 0;
+    }
+
+    .profile-tabs {
+        flex-wrap: wrap;       /* 🔥 wraps to next line */
+        white-space: normal;   /* 🔥 allow wrapping */
+        overflow-x: hidden;    /* 🔥 remove scroll */
+        gap: 10px;
+        margin: 0 40px; /* 🔥 matches content card edges perfectly */
+        padding: 0;
+    }
+
+    .tab {
+        flex: 1 1 auto;        /* 🔥 responsive sizing */
+        text-align: center;
+        padding: 10px 8px;
+        font-size: 0.9rem;
+    }
+
+       .profile-header-integrated {
+        flex-direction: column;   /* stack everything */
+        align-items: center;      /* center it */
+        text-align: center;
         gap: 15px;
     }
-    
-    /* Hide the visual divider on mobile */
-    .reservation-divider {
-        display: none;
+
+    .avatar-overlap {
+        margin-left: 0;           /* remove left offset */
+        display: flex;
+        justify-content: center;
+    }
+
+    .header-text-block {
+        padding: 0;
+    }
+
+    .profile-meta-row {
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-actions {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .btn-edit-profile {
+        width: 100%;
+        max-width: 250px;
     }
 }
 
-@media (max-width: 768px) {
-    /* 5. Adjust padding/margins for smaller screens */
-    .profile-content-card, 
-    .profile-layout-wrapper .timeline-row,
-    .profile-layout-wrapper .profile-header-integrated {
-        margin-left: 15px !important;
-        margin-right: 15px !important;
-        padding-left: 15px !important;
-        padding-right: 15px !important;
-    }
-
-    /* 6. Timeline: Stack timeline items */
-    .profile-layout-wrapper .timeline-row {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    /* 7. Stats: Collapse to 1 column */
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /* 8. Fix image sizes */
-    .timeline-image img, 
-    .bike-img {
-        width: 100% !important;
-        height: auto;
-    }
-}
-
+/* ===== VERY SMALL PHONES ===== */
 @media (max-width: 480px) {
-    /* 9. Hero Card: Scale down */
+
     .profile-card {
         width: 95%;
-        padding: 15px;
+        padding: 10px;
         flex-direction: column;
         text-align: center;
     }
 
     .edit-btn {
-        margin-left: 0;
         width: 100%;
     }
-    
-    /* 10. Forms/Inputs */
-    .settings-grid {
-        grid-template-columns: 1fr;
+
+    .profile-name {
+        font-size: 1.2rem;
     }
 }
 
 
-
-.profile-header-integrated {
-    position: relative;
-}
-
-/* Header row (name + button side by side) */
-.header-top-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Keep name + badge clean */
-.profile-name {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Fix edit button position */
-.btn-edit-profile {
-    padding: 8px 14px;
-    border: 1px solid #ccc;
-    background: white;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 14px;
-    transition: 0.2s ease;
-}
-
-.btn-edit-profile:hover {
-    background: #f5f5f5;
-}
-
-/* 🔴 ADMIN BANNER (make it ACTUALLY visible) */
-.admin-banner {
-    background: #ff3b3b;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    position: relative;
-    z-index: 5;
-}
-
-/* 🔒 Admin badge */
-.admin-badge {
-    background: #111;
-    color: #fff;
-    font-size: 11px;
-    padding: 4px 10px;
-    border-radius: 20px;
-}
-
-.admin-hero .admin-actions {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    display: flex;
-    gap: 10px;
-}
-
-.admin-table .admin-actions {
-    position: static;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-/* Back button */
-.btn-admin-back {
-    padding: 6px 12px;
-    background: #333;
-    color: white;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 12px;
-}
-
-.btn-admin-back:hover {
-    background: black;
-}
-
-/* Optional: whole page tint */
-body.admin-mode {
-    background-color: #fff5f5;
-}
-
-/* ONLY affect admin version */
-.admin-hero .profile-header-integrated {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    padding: 30px 50px;
-}
-
-/* Keep normal profile untouched */
-.admin-hero .header-text-block {
-    flex-grow: 1;
-}
-
-.admin-hero .profile-name {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.admin-hero .profile-meta-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    color: #555;
-    font-size: 14px;
-}

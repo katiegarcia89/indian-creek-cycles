@@ -1,5 +1,7 @@
 import requests
+from collections import Counter
 from datetime import timedelta
+from decimal import Decimal
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -10,7 +12,7 @@ from .models import SavedTrail
 from django.views.decorators.http import require_http_methods, require_POST
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
-from django.db.models import Case, Count, F, IntegerField, Q, Value, When
+from django.db.models import Case, Count, F, IntegerField, Q, Sum, Value, When
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -21,7 +23,7 @@ from django.urls import reverse
 from bikes.models import Accessory, Bike, BikeCategory
 from reviews.models import Review
 from reviews.forms import AdminReviewCommentForm
-from reservations.models import PromoCode, Reservation, Waiver
+from reservations.models import PromoCode, Reservation, ReservationAccessory, Waiver
 from payments.models import Payment
 from .models import Trail
 from .forms import (
@@ -262,14 +264,139 @@ def admin_dashboard(request):
 
     total_reviews = Review.objects.count()
     pending_reviews = Review.objects.filter(is_approved=False).count()
-    latest_reviews = Review.objects.select_related("user").order_by("-created_at")[:5]
-
     signed_waivers = Waiver.objects.count()
     unsigned_active_waivers = Reservation.objects.filter(
         status__in=["pending", "confirmed", "paid", "active"],
         waiver_signed=False,
     ).count()
-    staff_count = User.objects.filter(is_staff=True).count()
+    user_count = User.objects.count()
+
+    analytics_reservations = Reservation.objects.exclude(status="cancelled").select_related("bike", "pickup_location")
+
+    top_bike_rows = (
+        analytics_reservations.values("bike__name")
+        .annotate(total=Count("id"))
+        .order_by("-total", "bike__name")[:5]
+    )
+    max_bike_total = top_bike_rows[0]["total"] if top_bike_rows else 0
+    top_bikes = [
+        {
+            "label": row["bike__name"] or "Unknown Bike",
+            "count": row["total"],
+            "width": int((row["total"] / max_bike_total) * 100) if max_bike_total else 0,
+        }
+        for row in top_bike_rows
+    ]
+
+    weekday_labels = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ]
+    weekday_counts = Counter(
+        reservation.rental_date.weekday()
+        for reservation in analytics_reservations
+        if reservation.rental_date
+    )
+    max_day_total = max(weekday_counts.values(), default=0)
+    reservations_by_day = [
+        {
+            "label": label,
+            "count": weekday_counts.get(index, 0),
+            "width": int((weekday_counts.get(index, 0) / max_day_total) * 100) if max_day_total else 0,
+        }
+        for index, label in enumerate(weekday_labels)
+    ]
+
+    top_location_rows = (
+        analytics_reservations.values("pickup_location__name")
+        .annotate(total=Count("id"))
+        .order_by("-total", "pickup_location__name")[:5]
+    )
+    max_location_total = top_location_rows[0]["total"] if top_location_rows else 0
+    top_locations = [
+        {
+            "label": row["pickup_location__name"] or "Not selected",
+            "count": row["total"],
+            "width": int((row["total"] / max_location_total) * 100) if max_location_total else 0,
+        }
+        for row in top_location_rows
+    ]
+
+    top_customer_rows = (
+        analytics_reservations.values("user__first_name", "user__last_name", "user__username")
+        .annotate(total=Count("id"))
+        .order_by("-total", "user__last_name", "user__first_name", "user__username")[:5]
+    )
+    max_customer_total = top_customer_rows[0]["total"] if top_customer_rows else 0
+    top_customers = []
+    for row in top_customer_rows:
+        full_name = f"{row['user__first_name'] or ''} {row['user__last_name'] or ''}".strip()
+        label = full_name or row["user__username"] or "Unknown Customer"
+        top_customers.append(
+            {
+                "label": label,
+                "count": row["total"],
+                "width": int((row["total"] / max_customer_total) * 100) if max_customer_total else 0,
+            }
+        )
+
+    rental_addon_rows = (
+        ReservationAccessory.objects.filter(
+            fulfillment_type="rental",
+            reservation__status__in=["pending", "confirmed", "paid", "active", "completed"],
+        )
+        .values("accessory__name")
+        .annotate(total=Count("id"), quantity_total=Sum("quantity"))
+        .order_by("-quantity_total", "-total", "accessory__name")[:5]
+    )
+    max_rental_addon_total = max((row["quantity_total"] or 0) for row in rental_addon_rows) if rental_addon_rows else 0
+    top_rental_addons = [
+        {
+            "label": row["accessory__name"] or "Unknown Add-On",
+            "count": row["quantity_total"] or 0,
+            "width": int(((row["quantity_total"] or 0) / max_rental_addon_total) * 100) if max_rental_addon_total else 0,
+        }
+        for row in rental_addon_rows
+    ]
+
+    merch_sales_rows = (
+        ReservationAccessory.objects.filter(
+            fulfillment_type="purchase",
+            reservation__status__in=["pending", "confirmed", "paid", "active", "completed"],
+        )
+        .values("accessory__name")
+        .annotate(total=Count("id"), quantity_total=Sum("quantity"))
+        .order_by("-quantity_total", "-total", "accessory__name")[:5]
+    )
+    max_merch_sales_total = max((row["quantity_total"] or 0) for row in merch_sales_rows) if merch_sales_rows else 0
+    top_merchandise_sales = [
+        {
+            "label": row["accessory__name"] or "Unknown Item",
+            "count": row["quantity_total"] or 0,
+            "width": int(((row["quantity_total"] or 0) / max_merch_sales_total) * 100) if max_merch_sales_total else 0,
+        }
+        for row in merch_sales_rows
+    ]
+
+    revenue_reservations = analytics_reservations.filter(
+        status__in=["paid", "active", "completed"]
+    )
+    rental_revenue = (
+        revenue_reservations.aggregate(total=Sum("bike_price")).get("total")
+        or Decimal("0.00")
+    )
+    merchandise_revenue = Decimal("0.00")
+    for item in ReservationAccessory.objects.filter(
+        fulfillment_type="purchase",
+        reservation__status__in=["paid", "active", "completed"],
+    ):
+        merchandise_revenue += item.get_total()
+    total_revenue = rental_revenue + merchandise_revenue
 
     context = {
         "total_bikes": total_bikes,
@@ -279,13 +406,21 @@ def admin_dashboard(request):
         "active_reservations": active_reservations,
         "total_payments": total_payments,
         "completed_payments": completed_payments,
+        "rental_revenue": rental_revenue,
+        "merchandise_revenue": merchandise_revenue,
+        "total_revenue": total_revenue,
         "total_reviews": total_reviews,
         "pending_reviews": pending_reviews,
         "recent_reservations": recent_reservations,
-        "latest_reviews": latest_reviews,
         "signed_waivers": signed_waivers,
         "unsigned_active_waivers": unsigned_active_waivers,
-        "staff_count": staff_count,
+        "user_count": user_count,
+        "top_bikes": top_bikes,
+        "reservations_by_day": reservations_by_day,
+        "top_locations": top_locations,
+        "top_customers": top_customers,
+        "top_rental_addons": top_rental_addons,
+        "top_merchandise_sales": top_merchandise_sales,
     }
 
     return render(request, "admin_dashboard/admin.html", context)
@@ -894,6 +1029,76 @@ def unapprove_review(request, review_id):
 def admin_payments(request):
     payments = Payment.objects.select_related("reservation", "reservation__user", "reservation__bike").order_by("-created_at")
     return render(request, "admin_dashboard/admin_payments.html", {"payments": payments})
+
+
+@staff_member_required
+def admin_revenue(request):
+    revenue_statuses = ["paid", "active", "completed"]
+    revenue_reservations = Reservation.objects.filter(
+        status__in=revenue_statuses
+    ).select_related("bike", "user")
+
+    rental_revenue = (
+        revenue_reservations.aggregate(total=Sum("bike_price")).get("total")
+        or Decimal("0.00")
+    )
+
+    rental_addon_items = list(
+        ReservationAccessory.objects.filter(
+            fulfillment_type="rental",
+            reservation__status__in=revenue_statuses,
+        ).select_related("accessory", "reservation")
+    )
+    rental_addon_revenue = sum((item.get_total() for item in rental_addon_items), Decimal("0.00"))
+
+    merchandise_items = list(
+        ReservationAccessory.objects.filter(
+            fulfillment_type="purchase",
+            reservation__status__in=revenue_statuses,
+        ).select_related("accessory", "reservation")
+    )
+    merchandise_revenue = sum((item.get_total() for item in merchandise_items), Decimal("0.00"))
+
+    total_revenue = rental_revenue + rental_addon_revenue + merchandise_revenue
+
+    top_bike_revenue = (
+        revenue_reservations.values("bike__name")
+        .annotate(total=Sum("bike_price"), count=Count("id"))
+        .order_by("-total", "bike__name")[:6]
+    )
+
+    rental_addon_breakdown = {}
+    for item in rental_addon_items:
+        name = item.accessory.name if item.accessory_id else "Unknown Add-On"
+        entry = rental_addon_breakdown.setdefault(name, {"label": name, "quantity": 0, "total": Decimal("0.00")})
+        entry["quantity"] += item.quantity
+        entry["total"] += item.get_total()
+    top_rental_addon_revenue = sorted(
+        rental_addon_breakdown.values(),
+        key=lambda row: (-row["total"], row["label"])
+    )[:6]
+
+    merchandise_breakdown = {}
+    for item in merchandise_items:
+        name = item.accessory.name if item.accessory_id else "Unknown Item"
+        entry = merchandise_breakdown.setdefault(name, {"label": name, "quantity": 0, "total": Decimal("0.00")})
+        entry["quantity"] += item.quantity
+        entry["total"] += item.get_total()
+    top_merchandise_revenue = sorted(
+        merchandise_breakdown.values(),
+        key=lambda row: (-row["total"], row["label"])
+    )[:6]
+
+    context = {
+        "total_revenue": total_revenue,
+        "rental_revenue": rental_revenue,
+        "rental_addon_revenue": rental_addon_revenue,
+        "merchandise_revenue": merchandise_revenue,
+        "top_bike_revenue": top_bike_revenue,
+        "top_rental_addon_revenue": top_rental_addon_revenue,
+        "top_merchandise_revenue": top_merchandise_revenue,
+    }
+    return render(request, "admin_dashboard/admin_revenue.html", context)
 
 @staff_member_required
 def refund_payment(request, payment_id):
