@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block navbar %}
+{% endblock navbar %}
+
 {% block title %}
     {% if admin_view %}Customer Profile - Indian Creek Cycles{% else %}My Profile - Indian Creek Cycles{% endif %}
 {% endblock %}
@@ -13,6 +16,9 @@
         <div class="sidebar-logo">
             <img src="{% static 'images/logo/logo-email.png' %}" alt="Indian Creek">
         </div>
+
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
 
         <nav class="sidebar-links">
             <a href="{% url 'home' %}" class="side-link"><i class="fas fa-home"></i> Home</a>
@@ -520,6 +526,11 @@
         </div>
         <!-- TAB SCRIPT -->
         <script>
+        
+            function toggleMenu() {
+                document.querySelector(".sidebar-links").classList.toggle("active");
+            }
+            
         document.addEventListener("DOMContentLoaded", function () {
             if ('scrollRestoration' in history) {
                 history.scrollRestoration = 'manual';

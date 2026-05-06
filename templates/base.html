@@ -14,7 +14,6 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    {% comment %} <link rel="stylesheet" href="{% static 'css/styles.css' %}"> {% endcomment %}
     <link rel="stylesheet" href="{% static 'css/reservations.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,13 +23,13 @@
     
     {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body> 
     <!-- Navigation -->
-    {% if not is_profile_page %}
+    {% block navbar %}
     <nav class="navbar" id="navbar">
         <div class="container">
             <a href="{% url 'home' %}" class="navbar-brand">
-                <img src="{% static 'images/logo/logo-icc.png' %}" alt="Indian Creek Cycles" class="navbar-logo">
+                <img src="{% static 'images/logo/logo-email.png' %}" alt="Indian Creek Cycles" class="navbar-logo">
                 <!--<span class="brand-text">Indian Creek Cycles</span> -->
             </a>
             
@@ -118,7 +117,7 @@
                 </li>
                 {% endif %}
             </ul>
-
+ 
             {% if user.is_authenticated %}
             <div class="navbar-auth navbar-account">
                 <a href="{% url 'profile' %}" class="nav-link nav-account-btn {% if '/accounts/' in request.path %}active{% endif %}">
@@ -136,8 +135,8 @@
             {% endif %}
         </div>
     </nav>
-    {% endif %}
-    
+    {% endblock navbar %}
+
     <!-- Messages -->
     {% if messages %}
     <div class="messages-container">

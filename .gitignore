@@ -4,15 +4,11 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Virtual environment
-.venv/
-venv/
+# Environment variables (keep secrets out of Git)
+.env
 
-
-
-#mac
+# macOS
 .DS_Store
 
-
-__pycache__/
-*.pyc
+# Static build files (if using collectstatic)
+staticfiles/

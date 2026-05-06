@@ -18,6 +18,113 @@
     color: #0b3704;
 }
 
+.unlock-guide-card {
+    margin-top: 18px;
+    max-width: 520px;
+}
+
+.mini-step {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 14px;
+    padding: 14px 0;
+}
+
+.mini-icon {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    background: #eef6ee;
+    color: #114823;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mini-step h4 {
+    margin: 0 0 6px;
+    color: #114823;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.mini-step p {
+    margin: 0 0 7px;
+    line-height: 1.35;
+    color: #333;
+    font-size: 0.9rem;
+    max-width: 430px;
+}
+
+.mini-step p:last-child {
+    margin-bottom: 0;
+}
+
+.mini-step p strong {
+    color: #114823;
+}
+
+.guide-tip {
+    margin-top: 16px;
+    max-width: 470px;
+    background: #fff8e6;
+    border-left: 4px solid #d4af37;
+    padding: 12px 14px;
+    color: #3d3210;
+    font-size: 0.9rem;
+    line-height: 1.35;
+}
+
+.mini-list {
+    list-style: none;
+    margin: 6px 0 0 0;
+    padding-left: 0;
+    font-size: 12px;
+}
+
+.mini-list li {
+    position: relative;
+    padding-left: 16px;
+    margin-bottom: 6px;
+    line-height: 1.35;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.mini-list li::before {
+    content: "–";
+    position: absolute;
+    left: 0;
+    color: #114823;
+    font-weight: 700;
+}
+
+.under-image {
+    margin-top: 12px;
+    margin-left: 20px;
+    max-width: 520px;
+}
+
+.help-header p {
+    color: #555;
+    margin-top: 10px;
+}
+
+.help-section {
+    margin-bottom: 60px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.help-step-list {
+    font-size: 13px;;
+}
+
+.step-brown {
+    white-space: nowrap;
+}
+
 .help-header p {
     color: #555;
     margin-top: 10px;
@@ -181,18 +288,18 @@
 
 .map-legend-overlay {
     position: absolute;
-    top: 42%;              /* ⬅️ move it up a bit (was ~50%) */
+    top: 42%;              
     right: 12px;
     transform: translateY(-50%);
 
     z-index: 10;
     display: flex;
     flex-direction: column;
-    gap: 6px;              /* ⬅️ tighter spacing */
+    gap: 6px;              
 
     background: rgba(255, 255, 255, 0.9);
-    padding: 8px;          /* ⬅️ smaller padding */
-    border-radius: 8px;    /* slightly tighter */
+    padding: 8px;         
+    border-radius: 8px;    
     
     box-shadow: 0 3px 10px rgba(0,0,0,0.12);
 }
@@ -246,8 +353,11 @@
 .help-image img {
     width: 100%;
     max-width: 600px;
+    max-height: 500px;
+    padding-top: 50px;
     display: block;
     margin: auto;
+    margin-left: 20px;
     border-radius: 12px;
 }
 
@@ -309,12 +419,12 @@
     font-size: 14px;
     font-weight: 500;
     display: flex;
-    align-items: flex-start; /* important */
+    align-items: flex-start;
     margin-bottom: 8px;
     transition: all 0.2s ease;
 
-    white-space: normal;        /* FIX */
-    word-break: break-word;     /* prevents overflow */
+    white-space: normal;       
+    word-break: break-word;    
 }
 
 .loc-num {
@@ -454,6 +564,5 @@
         padding: 10px 0;
     }
 }
-
 
 

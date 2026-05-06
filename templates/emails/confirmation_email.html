@@ -16,7 +16,7 @@
                     <tr>
                         <td align="center" style="background-color: #114823; padding: 20px; color: #ffffff;">
                             <h1 style="margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">Reservation Confirmed</h1>
-                            <p style="margin: 5px 0 0; font-size: 14px; opacity: 0.9;">Booking #{{ reservation.id }}</p>
+                            <p style="margin: 5px 0 0; font-size: 14px; opacity: 0.9;">Reservation #{{ reservation.id }}</p>
                         </td>
                     </tr>
 
@@ -49,7 +49,8 @@
                                 <tr>
                                     <td align="center" style="padding: 15px;">
                                         <p style="margin: 0 0 10px 0; font-size: 9px; text-transform: uppercase; color: #888888; letter-spacing: 1px;">Scan at Smart-Dock</p>
-                                        <img src="cid:reservation_qr" width="100" height="100" style="display: block; margin-bottom: 10px;" alt="Reservation QR code">
+                                            <img src="data:image/png;base64,{{ qr_base64 }}" width="120" />
+                                        </p>
                                         <div style="font-family: monospace; font-size: 24px; font-weight: bold; color: #114823; letter-spacing: 4px;">{{ reservation.unlock_code }}</div>
                                     </td>
                                 </tr>

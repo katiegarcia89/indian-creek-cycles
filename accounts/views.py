@@ -111,7 +111,7 @@ def profile(request):
     # Reservations
     reservations = Reservation.objects.filter(
         user=request.user
-    ).select_related('bike').order_by('-created_at')[:5]
+    ).select_related('bike').order_by('-created_at')
 
     # Reviews
     reviews = Review.objects.filter(
@@ -161,7 +161,7 @@ def user_profile_detail(request, user_id):
     # Reservations
     reservations = Reservation.objects.filter(
         user=profile_user
-    ).select_related('bike').order_by('-created_at')[:5]
+    ).select_related('bike').order_by('-created_at')
 
     # Reviews
     reviews = Review.objects.filter(
