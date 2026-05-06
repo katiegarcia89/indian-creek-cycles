@@ -52,35 +52,62 @@
 
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 1rem;
-        margin-bottom: 2rem;
+        margin-bottom: 1.4rem;
     }
 
     .stat-card {
         background: #fff;
         border-radius: 18px;
-        padding: 1.25rem;
+        padding: 1rem 1.05rem;
         box-shadow: 0 10px 30px rgba(19, 39, 64, 0.08);
         border: 1px solid #e5ebf1;
+        display: grid;
+        gap: .75rem;
+    }
+
+    .stat-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
     }
 
     .stat-label {
         color: #5f6b7a;
         font-size: .95rem;
-        margin-bottom: .5rem;
+        font-weight: 600;
     }
 
     .stat-value {
         font-size: 2rem;
         font-weight: 700;
         color: #16324f;
-        margin-bottom: .35rem;
+        line-height: 1;
     }
 
     .stat-meta {
-        font-size: .9rem;
-        color: #7b8794;
+        display: flex;
+        flex-wrap: wrap;
+        gap: .55rem;
+        margin-top: auto;
+    }
+
+    .stat-chip {
+        display: inline-block;
+        font-size: .84rem;
+        color: #64748b;
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        padding: 0;
+        white-space: nowrap;
+    }
+
+    .stat-chip strong {
+        color: #16324f;
+        font-weight: 700;
     }
 
     .admin-grid {
@@ -105,6 +132,24 @@
 
     .quick-links {
         display: grid;
+        gap: 1rem;
+    }
+
+    .quick-group {
+        display: grid;
+        gap: .7rem;
+    }
+
+    .quick-group-title {
+        margin: 0;
+        color: #c9a227;
+        font-size: .95rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+    }
+
+    .quick-group-grid {
+        display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: .85rem;
     }
@@ -123,7 +168,9 @@
 
     .quick-link:hover {
         transform: translateY(-2px);
-        background: #edf4fb;
+        background: #fffaf0;
+        border-color: rgba(201, 162, 39, 0.45);
+        box-shadow: 0 10px 22px rgba(201, 162, 39, 0.14);
     }
 
     .quick-link small {
@@ -135,6 +182,81 @@
 
     .table-wrap {
         overflow-x: auto;
+    }
+
+    .analytics-panel {
+        margin-bottom: 1.4rem;
+    }
+
+    .analytics-intro {
+        margin: -.35rem 0 1rem;
+        color: #64748b;
+        font-size: .92rem;
+    }
+
+    .analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: .85rem;
+    }
+
+    .analytics-card {
+        border: 1px solid #e5ebf1;
+        border-radius: 14px;
+        padding: .9rem;
+        background: #fbfdff;
+    }
+
+    .analytics-card h3 {
+        margin: 0 0 0.7rem;
+        font-size: .96rem;
+        color: #16324f;
+    }
+
+    .chart-list {
+        display: grid;
+        gap: 0.6rem;
+    }
+
+    .chart-row {
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .chart-row-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: baseline;
+    }
+
+    .chart-label {
+        color: #16324f;
+        font-weight: 600;
+        font-size: 0.84rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .chart-value {
+        color: #64748b;
+        font-size: 0.78rem;
+        white-space: nowrap;
+    }
+
+    .chart-track {
+        width: 100%;
+        height: 6px;
+        border-radius: 999px;
+        background: #edf2f7;
+        overflow: hidden;
+    }
+
+    .chart-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #1f6d43 0%, #c9a227 100%);
     }
 
     table.admin-table {
@@ -207,13 +329,33 @@
     }
 
     @media (max-width: 900px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
         .admin-grid {
             grid-template-columns: 1fr;
+        }
+
+        .analytics-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
     }
 
     @media (max-width: 640px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
         .quick-links {
+            gap: .85rem;
+        }
+
+        .quick-group-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .analytics-grid {
             grid-template-columns: 1fr;
         }
 
@@ -242,33 +384,199 @@
 
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-label">Total Bikes</div>
-                <div class="stat-value">{{ total_bikes }}</div>
-                <div class="stat-meta">{{ available_bikes }} available · {{ maintenance_bikes }} in maintenance</div>
+                <div class="stat-top">
+                    <div class="stat-label">Total Bikes</div>
+                    <div class="stat-value">{{ total_bikes }}</div>
+                </div>
+                <div class="stat-meta">
+                    <span class="stat-chip"><strong>{{ available_bikes }}</strong> available</span>
+                    <span class="stat-chip"><strong>{{ maintenance_bikes }}</strong> in maintenance</span>
+                </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-label">Reservations</div>
-                <div class="stat-value">{{ total_reservations }}</div>
-                <div class="stat-meta">{{ active_reservations }} active right now</div>
+                <div class="stat-top">
+                    <div class="stat-label">Reservations</div>
+                    <div class="stat-value">{{ total_reservations }}</div>
+                </div>
+                <div class="stat-meta">
+                    <span class="stat-chip"><strong>{{ active_reservations }}</strong> active right now</span>
+                </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-label">Payments</div>
-                <div class="stat-value">{{ total_payments }}</div>
-                <div class="stat-meta">{{ completed_payments }} completed payments</div>
+                <div class="stat-top">
+                    <div class="stat-label">Revenue</div>
+                    <div class="stat-value">${{ total_revenue|floatformat:0 }}</div>
+                </div>
+                <div class="stat-meta">
+                    <span class="stat-chip"><strong>${{ rental_revenue|floatformat:0 }}</strong> rentals</span>
+                    <span class="stat-chip"><strong>${{ merchandise_revenue|floatformat:0 }}</strong> merchandise</span>
+                </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-label">Reviews Pending</div>
-                <div class="stat-value">{{ pending_reviews }}</div>
-                <div class="stat-meta">{{ total_reviews }} total reviews submitted</div>
+                <div class="stat-top">
+                    <div class="stat-label">Reviews Pending</div>
+                    <div class="stat-value">{{ pending_reviews }}</div>
+                </div>
+                <div class="stat-meta">
+                    <span class="stat-chip"><strong>{{ total_reviews }}</strong> total reviews submitted</span>
+                </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-label">Waivers Needed</div>
-                <div class="stat-value">{{ unsigned_active_waivers }}</div>
-                <div class="stat-meta">{{ signed_waivers }} signed waivers on file</div>
+                <div class="stat-top">
+                    <div class="stat-label">Waivers Needed</div>
+                    <div class="stat-value">{{ unsigned_active_waivers }}</div>
+                </div>
+                <div class="stat-meta">
+                    <span class="stat-chip"><strong>{{ signed_waivers }}</strong> signed waivers on file</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-label">User Accounts</div>
+                    <div class="stat-value">{{ user_count }}</div>
+                </div>
+                <div class="stat-meta">
+                    <span class="stat-chip">Customer and admin accounts on file</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel analytics-panel">
+            <h2>Analytics Snapshot</h2>
+            <p class="analytics-intro">A quick pulse on bikes, riders, locations, and add-ons.</p>
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Most-Rented Bikes</h3>
+                    {% if top_bikes %}
+                    <div class="chart-list">
+                        {% for item in top_bikes|slice:":4" %}
+                        <div class="chart-row">
+                            <div class="chart-row-top">
+                                <span class="chart-label">{{ item.label }}</span>
+                                <span class="chart-value">{{ item.count }} reservation{{ item.count|pluralize }}</span>
+                            </div>
+                            <div class="chart-track">
+                                <div class="chart-fill" style="width: {{ item.width }}%;"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">No rental activity yet.</div>
+                    {% endif %}
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Reservations by Day</h3>
+                    {% if reservations_by_day %}
+                    <div class="chart-list">
+                        {% for item in reservations_by_day %}
+                        {% if item.count %}
+                        <div class="chart-row">
+                            <div class="chart-row-top">
+                                <span class="chart-label">{{ item.label }}</span>
+                                <span class="chart-value">{{ item.count }}</span>
+                            </div>
+                            <div class="chart-track">
+                                <div class="chart-fill" style="width: {{ item.width }}%;"></div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">No reservation dates available yet.</div>
+                    {% endif %}
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Popular Pickup Locations</h3>
+                    {% if top_locations %}
+                    <div class="chart-list">
+                        {% for item in top_locations|slice:":4" %}
+                        <div class="chart-row">
+                            <div class="chart-row-top">
+                                <span class="chart-label">{{ item.label }}</span>
+                                <span class="chart-value">{{ item.count }}</span>
+                            </div>
+                            <div class="chart-track">
+                                <div class="chart-fill" style="width: {{ item.width }}%;"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">No pickup locations recorded yet.</div>
+                    {% endif %}
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Top Returning Customers</h3>
+                    {% if top_customers %}
+                    <div class="chart-list">
+                        {% for item in top_customers|slice:":4" %}
+                        <div class="chart-row">
+                            <div class="chart-row-top">
+                                <span class="chart-label">{{ item.label }}</span>
+                                <span class="chart-value">{{ item.count }} rental{{ item.count|pluralize }}</span>
+                            </div>
+                            <div class="chart-track">
+                                <div class="chart-fill" style="width: {{ item.width }}%;"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">No customer rental history yet.</div>
+                    {% endif %}
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Top Rental Add-Ons</h3>
+                    {% if top_rental_addons %}
+                    <div class="chart-list">
+                        {% for item in top_rental_addons|slice:":4" %}
+                        <div class="chart-row">
+                            <div class="chart-row-top">
+                                <span class="chart-label">{{ item.label }}</span>
+                                <span class="chart-value">{{ item.count }} rented</span>
+                            </div>
+                            <div class="chart-track">
+                                <div class="chart-fill" style="width: {{ item.width }}%;"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">No accessory rentals yet.</div>
+                    {% endif %}
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Top Merchandise Sales</h3>
+                    {% if top_merchandise_sales %}
+                    <div class="chart-list">
+                        {% for item in top_merchandise_sales|slice:":4" %}
+                        <div class="chart-row">
+                            <div class="chart-row-top">
+                                <span class="chart-label">{{ item.label }}</span>
+                                <span class="chart-value">{{ item.count }} sold</span>
+                            </div>
+                            <div class="chart-track">
+                                <div class="chart-fill" style="width: {{ item.width }}%;"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">No merchandise sales yet.</div>
+                    {% endif %}
+                </div>
             </div>
         </div>
 
@@ -327,65 +635,64 @@
                 <div class="panel">
                     <h2>Quick Actions</h2>
                     <div class="quick-links">
-                        <a class="quick-link" href="{% url 'admin_bikes' %}">
-                            Manage Bikes
-                            <small>Edit inventory and bike details</small>
-                        </a>
-                        <a class="quick-link" href="{% url 'admin_accessories' %}">
-                            Manage Accessories
-                            <small>Review add-ons, pricing, and stock</small>
-                        </a>
-                        <a class="quick-link" href="{% url 'admin_promos' %}">
-                            Manage Promo Codes
-                            <small>Review discounts, rules, dates, and usage</small>
-                        </a>
-                        <a class="quick-link" href="{% url 'admin_reservations' %}">
-                            Manage Reservations
-                            <small>Review and update bookings</small>
-                        </a>
-                        <a class="quick-link" href="{% url 'admin_payments' %}">
-                            View Payments
-                            <small>Check payment records</small>
-                        </a>
-                        <a class="quick-link" href="{% url 'admin_reviews' %}">
-                            Moderate Reviews
-                            <small>Approve or respond to reviews</small>
-                        </a>
-                        <a class="quick-link" href="{% url 'signed_waivers' %}">
-                            Signed Waivers
-                            <small>Review signatures and missing waivers</small>
-                        </a>
-                        <a class="quick-link" href="{% url 'admin_staff' %}">
-                            Manage Staff
-                            <small>View admin access and login activity</small>
-                        </a>
-                        <a class="quick-link" href="{% url 'admin_users' %}">
-                            Manage Users
-                            <small>Review customer profiles and activity</small>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="panel">
-                    <h2>Latest Reviews</h2>
-                    {% if latest_reviews %}
-                    <div class="list-stack">
-                        {% for review in latest_reviews %}
-                        <div class="list-item">
-                            <strong>{{ review.title }}</strong><br>
-                            <span class="muted">
-                                {{ review.user.get_full_name|default:review.user.username }}
-                                · {{ review.rating }}/5
-                            </span><br>
-                            <span class="muted">
-                                {% if review.is_approved %}Approved{% else %}Pending approval{% endif %}
-                            </span>
+                        <div class="quick-group">
+                            <h3 class="quick-group-title">Inventory</h3>
+                            <div class="quick-group-grid">
+                                <a class="quick-link" href="{% url 'admin_bikes' %}">
+                                    Manage Bikes
+                                    <small>Edit inventory and bike details</small>
+                                </a>
+                                <a class="quick-link" href="{% url 'admin_accessories' %}">
+                                    Manage Accessories
+                                    <small>Review add-ons, pricing, and stock</small>
+                                </a>
+                            </div>
                         </div>
-                        {% endfor %}
+
+                        <div class="quick-group">
+                            <h3 class="quick-group-title">Reservations & Sales</h3>
+                            <div class="quick-group-grid">
+                                <a class="quick-link" href="{% url 'admin_reservations' %}">
+                                    Manage Reservations
+                                    <small>Review and update bookings</small>
+                                </a>
+                                <a class="quick-link" href="{% url 'admin_payments' %}">
+                                    View Payments
+                                    <small>Check payment records</small>
+                                </a>
+                                <a class="quick-link" href="{% url 'admin_revenue' %}">
+                                    Revenue Breakdown
+                                    <small>See rentals, add-ons, and merchandise totals</small>
+                                </a>
+                                <a class="quick-link" href="{% url 'admin_promos' %}">
+                                    Manage Promo Codes
+                                    <small>Review discounts, rules, dates, and usage</small>
+                                </a>
+                                <a class="quick-link" href="{% url 'signed_waivers' %}">
+                                    Signed Waivers
+                                    <small>Review signatures and missing waivers</small>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="quick-group">
+                            <h3 class="quick-group-title">People & Feedback</h3>
+                            <div class="quick-group-grid">
+                                <a class="quick-link" href="{% url 'admin_reviews' %}">
+                                    Moderate Reviews
+                                    <small>Approve or respond to reviews</small>
+                                </a>
+                                <a class="quick-link" href="{% url 'admin_staff' %}">
+                                    Manage Staff
+                                    <small>View admin access and login activity</small>
+                                </a>
+                                <a class="quick-link" href="{% url 'admin_users' %}">
+                                    Manage Users
+                                    <small>Review, edit, or remove user accounts</small>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    {% else %}
-                    <div class="empty-state">No reviews yet.</div>
-                    {% endif %}
                 </div>
 
             </div>

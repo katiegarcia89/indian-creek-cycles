@@ -488,6 +488,10 @@
     color: white;
 }
 
+.summary-header h2 {
+    color: #ffffff;
+}
+
 .summary-top {
     display: flex;
     justify-content: space-between;

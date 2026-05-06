@@ -1,8 +1,107 @@
-# Recovery Cheat Sheet
+# Indian Creek Cycles Recovery Cheat Sheet
 
-This is the quick reset guide for the Indian Creek Cycles project.
+This is the practical reset guide for getting the project back into a working state.
 
-## 1. `.env`
+Use this in order.
+
+## 1. Log In First
+
+### PythonAnywhere
+
+- Hosting site: PythonAnywhere
+- Username: `katie.garcia.c@gmail.com`
+- Password: `indiancreeyckcyles123`
+
+### Project Gmail
+
+- Email: `indiancreekrentals@gmail.com`
+- Password: `indiancreekcycles123`
+
+## 2. Open the Right Place in PythonAnywhere
+
+1. Log into PythonAnywhere.
+2. From the top navigation, click `Consoles`.
+3. Open a `Bash` console.
+4. In the Bash console, go to the project:
+
+```bash
+cd ~/indian-creek-cycles
+```
+
+5. Check what branch you are on:
+
+```bash
+git branch --show-current
+```
+
+Important:
+
+- Do not experiment in the live host repo unless you mean to affect the live site.
+- The PythonAnywhere repo folder is the same folder the live site is using.
+
+## 3. Update the Live Website from the Bash Console
+
+From the PythonAnywhere Bash console:
+
+```bash
+cd ~/indian-creek-cycles
+git branch --show-current
+git pull origin <branch-name>
+source .venv/bin/activate
+python manage.py migrate
+python manage.py check
+python manage.py collectstatic --noinput
+touch /var/www/www_indiancreekcycles_com_wsgi.py
+```
+
+That last command reloads the live site from the console.
+
+If you prefer the website UI instead:
+
+1. Click the `Web` tab in PythonAnywhere.
+2. Find the web app.
+3. Click `Reload`.
+
+If the site is still wrong after this, check the error log:
+
+```bash
+tail -n 80 /var/log/www.indiancreekcycles.com.error.log
+```
+
+To watch new errors live:
+
+```bash
+tail -f /var/log/www.indiancreekcycles.com.error.log
+```
+
+Stop the live tail with:
+
+```bash
+Ctrl + C
+```
+
+## 4. Local Backups
+
+A backup folder exists here:
+
+- `WEBSITE BACKUP/`
+
+It currently contains copies of:
+
+- `WEBSITE BACKUP/db.sqlite3`
+- `WEBSITE BACKUP/media/`
+- `WEBSITE BACKUP/static/`
+
+If you need to rebuild it again later:
+
+```bash
+mkdir -p backup
+cp -R media backup/media
+cp -R static backup/static
+cp db.sqlite3 backup/db.sqlite3
+```
+
+## 5. Fix the Local `.env`
 
 Real config file:
 
@@ -12,7 +111,14 @@ Template/reference:
 
 - `.env.example`
 
-### Local `.env`
+From your local terminal:
+
+```bash
+cd "/Users/katiegarcia/Desktop/new project 4-16/indian-creek-cycles"
+nano .env
+```
+
+Paste this for the local version:
 
 ```env
 DEBUG=True
@@ -30,7 +136,22 @@ EMAIL_HOST_USER=
 EMAIL_HOST_PASSWORD=
 ```
 
-### Host `.env`
+Save and exit `nano`:
+
+1. `Ctrl + O`
+2. `Enter`
+3. `Ctrl + X`
+
+## 6. Fix the Host `.env`
+
+From the PythonAnywhere Bash console:
+
+```bash
+cd ~/indian-creek-cycles
+nano .env
+```
+
+Paste this for the host version:
 
 ```env
 DEBUG=False
@@ -48,25 +169,21 @@ EMAIL_HOST_USER=
 EMAIL_HOST_PASSWORD=
 ```
 
-### Backup `.env`
+Save and exit `nano`:
+
+1. `Ctrl + O`
+2. `Enter`
+3. `Ctrl + X`
+
+## 7. Fix `config/settings.py`
+
+From the terminal in the project root:
 
 ```bash
-cp .env .env.backup
+nano config/settings.py
 ```
 
-Restore:
-
-```bash
-cp .env.backup .env
-```
-
-## 2. `config/settings.py`
-
-File:
-
-- `config/settings.py`
-
-Use this pattern:
+Use this env-loading pattern:
 
 ```python
 import os
@@ -90,13 +207,39 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'rentals@indiancreekcycles.com')
 ```
 
-Delete this if it exists later in the file:
+Delete this line if it appears later in the file:
 
 ```python
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ```
 
-## 3. Reservation form template
+Save and exit `nano`:
+
+1. `Ctrl + O`
+2. `Enter`
+3. `Ctrl + X`
+
+## 8. Check the App After `.env` or Settings Changes
+
+Local:
+
+```bash
+source .venv/bin/activate
+python manage.py check
+python manage.py runserver
+```
+
+Host:
+
+```bash
+source .venv/bin/activate
+python manage.py check
+python manage.py collectstatic --noinput
+```
+
+Then reload the app from the PythonAnywhere `Web` tab.
+
+## 9. Reservation Form Fix
 
 File:
 
@@ -125,18 +268,16 @@ Example:
 
 JS behavior should be:
 
-- checked => enable input, set to `1` if it was `0`
+- checked => enable input and set to `1` if it was `0`
 - unchecked => reset to `0` and disable input
 
-## 4. Reservation view
+## 10. Reservation View Fix
 
 File:
 
 - `reservations/views.py`
 
-### Accessory quantity logic
-
-Correct:
+Correct accessory quantity logic:
 
 ```python
 requested_quantities[accessory.id] = requested_quantities.get(accessory.id, 0) + quantity
@@ -148,7 +289,7 @@ Wrong:
 requested_quantities[quantity_key] = quantity
 ```
 
-### Stock lookup
+Stock lookup should be:
 
 ```python
 stock_lookup = Accessory.objects.in_bulk(requested_quantities.keys())
@@ -156,19 +297,19 @@ for accessory_id, quantity in requested_quantities.items():
     accessory = stock_lookup.get(accessory_id)
 ```
 
-### Waiver fallback
-
-Only redirect if the reservation really exists:
+Waiver fallback should only redirect if the reservation really exists:
 
 ```python
 if reservation and reservation.pk and Reservation.objects.filter(pk=reservation.pk).exists():
 ```
 
-## 5. Email is commented out for now
+## 11. Email is Commented Out for Now
+
+Email sending is intentionally disabled until live email is configured.
 
 ### `reservations/signals.py`
 
-Keep the signal code, but comment out the actual send:
+Keep the signal code, but comment out the send:
 
 ```python
 # Email sending is temporarily disabled until live mail is configured.
@@ -196,7 +337,7 @@ In `send_daily_reminders`:
 # count += 1
 ```
 
-## 6. `reminder_sent`
+## 12. `reminder_sent` Migration
 
 File:
 
@@ -212,17 +353,23 @@ Migration:
 
 - `reservations/migrations/0013_reservation_reminder_sent.py`
 
-If live errors with `no such column: reservations_reservation.reminder_sent`, run:
+If live errors with:
+
+```text
+no such column: reservations_reservation.reminder_sent
+```
+
+run:
 
 ```bash
 python manage.py migrate
 ```
 
-## 7. Profile CSS leak fix
+## 13. Profile CSS Leak Fix
 
 ### `templates/base.html`
 
-Do **not** load:
+Do not load profile CSS globally:
 
 ```html
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
@@ -238,89 +385,100 @@ Load it only on the profile page:
 {% endblock %}
 ```
 
-## 8. Reservation confirmation summary text
+## 14. Contact Page FAQ Answers
+
+File:
+
+- `templates/core/contact.html`
+
+The FAQ answers should exist directly in the markup as regular paragraphs.
+
+If they are hidden, check that `help.css` is not being loaded globally from `templates/base.html`.
+
+`help.css` should only be loaded on:
+
+- `templates/reservations/help.html`
+
+## 15. About Page Content
+
+File:
+
+- `templates/core/about.html`
+
+Should include:
+
+- family biking image from `static/images/hero/family-biking-hero.jpg`
+- original fictional Indian Creek team
+- Website Project Team section with real contributors
+
+## 16. Profile Email Draft Link
 
 Files:
 
+- `accounts/views.py`
+- `templates/accounts/profile.html`
+
+The profile email link should open a Gmail compose draft in a new tab with:
+
+- recipient = the customer
+- subject = `Indian Creek Cycles Reservation Follow-Up`
+- body = prefilled support message
+- Gmail account hint = `indiancreekcycles@gmail.com`
+
+## 17. Admin Review Comments
+
+Files:
+
+- `core/views.py`
+- `core/urls.py`
+- `reviews/forms.py`
+- `templates/admin_dashboard/admin_reviews.html`
+- `templates/admin_dashboard/admin_review_comment.html`
+- `templates/reviews/review_list.html`
+
+Feature behavior:
+
+- green `Comment` button if no admin comment exists
+- red `Edit Comment` button if a comment already exists
+- admin can revise the comment later
+- public review list shows the admin response below the review
+
+## 18. Unsigned Waivers Admin Tools
+
+Files:
+
+- `core/views.py`
+- `templates/admin_dashboard/signed_waivers.html`
+
+Expected behavior:
+
+- show urgency labels like `Overdue`, `Due Today`, `Due Soon`, `Upcoming`
+- include `Copy Waiver Link`
+- include `View Customer`
+
+## 19. Helpful Button / Review Card Layout
+
+Files:
+
+- `templates/reviews/review_list.html`
 - `static/css/main.css`
-- `static/css/reservations.css`
 
-Keep this:
+Expected behavior:
 
-```css
-.summary-header h2,
-.summary-header .summary-label,
-.summary-header .summary-id {
-    color: white;
-}
-```
+- `Helpful` button belongs to the specific review card
+- it should sit in the review header area, not float ambiguously between reviews
 
-## 9. Bike detail recommended accessories
+## 20. Local Workflow Rule
 
-File:
+Best workflow:
 
-- `templates/bikes/bike_detail.html`
+1. Edit code on your Mac.
+2. Commit and push from your Mac.
+3. On PythonAnywhere, only:
+   - pull
+   - migrate
+   - check
+   - collectstatic
+   - reload
 
-Recommended Accessories should be a simple list, not fake clickable buttons.
-
-Use:
-
-```django
-<ul class="feature-list">
-    {% for accessory in accessories %}
-    <li class="feature-item">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-            <polyline points="22 4 12 14.01 9 11.01"/>
-        </svg>
-        <span>
-            {{ accessory.name }}
-            <span style="color: #636e72; font-size: 0.9rem;">{{ accessory.display_price }}</span>
-        </span>
-    </li>
-    {% endfor %}
-</ul>
-```
-
-## 10. Footer quick links
-
-File:
-
-- `templates/base.html`
-
-Quick Links should include:
-
-- Browse Bikes
-- Trails
-- Accessories
-- Ride Guide
-- Reviews
-- About
-- Contact
-
-Not account/admin-only links.
-
-## 11. Deploy checklist
-
-On the host:
-
-```bash
-git pull origin <branch>
-source .venv/bin/activate
-python manage.py migrate
-python manage.py check
-python manage.py collectstatic --noinput
-```
-
-Then reload the app in the PythonAnywhere Web tab.
-
-## 12. Git workflow rule
-
-Best practice:
-
-- edit on your Mac
-- commit on your Mac
-- push from your Mac
-- pull/deploy on the host
-
-Avoid hand-editing app code on the host unless it is a true emergency.
+Try not to do experimental branch work directly in the live PythonAnywhere repo.

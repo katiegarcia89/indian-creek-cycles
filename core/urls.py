@@ -14,7 +14,10 @@ urlpatterns = [
 
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path("admin-dashboard/staff/", views.admin_staff, name="admin_staff"),
+    path("admin-dashboard/staff/add/", views.admin_add_staff, name="admin_add_staff"),
+    path("admin-dashboard/staff/<int:user_id>/toggle-active/", views.toggle_user_active, name="toggle_user_active"),
     path("admin-dashboard/users/", views.admin_users, name="admin_users"),
+    path("admin-dashboard/users/add/", views.admin_add_user, name="admin_add_user"),
     path("admin-dashboard/users/<int:user_id>/edit/", views.admin_edit_user, name="admin_edit_user"),
     path("admin-dashboard/users/<int:user_id>/delete/", views.delete_user, name="delete_user"),
 
@@ -44,6 +47,7 @@ urlpatterns = [
     path("admin-dashboard/reviews/<int:review_id>/unapprove/", views.unapprove_review, name="unapprove_review"),
 
     path("admin-dashboard/payments/", views.admin_payments, name="admin_payments"),
+    path("admin-dashboard/revenue/", views.admin_revenue, name="admin_revenue"),
     path("admin-dashboard/payments/<int:payment_id>/refund/", views.refund_payment, name="refund_payment"),
     path("admin-dashboard/payments/<int:payment_id>/void/", views.void_payment, name="void_payment"),
 

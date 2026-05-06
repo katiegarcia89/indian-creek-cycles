@@ -281,7 +281,8 @@ Edit CSS variables in `static/css/main.css`:
     --color-primary-dark: #0d2916; /* Darker green */
     --color-accent: #c9a227;       /* Gold */
     /* ... other variables */
-}
+};
+```
 
 ### Useful Commands
 
@@ -320,78 +321,6 @@ Django checks:
 ```bash
 python manage.py check
 ```
-
-
-## URL Routes
-
-### Public Pages
-- `/` - Homepage
-- `/about/` - About page
-- `/trails/` - Trails listing
-- `/contact/` - Contact form
-- `/bikes/` - Bike listing
-- `/bikes/adults/` - Adult bikes
-- `/bikes/kids/` - Kids bikes
-- `/bikes/mountain/` - Mountain bikes
-- `/bikes/sizes/` - Bike size guide
-- `/bikes/<slug>/` - Bike detail page
-- `/bikes/accessories/` - Bike accessories
-- `/reviews/` - Reviews listing
-- `/help/` - Ride Guide
-
-### Account Pages
-- `/accounts/login/` - Login
-- `/accounts/register/` - Registration
-- `/accounts/logout/` - Logout
-- `/accounts/profile/` - User profile
-- `/accounts/profile/edit/` - Edit profile
-
-### Reservation Pages (Login Required)
-- `/reservations/create/<bike_slug>/` - Create reservation
-- `/reservations/waiver/<reservation_id>/` - Sign waiver
-- `/reservations/my-reservations/` - My reservations
-- `/reservations/detail/<pk>/` - Reservation detail
-- `/reservations/cancel/<pk>/` - Cancel reservation
-- `/reservations/confirmation/<pk>/` - Reservation confirmation
-
-### Payment Pages (Login Required)
-- `/payments/process/<reservation_id>/` - Process payment
-- `/payments/confirmation/<payment_id>/` - Payment confirmation
-- `/payments/history/` - Payment history
-
-### Admin Dashboard Pages 
-### (Staff/Superuser Only)
-- `/admin-dashboard/` - Admin dashboard overview
-- `/admin-dashboard/bikes/` - Manage bikes
-- `/admin-dashboard/reservations/` - Manage reservations
-- `/admin-dashboard/reviews/` - Moderate reviews
-- `/admin-dashboard/payments/` - View/manage payments
-- `/admin-dashboard/bikes/<bike_id>/toggle-availability/` - Toggle bike availability
-- `/admin-dashboard/bikes/<bike_id>/toggle-maintenance/` - Toggle bike maintenance
-- `/admin-dashboard/reservations/<reservation_id>/status/<new_status>/` - Update reservation status
-- `/admin-dashboard/reviews/<review_id>/approve/` - Approve review
-- `/admin-dashboard/reviews/<review_id>/unapprove/`- Unapprove review
-- `/admin-dashboard/payments/<payment_id>/refund/` - Refund payment
-- `/admin-dashboard/payments/<payment_id>/void/` - Void payment
-
-### API Endpoints
-- `/api/weather/?zip_code=<zip>` - Get weather data
-- `/reservations/check-availability/?bike_id=<id>&date=<date>` - Check bike availability
-
-### Public
-- `/` - Homepage
-- `/about/` - About page
-- `/trails/` - Trails listing
-- `/contact/` - Contact form
-- `/bikes/` - Bike listing
-- `/bikes/adults/` - Adult bikes
-- `/bikes/kids/` - Kids bikes
-- `/bikes/mountain/` - Mountain bikes
-- `/bikes/sizes/` - Bike size guide
-- `/bikes/<slug>/` - Bike detail page
-- `/bikes/accessories/` - Bike accessories
-- `/reviews/` - Reviews listing
-- `/help/` - Ride Guide`
 
 ## Notes About Demo Data
 
