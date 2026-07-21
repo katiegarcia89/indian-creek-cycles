@@ -3,7 +3,7 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-
+.venv/
 # Environment variables (keep secrets out of Git)
 .env
 
