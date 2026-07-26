@@ -1,6 +1,29 @@
-# Indian Creek Cycles
+# Indian Creek Cycles -May 2026
 
 Indian Creek Cycles is a Django bike rental platform with customer reservations, waiver signing, payments, reviews, trail browsing, bike/accessory inventory, and a custom staff dashboard.
+
+
+## My Contributions
+
+I completed approximately 25% of this four-person capstone project.
+
+My primary contributions included:
+
+- Developing and improving the custom admin dashboard and management tools
+- Building and refining accessories, merchandise, trails, and reservation-related pages
+- Managing deployment, hosting, domain configuration, and the live production environment through PythonAnywhere
+- Integrating frontend, backend, database, and deployment components
+- Supporting database setup, migrations, media files, and static asset configuration
+- Debugging application issues and performing functional testing
+- Improving responsive design, user interface consistency, and overall usability
+- Working on role-based functionality, administrative permissions, and reservation accessory displays
+- Supporting email configuration and notification functionality
+- Managing Git branches, merges, and collaborative development workflows
+- Organizing Product Owner meetings and assisting with presentation and live-demo preparation
+
+The project was developed collaboratively using Python, Django, SQLite, HTML, CSS, JavaScript, Git/GitLab, Jira, and PythonAnywhere.
+
+
 
 ## Team Members
 
